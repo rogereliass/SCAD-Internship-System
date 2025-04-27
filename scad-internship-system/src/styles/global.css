@@ -1,0 +1,138 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+body {
+  background-color: #FFFFFF; /* White background for the entire page */
+  color: #050608; /* Dark text */
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Arial', sans-serif;
+  color: #EB2026; /* Red header color */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #EB2026; /* Button background color */
+  color: white;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #FFDD02; /* Hover color */
+}
+
+/* Center content and give padding/margins */
+.container {
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Flexbox layout for center alignment */
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Form styling */
+input, select, textarea {
+  padding: 10px;
+  border: 1px solid #EFEFEF;
+  border-radius: 5px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #EB2026;
+  outline: none;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* Add padding to page layout */
+.page-padding {
+  padding: 20px;
+}
+
+.card {
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.card h2 {
+  color: #050608;
+}
+
+.card-header {
+  background-color: #EB2026;
+  color: #FFFFFF;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+/* Dashboard Specific Styles */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FFDD02;
+  padding: 20px;
+  border-radius: 10px;
+  color: #050608;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+}
+
+.dashboard-header .guc-logo {
+  height: 50px;
+}
+
+.dashboard-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.dashboard-card {
+  background-color: #FFFFFF;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.dashboard-card h2 {
+  font-size: 18px;
+  color: #050608;
+}
+
+.dashboard-card p {
+  color: #666;
+}
