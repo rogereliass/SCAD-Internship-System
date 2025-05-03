@@ -1,5 +1,5 @@
 
-import React, { JSX } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface CompanyProps {
@@ -36,7 +36,7 @@ const CompanyCard: React.FC<CompanyProps> = ({
 
   // Generate star rating display
   const renderStars = (rating: number) => {
-    const stars: JSX.Element[] = [];
+    const stars = [];
     const fullStar = "★";
     const emptyStar = "☆";
     
