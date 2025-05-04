@@ -47,31 +47,31 @@ const LoginForm = () => {
       <form onSubmit={handleSubmit} className="space-y-6">
        
         
-        <div>
-          <label htmlFor="email" className="label">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="input-field w-full"
-            placeholder="your@email.com"
-            required
-          />
-        </div>
-        
-        <div>
-          <label htmlFor="password" className="label">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="input-field w-full"
-            placeholder="••••••••"
-            required
-          />
-        </div>
+      <div>
+  <label htmlFor="email" className="text-black block mb-1 font-medium">Email</label>
+  <input
+    type="email"
+    id="email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    className="input-field w-full"
+    placeholder="your@email.com"
+    required
+  />
+</div>
+
+<div>
+  <label htmlFor="password" className="text-black block mb-1 font-medium">Password</label>
+  <input
+    type="password"
+    id="password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    className="input-field w-full"
+    placeholder="••••••••"
+    required
+  />
+</div>
         
         <div className="flex items-center justify-between">
           <div className="flex items-center">
