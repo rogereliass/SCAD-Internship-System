@@ -36,13 +36,17 @@ const featuredInternships = [
       postedDate: '2023-11-12',
       industry: 'Marketing'
     }
+    
   ];
 
 const ViewAllInternships = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <h2 className="text-2xl font-bold text-gray-800 pt-6 px-6 mb-4">
+        Available Internships
+      </h2>
+      <div className="p-6 grid grid-cols-2 gap-6">
             {featuredInternships.map(internship => (
               <InternshipCard key={internship.id} {...internship} />
             ))}
