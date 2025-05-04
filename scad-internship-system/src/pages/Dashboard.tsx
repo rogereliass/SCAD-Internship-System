@@ -5,6 +5,7 @@ import StudentDashboard from '../components/dashboard/StudentDashboard';
 import CompanyDashboard from '../components/dashboard/CompanyDashboard';
 import ScadOfficeDashboard from '../components/dashboard/ScadOfficeDashboard';
 import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
 
 const Dashboard = () => {
   const [userType, setUserType] = useState<string | null>(null);
@@ -102,6 +103,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
