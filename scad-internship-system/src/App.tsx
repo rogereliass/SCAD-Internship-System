@@ -10,6 +10,8 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import ViewAllInternships from "./pages/Internships";
+import ViewInternshipApplicants from "./pages/InternshipApplicants";
+import ViewAllCompanies from "./pages/Companies";
 
 const queryClient = new QueryClient();
 
@@ -25,7 +27,9 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/internships" element={<ViewAllInternships />} />
+          <Route path="/companies" element={<ViewAllCompanies />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/internships/:id/applicants" element={<ViewInternshipApplicants />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
