@@ -1,5 +1,6 @@
 import CompanyCard from '@/components/companies/CompanyCard';
 import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
 
 // Sample company data
 const featuredCompanies = [
@@ -75,6 +76,7 @@ const ViewAllCompanies = () => {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

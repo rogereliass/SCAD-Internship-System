@@ -1,6 +1,7 @@
 
 import InternshipCard from '@/components/internships/InternshipCard';
 import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
 
 // Sample data
 const featuredInternships = [
@@ -51,6 +52,7 @@ const ViewAllInternships = () => {
               <InternshipCard key={internship.id} {...internship} />
             ))}
           </div>
+        <Footer />
     </div>
   );
 };
