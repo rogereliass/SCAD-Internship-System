@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userType, setUserType] = useState('student');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   
@@ -21,14 +20,14 @@ const LoginForm = () => {
       setIsLoading(false);
       
       // Demo credentials for different user types
-      if (userType === 'student' && email === 'student@example.com' && password === 'password') {
-        navigate('/dashboard');
-      } else if (userType === 'company' && email === 'company@example.com' && password === 'password') {
-        navigate('/dashboard');
-      } else if (userType === 'scadOffice' && email === 'scad@example.com' && password === 'password') {
-        navigate('/dashboard');
-      } else if (userType === 'faculty' && email === 'faculty@example.com' && password === 'password') {
-        navigate('/dashboard');
+      if ( email === 'student@example.com' && password === 'password') {
+        navigate('/dashboard/1');
+      } else if ( email === 'company@example.com' && password === 'password') {
+        navigate('/dashboard/2');
+      } else if ( email === 'scad@example.com' && password === 'password') {
+        navigate('/dashboard/3');
+      } else if (email === 'faculty@example.com' && password === 'password') {
+        navigate('/dashboard/4');
       } else {
         setError('Invalid credentials. Please try again.');
       }
@@ -46,47 +45,33 @@ const LoginForm = () => {
       )}
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="userType" className="label">User Type</label>
-          <select
-            id="userType"
-            value={userType}
-            onChange={(e) => setUserType(e.target.value)}
-            className="input-field"
-            required
-          >
-            <option value="student">Student</option>
-            <option value="company">Company</option>
-            <option value="scadOffice">SCAD Office</option>
-            <option value="faculty">Faculty Member</option>
-          </select>
-        </div>
+       
         
-        <div>
-          <label htmlFor="email" className="label">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="input-field"
-            placeholder="your@email.com"
-            required
-          />
-        </div>
-        
-        <div>
-          <label htmlFor="password" className="label">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="input-field"
-            placeholder="••••••••"
-            required
-          />
-        </div>
+      <div>
+  <label htmlFor="email" className="text-black block mb-1 font-medium">Email</label>
+  <input
+    type="email"
+    id="email"
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+    className="input-field w-full"
+    placeholder="your@email.com"
+    required
+  />
+</div>
+
+<div>
+  <label htmlFor="password" className="text-black block mb-1 font-medium">Password</label>
+  <input
+    type="password"
+    id="password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    className="input-field w-full"
+    placeholder="••••••••"
+    required
+  />
+</div>
         
         <div className="flex items-center justify-between">
           <div className="flex items-center">
