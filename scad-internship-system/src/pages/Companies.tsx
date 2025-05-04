@@ -68,16 +68,20 @@ const ViewAllCompanies = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="container mx-auto py-8 px-4">
-        <h1 className="text-2xl font-bold mb-6">Partner Companies</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+      <h2 className="text-2xl font-bold text-gray-800 pt-6 px-6 mb-4">
+        Partner Companies
+      </h2>
+      <div className="p-6 grid grid-cols-2 gap-6">
           {featuredCompanies.map(company => (
             <CompanyCard key={company.id} {...company} />
           ))}
         </div>
       </div>
+<<<<<<< HEAD
       <Footer />
     </div>
+=======
+>>>>>>> 913528fd1ae7bf7b763110de43a0e85b64293721
   );
 };
 
