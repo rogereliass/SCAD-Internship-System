@@ -93,70 +93,70 @@ const RegisterForm = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="name" className="label">Full Name</label>
+                <label htmlFor="name" className="text-black block mb-1 font-medium">Full Name</label>
                 <input
                   type="text"
                   id="name"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-field w-full"
                   placeholder="John Doe"
                   required
                 />
               </div>
               
               <div>
-                <label htmlFor="email" className="label">Email</label>
-                <input
+                <label htmlFor="email" className="text-black block mb-1 font-medium">Email</label>
+                 <input
                   type="email"
                   id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-field w-full"
                   placeholder="your@email.com"
                   required
                 />
               </div>
               
               <div>
-                <label htmlFor="password" className="label">Password</label>
-                <input
+                <label htmlFor="password" className="text-black block mb-1 font-medium">Password</label>
+                 <input
                   type="password"
                   id="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-field w-full"
                   placeholder="••••••••"
                   required
                 />
               </div>
               
               <div>
-                <label htmlFor="confirmPassword" className="label">Confirm Password</label>
-                <input
+                <label htmlFor="confirmPassword" className="text-black block mb-1 font-medium">Confirm Password</label>
+                 <input
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-field w-full"
                   placeholder="••••••••"
                   required
                 />
               </div>
               
               <div>
-                <label htmlFor="major" className="label">Major</label>
-                <input
+                <label htmlFor="major" className="text-black block mb-1 font-medium">Major</label>
+                 <input
                   type="text"
                   id="major"
                   name="major"
                   value={formData.major}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-field w-full"
                   placeholder="Computer Science"
                   required
                 />
@@ -167,55 +167,55 @@ const RegisterForm = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="companyName" className="label">Company Name</label>
+                <label htmlFor="companyName" className="text-black block mb-1 font-medium">Company Name</label>
                 <input
                   type="text"
                   id="companyName"
                   name="companyName"
                   value={formData.companyName}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-field w-full"
                   placeholder="Acme Inc."
                   required
                 />
               </div>
               
               <div>
-                <label htmlFor="email" className="label">Official Company Email</label>
-                <input
+                <label htmlFor="email" className="text-black block mb-1 font-medium">Official Company Email</label>
+                 <input
                   type="email"
                   id="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-field w-full"
                   placeholder="contact@company.com"
                   required
                 />
               </div>
               
               <div>
-                <label htmlFor="industry" className="label">Industry</label>
-                <input
+                <label htmlFor="industry" className="text-black block mb-1 font-medium">Industry</label>
+                 <input
                   type="text"
                   id="industry"
                   name="industry"
                   value={formData.industry}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-field w-full"
                   placeholder="Technology"
                   required
                 />
               </div>
               
               <div>
-                <label htmlFor="companySize" className="label">Company Size</label>
-                <select
+                <label htmlFor="companySize" className="text-black block mb-1 font-medium">Company Size</label>
+                 <select
                   id="companySize"
                   name="companySize"
                   value={formData.companySize}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-field w-full" // Explicitly add bg-white
                   required
                 >
                   <option value="small">Small (50 employees or less)</option>
@@ -226,36 +226,36 @@ const RegisterForm = () => {
               </div>
               
               <div>
-                <label htmlFor="password" className="label">Password</label>
-                <input
+                <label htmlFor="password" className="text-black block mb-1 font-medium">Password</label>
+                 <input
                   type="password"
                   id="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-field w-full"
                   placeholder="••••••••"
                   required
                 />
               </div>
               
               <div>
-                <label htmlFor="confirmPassword" className="label">Confirm Password</label>
-                <input
+                <label htmlFor="confirmPassword" className="text-black block mb-1 font-medium">Confirm Password</label>
+                 <input
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="input-field"
+                  className="input-field w-full"
                   placeholder="••••••••"
                   required
                 />
               </div>
               
               <div className="md:col-span-2">
-                <label className="label">Company Logo</label>
-                <div className="border-2 border-dashed border-gray-300 rounded-md px-6 py-10">
+                <label className="text-black block mb-1 font-medium">Company Logo</label>
+                 <div className="border-2 border-dashed border-gray-300 rounded-md px-6 py-10">
                   <div className="text-center">
                     <svg
                       className="mx-auto h-12 w-12 text-gray-400"
@@ -301,8 +301,8 @@ const RegisterForm = () => {
               </div>
               
               <div className="md:col-span-2">
-                <label className="label">Verification Documents</label>
-                <div className="border-2 border-dashed border-gray-300 rounded-md px-6 py-10">
+                <label className="text-black block mb-1 font-medium">Verification Documents</label>
+                 <div className="border-2 border-dashed border-gray-300 rounded-md px-6 py-10">
                   <div className="text-center">
                     <svg
                       className="mx-auto h-12 w-12 text-gray-400"

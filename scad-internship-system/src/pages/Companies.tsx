@@ -75,13 +75,9 @@ const ViewAllCompanies = () => {
           {featuredCompanies.map(company => (
             <CompanyCard key={company.id} {...company} />
           ))}
-        </div>
       </div>
-<<<<<<< HEAD
       <Footer />
     </div>
-=======
->>>>>>> 913528fd1ae7bf7b763110de43a0e85b64293721
   );
 };
 
