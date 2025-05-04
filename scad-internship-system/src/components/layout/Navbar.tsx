@@ -1,20 +1,30 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, X, ArrowLeft } from 'lucide-react';
 
 const Navbar = ({ userType = null }: { userType?: string | null }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const navigate = useNavigate();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+  const handleBack = () => {
+    navigate(-1);
   };
 
   return (
     <nav className="bg-white shadow-md">
       <div className="container mx-auto px-4 py-3">
         <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-4">
+            <button 
+              onClick={handleBack} 
+              className="text-scad-dark hover:text-scad-red transition-colors focus:outline-none"
+              aria-label="Go back"
+            >
+              <ArrowLeft size={24} />
+            </button>
             <Link to="/" className="flex items-center space-x-2">
               <div className="h-10 w-10 bg-scad-red rounded-md flex items-center justify-center">
                 <span className="text-white font-bold text-xl">SC</span>
@@ -22,7 +32,6 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
               <span className="text-scad-dark font-bold text-xl hidden md:block">SCAD Intern Compass</span>
             </Link>
           </div>
-          
           {/* Desktop menu */}
           <div className="hidden md:flex items-center space-x-6">
             {!userType ? (
@@ -30,7 +39,7 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
                 <Link to="/about" className="text-scad-dark hover:text-scad-red transition-colors">About</Link>
                 <Link to="/companies" className="text-scad-dark hover:text-scad-red transition-colors">Companies</Link>
                 <Link to="/internships" className="text-scad-dark hover:text-scad-red transition-colors">Internships</Link>
-                <Link to="/login" className="btn btn-outline">Login</Link>
+                <Link to="/login" className="bg-black text-white hover:bg-gray-800 py-2 px-4 rounded">Login</Link>
                 <Link to="/register" className="btn btn-primary">Register</Link>
               </>
             ) : (
