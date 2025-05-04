@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import InternshipCard from '../components/internships/InternshipCard';
 import CompanyCard from '../components/companies/CompanyCard';
+import Footer from '../components/layout/Footer';
 
 // Sample data
 const featuredInternships = [
@@ -248,7 +249,7 @@ const Index = () => {
       </section>
       
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-12">
+      {/* <footer className="bg-gray-800 text-white py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
@@ -299,7 +300,8 @@ const Index = () => {
             </div>
           </div>
         </div>
-      </footer>
+      </footer> */}
+      <Footer />
     </div>
   );
 };
