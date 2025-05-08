@@ -33,7 +33,8 @@ export default {
           red: "#EB2026",
           yellow: "#FFDD02",
           light: "#FFFFFF",
-          gray: "#EFEFEF"
+          gray: "#EFEFEF",
+          green: "#2ECC71",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",

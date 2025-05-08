@@ -44,22 +44,26 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
               </>
             ) : (
               <>
-                <Link to="/dashboard" className="text-scad-dark hover:text-scad-red transition-colors">Dashboard</Link>
+                
                 {userType === 'student' && (
                   <>
+                    <Link to="/dashboard/1" className="text-scad-dark hover:text-scad-red transition-colors">Dashboard</Link>
                     <Link to="/internships" className="text-scad-dark hover:text-scad-red transition-colors">Find Internships</Link>
                     <Link to="/applications" className="text-scad-dark hover:text-scad-red transition-colors">My Applications</Link>
                   </>
                 )}
                 {userType === 'company' && (
                   <>
-                    <Link to="/job-posts" className="text-scad-dark hover:text-scad-red transition-colors">Job Posts</Link>
+                    <Link to="/dashboard/2" className="text-scad-dark hover:text-scad-red transition-colors">Dashboard</Link>
+                    {/* <Link to="/job-posts" className="text-scad-dark hover:text-scad-red transition-colors">Job Posts</Link>
                     <Link to="/applicants" className="text-scad-dark hover:text-scad-red transition-colors">Applicants</Link>
-                    <Link to="/interns" className="text-scad-dark hover:text-scad-red transition-colors">Interns</Link>
+                    <Link to="/interns" className="text-scad-dark hover:text-scad-red transition-colors">Interns</Link> */}
+                    
                   </>
                 )}
                 {userType === 'scadOffice' && (
                   <>
+                    <Link to="/dashboard/3" className="text-scad-dark hover:text-scad-red transition-colors">Dashboard</Link>
                     <Link to="/applications" className="text-scad-dark hover:text-scad-red transition-colors">Company Applications</Link>
                     <Link to="/students" className="text-scad-dark hover:text-scad-red transition-colors">Students</Link>
                     <Link to="/reports" className="text-scad-dark hover:text-scad-red transition-colors">Reports</Link>

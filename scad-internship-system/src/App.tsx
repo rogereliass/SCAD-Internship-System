@@ -20,6 +20,7 @@ import ViewAllInternships from "./pages/Internships";
 import ViewInternshipApplicants from "./pages/InternshipApplicants";
 import ViewAllCompanies from "./pages/Companies";
 import Companies from "./pages/Companies";
+import CompanyPeding from "./pages/CompanyPending";
 
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/companies/:id" element={<ViewAllCompanies />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/internships/:id/applicants" element={<ViewInternshipApplicants />} />
+          <Route path="/company-pending" element={<CompanyPeding />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

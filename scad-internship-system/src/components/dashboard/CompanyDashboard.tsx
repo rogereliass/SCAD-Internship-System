@@ -1,6 +1,11 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import NotificationsButton from './../DashboardEssentials/NotificationsButton';
+import TabsLayout from './../DashboardEssentials/TabsLayout';
+import { TabsContent } from '../ui/tabs';
+import Footer from '../layout/Footer';
+
 
 // Sample data
 const jobPostings = [
@@ -21,7 +26,44 @@ const currentInterns = [
   { id: 2, name: 'Jessica Lee', position: 'Marketing Assistant', startDate: '2023-10-15', endDate: '2024-01-15' },
 ];
 
+const mockNotifications = [
+  {
+    id: 1,
+    title: 'New Application',
+    description: 'Jessica Lee applied for Frontend Developer position',
+    time: '2 hours ago',
+    type: 'company' as const,
+    read: false
+  },
+  {
+    id: 2,
+    title: 'Report Submitted',
+    description: 'Alex Martinez submitted their monthly report',
+    time: '1 day ago',
+    type: 'report' as const,
+    read: false
+  },
+  {
+    id: 3,
+    title: 'Meeting Scheduled',
+    description: 'SCAD Office requested a meeting on Nov 25',
+    time: '2 days ago',
+    type: 'appointment' as const,
+    read: true
+  }
+];
+
 const CompanyDashboard = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+
+  const companyTabs = [
+    { value: "overview", label: "Overview" },
+    { value: "postings", label: "Job Postings" },
+    { value: "applicants", label: "Applicants" },
+    { value: "interns", label: "Interns" }
+  ];
+
+
   const [company, setCompany] = useState({
     name: 'TechSolutions Inc.',
     industry: 'Information Technology',
@@ -33,35 +75,56 @@ const CompanyDashboard = () => {
 
   return (
     <div className="p-6">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-scad-dark mb-2">Welcome back, {company.name}!</h1>
-        <p className="text-gray-600">{company.industry} | {company.companySize.charAt(0).toUpperCase() + company.companySize.slice(1)} Company</p>
-      </div>
-
-      {/* Stats overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <div className="card bg-gradient-to-r from-scad-red to-red-600 text-white">
-          <h3 className="text-lg font-semibold mb-2">Active Job Postings</h3>
-          <p className="text-3xl font-bold">{company.activeJobPostings}</p>
-          <Link to="/job-posts" className="inline-block mt-4 text-sm text-white hover:underline">Manage Postings →</Link>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-scad-dark mb-2">Welcome back, {company.name}!</h1>
+          <p className="text-gray-600">{company.industry} | {company.companySize.charAt(0).toUpperCase() + company.companySize.slice(1)} Company</p>
         </div>
         
-        <div className="card bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-          <h3 className="text-lg font-semibold mb-2">Pending Applications</h3>
-          <p className="text-3xl font-bold">{company.totalApplications}</p>
-          <Link to="/applicants" className="inline-block mt-4 text-sm text-white hover:underline">Review Applications →</Link>
-        </div>
-        
-        <div className="card bg-gradient-to-r from-green-500 to-green-600 text-white">
-          <h3 className="text-lg font-semibold mb-2">Current Interns</h3>
-          <p className="text-3xl font-bold">{company.currentInterns}</p>
-          <Link to="/interns" className="inline-block mt-4 text-sm text-white hover:underline">Manage Interns →</Link>
+        <div className="mt-4 sm:mt-0">
+          <NotificationsButton notifications={mockNotifications} />
         </div>
       </div>
+      {/* Tabs section */}
+      <TabsLayout 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        tabs={companyTabs}
+        className="mb-6"
+      >
+        <TabsContent value="overview">
+          {/* All your overview content */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            
+            <div className="card bg-gradient-to-r from-scad-red to-red-600 text-white">
+              <h3 className="text-lg font-semibold mb-2">Active Job Postings</h3>
+              <p className="text-3xl font-bold">{company.activeJobPostings}</p>
+              <Link to="/job-posts" className="inline-block mt-4 text-sm text-white hover:underline">Manage Postings →</Link>
+            </div>
+            
+            <div className="card bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+              <h3 className="text-lg font-semibold mb-2">Pending Applications</h3>
+              <p className="text-3xl font-bold">{company.totalApplications}</p>
+              <Link to="/applicants" className="inline-block mt-4 text-sm text-white hover:underline">Review Applications →</Link>
+            </div>
+            
+            <div className="card bg-gradient-to-r from-green-500 to-green-600 text-white">
+              <h3 className="text-lg font-semibold mb-2">Current Interns</h3>
+              <p className="text-3xl font-bold">{company.currentInterns}</p>
+              <Link to="/interns" className="inline-block mt-4 text-sm text-white hover:underline">Manage Interns →</Link>
+            </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Job Postings */}
-        <div className="lg:col-span-2">
+          </div>
+         
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Your tables and other content */}
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="postings">
+          {/* Job postings tab content */}
+          <div className="card">
+          <div className="lg:col-span-2">
           <div className="card h-full">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold text-scad-dark">Job Postings</h2>
@@ -113,8 +176,10 @@ const CompanyDashboard = () => {
             </div>
           </div>
         </div>
-
-        {/* Recent Applications */}
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="applicants">
         <div className="lg:col-span-1">
           <div className="card h-full">
             <div className="flex justify-between items-center mb-4">
@@ -149,7 +214,9 @@ const CompanyDashboard = () => {
           </div>
         </div>
 
-        {/* Current Interns */}
+        </TabsContent>
+        
+        <TabsContent value="interns">
         <div className="lg:col-span-3">
           <div className="card">
             <div className="flex justify-between items-center mb-4">
@@ -190,8 +257,11 @@ const CompanyDashboard = () => {
             )}
           </div>
         </div>
-      </div>
+        </TabsContent>
+      </TabsLayout>
+
     </div>
+
   );
 };
 
