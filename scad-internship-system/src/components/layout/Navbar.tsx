@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, ArrowLeft } from 'lucide-react';
+import logo from '@/components/assets/logo.jpeg';
+
 
 const Navbar = ({ userType = null }: { userType?: string | null }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,35 +28,38 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
               <ArrowLeft size={24} />
             </button>
             <Link to="/" className="flex items-center space-x-2">
-              <div className="h-10 w-10 bg-scad-red rounded-md flex items-center justify-center">
-                <span className="text-white font-bold text-xl">SC</span>
-              </div>
-              <span className="text-scad-dark font-bold text-xl hidden md:block">SCAD Intern Compass</span>
+              <img 
+                src={logo} 
+                alt="SCAD Logo" 
+                className="h-10 w-25 rounded-md object-cover"
+              />
+
+              <span className="text-scad-dark font-bold text-xl hidden md:block">SCAD Compass</span>
             </Link>
           </div>
           {/* Desktop menu */}
           <div className="hidden md:flex items-center space-x-6">
             {!userType ? (
               <>
-                <Link to="/about" className="text-scad-dark hover:text-scad-red transition-colors">About</Link>
-                <Link to="/companies" className="text-scad-dark hover:text-scad-red transition-colors">Companies</Link>
-                <Link to="/internships" className="text-scad-dark hover:text-scad-red transition-colors">Internships</Link>
-                <Link to="/login" className="bg-black text-white hover:bg-gray-800 py-2 px-4 rounded">Login</Link>
-                <Link to="/register" className="btn btn-primary">Register</Link>
+                <Link to="/about" className="text-scad-dark hover:text-scad-red transition-colors font-bold">About</Link>
+                <Link to="/companies" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Companies</Link>
+                <Link to="/internships" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Internships</Link>
+                <Link to="/login" className="bg-black text-white hover:bg-gray-800 py-2 px-4 rounded font-bold">Login</Link>
+                <Link to="/register" className="btn btn-primary font-bold">Register</Link>
               </>
             ) : (
               <>
                 
                 {userType === 'student' && (
                   <>
-                    <Link to="/dashboard/1" className="text-scad-dark hover:text-scad-red transition-colors">Dashboard</Link>
-                    <Link to="/internships" className="text-scad-dark hover:text-scad-red transition-colors">Find Internships</Link>
-                    <Link to="/applications" className="text-scad-dark hover:text-scad-red transition-colors">My Applications</Link>
+                    <Link to="/dashboard/1" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Dashboard</Link>
+                    <Link to="/internships" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Find Internships</Link>
+                    <Link to="/applications" className="text-scad-dark hover:text-scad-red transition-colors font-bold">My Applications</Link>
                   </>
                 )}
                 {userType === 'company' && (
                   <>
-                    <Link to="/dashboard/2" className="text-scad-dark hover:text-scad-red transition-colors">Dashboard</Link>
+                    <Link to="/dashboard/2" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Dashboard</Link>
                     {/* <Link to="/job-posts" className="text-scad-dark hover:text-scad-red transition-colors">Job Posts</Link>
                     <Link to="/applicants" className="text-scad-dark hover:text-scad-red transition-colors">Applicants</Link>
                     <Link to="/interns" className="text-scad-dark hover:text-scad-red transition-colors">Interns</Link> */}

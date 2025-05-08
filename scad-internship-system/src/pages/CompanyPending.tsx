@@ -61,9 +61,9 @@ const CompanyPending = () => {
               className="w-full sm:w-auto"
               asChild
             >
-              <Link to="/contact">
+              <a href="mailto:scad@example.com" className="hover:underline">
                 Contact Support
-              </Link>
+              </a>
             </Button>
             
             <Button
