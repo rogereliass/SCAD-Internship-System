@@ -267,7 +267,7 @@ const InternshipReports = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Internship Reports</h1>
-          <Link to="/scad-dashboard" className="text-gray-600 hover:text-gray-900">
+          <Link to="/dashboard/3" className="text-gray-600 hover:text-gray-900">
             Back to Dashboard
           </Link>
         </div>

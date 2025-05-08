@@ -179,7 +179,7 @@ const InternshipCycles = () => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">Manage Internship Cycles</h1>
           <div className="flex flex-col sm:flex-row gap-2">
-            <Link to="/dashboard" className="text-gray-600 hover:text-gray-900">
+            <Link to="/dashboard/3" className="text-gray-600 hover:text-gray-900">
               Back to Dashboard
             </Link>
             <Button 

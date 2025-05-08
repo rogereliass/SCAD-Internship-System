@@ -245,7 +245,7 @@ const Students = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Students Management</h1>
           <div className="flex items-center gap-3">
-            <Link to="/scad-dashboard" className="text-gray-600 hover:text-gray-900">
+            <Link to="/dashboard/3" className="text-gray-600 hover:text-gray-900">
               Back to Dashboard
             </Link>
             <Button 
