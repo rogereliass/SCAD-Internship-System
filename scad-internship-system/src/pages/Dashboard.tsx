@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import StudentDashboard from '../components/dashboard/StudentDashboard';
 import CompanyDashboard from '../components/dashboard/CompanyDashboard';
 import ScadOfficeDashboard from '../components/dashboard/ScadDashboard';
+import FacultyDashboard from '../components/dashboard/FacultyDashboard';
 import Navbar from '../components/layout/Navbar';
 import DemoControls from '@/components/Developing Controls/DemoControls';
 import Footer from '@/components/layout/Footer';
@@ -36,8 +37,9 @@ const Dashboard = () => {
       case 'company':
         return <CompanyDashboard />;
       case 'scadOffice':
-      case 'faculty':
         return <ScadOfficeDashboard />;
+      case 'faculty':
+        return <FacultyDashboard />;
       default:
         return <div>Loading...</div>;
     }
