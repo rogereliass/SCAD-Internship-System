@@ -245,7 +245,7 @@ const Students = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Students Management</h1>
           <div className="flex items-center gap-3">
-            <Link to="/dashboard" className="text-gray-600 hover:text-gray-900">
+            <Link to="/scad-dashboard" className="text-gray-600 hover:text-gray-900">
               Back to Dashboard
             </Link>
             <Button 
@@ -264,7 +264,7 @@ const Students = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="flex justify-between items-center">
-                <p className="text-sm font-medium text-gray-500">Total Students</p>
+                <p className="text-lg font-medium text-gray-500">Total Students</p>
                 <span className="text-2xl font-bold">{mockStudents.length}</span>
               </div>
             </CardContent>
@@ -273,7 +273,7 @@ const Students = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="flex justify-between items-center">
-                <p className="text-sm font-medium text-gray-500">Active Internships</p>
+                <p className="text-lg font-medium text-gray-500">Active Internships</p>
                 <span className="text-2xl font-bold">
                   {mockStudents.filter(s => s.internshipStatus === 'active').length}
                 </span>
@@ -284,7 +284,7 @@ const Students = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="flex justify-between items-center">
-                <p className="text-sm font-medium text-gray-500">Completed</p>
+                <p className="text-lg font-medium text-gray-500">Completed</p>
                 <span className="text-2xl font-bold">
                   {mockStudents.filter(s => s.internshipStatus === 'completed').length}
                 </span>
@@ -295,7 +295,7 @@ const Students = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="flex justify-between items-center">
-                <p className="text-sm font-medium text-gray-500">Still Searching</p>
+                <p className="text-lg font-medium text-gray-500">Still Searching</p>
                 <span className="text-2xl font-bold">
                   {mockStudents.filter(s => s.internshipStatus === 'searching').length}
                 </span>
@@ -396,29 +396,29 @@ const Students = () => {
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Student ID</TableHead>
-                <TableHead>Major</TableHead>
-                <TableHead>Internship Status</TableHead>
-                <TableHead>Company</TableHead>
-                <TableHead>Report</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+              <TableRow className="bg-gray-100 text-black font-bold">
+                <TableHead className=" text-black font-bold">Name</TableHead>
+                <TableHead className=" text-black font-bold">Student ID</TableHead>
+                <TableHead className=" text-black font-bold">Major</TableHead>
+                <TableHead className=" text-black font-bold">Internship Status</TableHead>
+                <TableHead className=" text-black font-bold">Company</TableHead>
+                <TableHead className=" text-black font-bold">Report</TableHead>
+                <TableHead className="text-center text-black font-bold">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredStudents.map(student => (
                 <TableRow key={student.id}>
-                  <TableCell className="font-medium">{student.name}</TableCell>
-                  <TableCell>{student.studentId}</TableCell>
-                  <TableCell>{student.major}</TableCell>
+                  <TableCell className="font-medium text-black">{student.name}</TableCell>
+                  <TableCell className="text-black">{student.studentId}</TableCell>
+                  <TableCell className="text-black">{student.major}</TableCell>
                   <TableCell>
                     <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(student.internshipStatus)}`}>
                       {student.internshipStatus.charAt(0).toUpperCase() + student.internshipStatus.slice(1)}
                     </span>
                   </TableCell>
-                  <TableCell>{student.company || "-"}</TableCell>
-                  <TableCell>
+                  <TableCell className="text-black">{student.company || "-"}</TableCell>
+                  <TableCell className="text-black">
                     {student.reportStatus ? (
                       <div className="flex items-center gap-1">
                         {getReportStatusIcon(student.reportStatus)}
@@ -568,9 +568,7 @@ const Students = () => {
                   >
                     Close
                   </Button>
-                  <Link to={`/students/${selectedStudent.id}`}>
-                    <Button>Full Profile</Button>
-                  </Link>
+                  
                 </DialogFooter>
               </>
             )}

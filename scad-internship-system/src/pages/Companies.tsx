@@ -119,10 +119,10 @@ const Companies = () => {
         <CardContent className="pt-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-500" />
+              <Search className="absolute left-3 top-3 h-4 w-4 text-white" />
               <Input
                 placeholder="Search companies..."
-                className="pl-10 input-field"
+                className="pl-10 input-field  text-white"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -239,7 +239,7 @@ const Companies = () => {
               </div>
               
               <div className="border-t pt-4 flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setSelectedCompany(null)} className="border-gray-300 text-gray-900">
+                <Button variant="outline" onClick={() => setSelectedCompany(null)} className="border-gray-300  text-white">
                   Close
                 </Button>
               </div>

@@ -278,10 +278,10 @@ const InternshipReports = () => {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold">
+                  <h3 className="text-2xl font-semibold">
                     {mockReports.filter(r => r.status === 'pending').length}
                   </h3>
-                  <p className="text-sm text-gray-500">Pending Review</p>
+                  <p className="text-lg text-gray-500">Pending Review</p>
                 </div>
                 <Clock size={24} className="text-yellow-500" />
               </div>
@@ -292,10 +292,10 @@ const InternshipReports = () => {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold">
+                  <h3 className="text-2xl font-semibold">
                     {mockReports.filter(r => r.status === 'accepted').length}
                   </h3>
-                  <p className="text-sm text-gray-500">Accepted</p>
+                  <p className="text-lg text-gray-500">Accepted</p>
                 </div>
                 <CheckCircle size={24} className="text-green-500" />
               </div>
@@ -306,10 +306,10 @@ const InternshipReports = () => {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold">
+                  <h3 className="text-2xl font-semibold">
                     {mockReports.filter(r => r.status === 'flagged').length}
                   </h3>
-                  <p className="text-sm text-gray-500">Flagged</p>
+                  <p className="text-lg text-gray-500">Flagged</p>
                 </div>
                 <AlertTriangle size={24} className="text-orange-500" />
               </div>
@@ -320,10 +320,10 @@ const InternshipReports = () => {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold">
+                  <h3 className="text-2xl font-semibold">
                     {mockReports.filter(r => r.status === 'rejected').length}
                   </h3>
-                  <p className="text-sm text-gray-500">Rejected</p>
+                  <p className="text-lg text-gray-500">Rejected</p>
                 </div>
                 <X size={24} className="text-red-500" />
               </div>

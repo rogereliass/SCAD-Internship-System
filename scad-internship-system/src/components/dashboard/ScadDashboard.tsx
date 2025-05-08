@@ -32,8 +32,8 @@ const reportStatusData = [
 ];
 
 const companyIntershipsData = [
-  { name: 'TechSolutions', count: 12 },
-  { name: 'MarketingPro', count: 8 },
+  { name: 'TechSol', count: 12 },
+  { name: 'MarkPro', count: 8 },
   { name: 'DesignHub', count: 7 },
   { name: 'DataTech', count: 6 },
   { name: 'FinTech', count: 5 },
@@ -161,7 +161,7 @@ const ScadDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar userType="scadOffice" />
+      
       
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
@@ -187,8 +187,8 @@ const ScadDashboard = () => {
               {isNotificationsOpen && (
                 <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-10 overflow-hidden">
                   <div className="p-3 border-b border-gray-200 flex justify-between items-center">
-                    <h3 className="font-medium">Notifications</h3>
-                    <Button variant="ghost" size="sm" className="h-auto py-1">
+                    <h3 className="font-medium font-bold text-black">Notifications</h3>
+                    <Button size="sm" className="h-auto py-1">
                       Mark all as read
                     </Button>
                   </div>
@@ -206,7 +206,7 @@ const ScadDashboard = () => {
                             {notification.type === 'workshop' && <Calendar size={18} className="text-green-500" />}
                           </div>
                           <div>
-                            <p className="font-medium text-sm">{notification.title}</p>
+                            <p className="font-medium text-sm text-black font-bold">{notification.title}</p>
                             <p className="text-xs text-gray-600">{notification.description}</p>
                             <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
                           </div>
@@ -215,9 +215,10 @@ const ScadDashboard = () => {
                     ))}
                   </div>
                   <div className="p-2 border-t border-gray-200 text-center">
-                    <Button variant="ghost" size="sm" className="w-full text-sm">
-                      View all notifications
-                    </Button>
+                  <Button variant="ghost" size="sm" className="w-full text-sm bg-black text-white hover:bg-gray-800">
+                    View all notifications
+                  </Button>
+
                   </div>
                 </div>
               )}
@@ -300,21 +301,21 @@ const ScadDashboard = () => {
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                     <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
                       <p className="text-sm text-blue-600 font-medium">Total Students</p>
-                      <p className="text-2xl font-bold">128</p>
+                      <p className="text-2xl font-bold text-gray-700">128</p>
                     </div>
                     <div className="bg-green-50 rounded-lg p-4 border border-green-100">
                       <p className="text-sm text-green-600 font-medium">Placed</p>
-                      <p className="text-2xl font-bold">104</p>
+                      <p className="text-2xl font-bold text-gray-700">104</p>
                       <p className="text-xs text-gray-500">81% placement rate</p>
                     </div>
                     <div className="bg-orange-50 rounded-lg p-4 border border-orange-100">
                       <p className="text-sm text-orange-600 font-medium">Searching</p>
-                      <p className="text-2xl font-bold">18</p>
+                      <p className="text-2xl font-bold text-gray-700">18</p>
                       <p className="text-xs text-gray-500">14% of students</p>
                     </div>
                     <div className="bg-red-50 rounded-lg p-4 border border-red-100">
                       <p className="text-sm text-red-600 font-medium">No Placement</p>
-                      <p className="text-2xl font-bold">6</p>
+                      <p className="text-2xl font-bold text-gray-700">6</p>
                       <p className="text-xs text-gray-500">5% of students</p>
                     </div>
                   </div>
@@ -485,10 +486,10 @@ const ScadDashboard = () => {
                           </Badge>
                         </div>
                         <div>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-400">
                             <span className="font-medium">Reason:</span> {appointment.reason}
                           </p>
-                          <p className="text-xs text-gray-600 flex items-center">
+                          <p className="text-xs text-gray-400 flex items-center">
                             <Calendar size={12} className="mr-1" />
                             {appointment.date} at {appointment.time}
                           </p>
@@ -825,31 +826,31 @@ const ScadDashboard = () => {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="bg-gray-50 rounded-lg p-4">
-                      <p className="font-medium">This Week</p>
+                      <p className="font-medium text-black">This Week</p>
                       <div className="mt-2 space-y-2">
                         <div className="flex justify-between">
                           <p className="text-sm text-gray-600">Total Calls</p>
-                          <p className="font-medium">8</p>
+                          <p className="font-medium text-black">8</p>
                         </div>
                         <div className="flex justify-between">
                           <p className="text-sm text-gray-600">Avg. Duration</p>
-                          <p className="font-medium">24 mins</p>
+                          <p className="font-medium text-black">24 mins</p>
                         </div>
                         <div className="flex justify-between">
                           <p className="text-sm text-gray-600">Career Guidance</p>
-                          <p className="font-medium">5</p>
+                          <p className="font-medium text-black">5</p>
                         </div>
                         <div className="flex justify-between">
                           <p className="text-sm text-gray-600">Report Discussion</p>
-                          <p className="font-medium">3</p>
+                          <p className="font-medium text-black">3</p>
                         </div>
                       </div>
                     </div>
                     
                     <div className="bg-gray-50 rounded-lg p-4">
-                      <p className="font-medium">Pending Requests</p>
+                      <p className="font-medium text-black">Pending Requests</p>
                       <div className="mt-2">
-                        <p className="text-2xl font-bold">3</p>
+                        <p className="text-2xl font-bold text-black">3</p>
                         <p className="text-sm text-gray-600">Awaiting your response</p>
                       </div>
                     </div>
@@ -857,9 +858,7 @@ const ScadDashboard = () => {
                 </CardContent>
                 <CardFooter>
                   <Link to="/appointments" className="w-full">
-                    <Button variant="outline" size="sm" className="w-full">
-                      Manage Appointments
-                    </Button>
+                    
                   </Link>
                 </CardFooter>
               </Card>

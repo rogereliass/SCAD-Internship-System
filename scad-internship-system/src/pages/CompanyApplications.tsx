@@ -245,22 +245,22 @@ const CompanyApplications = () => {
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>Company Name</TableHead>
-                <TableHead>Industry</TableHead>
-                <TableHead>Size</TableHead>
-                <TableHead>Applied Date</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+              <TableRow className="bg-gray-100 text-black font-bold">
+                <TableHead className="text-black font-bold">Company Name</TableHead>
+                <TableHead className="text-black font-bold">Industry</TableHead>
+                <TableHead className="text-black font-bold">Size</TableHead>
+                <TableHead className="text-black font-bold">Applied Date</TableHead>
+                <TableHead className="text-black font-bold">Status</TableHead>
+                <TableHead className="text-center text-black font-bold">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredCompanies.map(company => (
                 <TableRow key={company.id}>
-                  <TableCell className="font-medium">{company.companyName}</TableCell>
-                  <TableCell>{company.industry}</TableCell>
-                  <TableCell>{company.size}</TableCell>
-                  <TableCell>{company.appliedDate}</TableCell>
+                  <TableCell className="font-medium text-black">{company.companyName}</TableCell>
+                  <TableCell className="font-medium text-black">{company.industry}</TableCell>
+                  <TableCell className="font-medium text-black">{company.size}</TableCell>
+                  <TableCell className="font-medium text-black">{company.appliedDate}</TableCell>
                   <TableCell>
                     <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-200">
                       {company.status.charAt(0).toUpperCase() + company.status.slice(1)}

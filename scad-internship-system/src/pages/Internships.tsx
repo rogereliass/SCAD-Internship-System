@@ -292,22 +292,22 @@ const Internships = () => {
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Job Title</TableHead>
-                  <TableHead>Company</TableHead>
-                  <TableHead>Industry</TableHead>
-                  <TableHead>Duration</TableHead>
-                  <TableHead className="text-center">Payment</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                <TableRow className="bg-gray-100 text-black font-bold">
+                  <TableHead className=" text-black font-bold">Job Title</TableHead>
+                  <TableHead className=" text-black font-bold">Company</TableHead>
+                  <TableHead className=" text-black font-bold">Industry</TableHead>
+                  <TableHead className=" text-black font-bold">Duration</TableHead>
+                  <TableHead className="text-center text-black font-bold">Payment</TableHead>
+                  <TableHead className="text-center text-black font-bold">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredInternships.map(internship => (
                   <TableRow key={internship.id}>
-                    <TableCell className="font-medium">{internship.title}</TableCell>
-                    <TableCell>{internship.company}</TableCell>
-                    <TableCell>{internship.industry}</TableCell>
-                    <TableCell>{internship.duration}</TableCell>
+                    <TableCell className="font-medium text-black">{internship.title}</TableCell>
+                    <TableCell className="text-black">{internship.company}</TableCell>
+                    <TableCell className="text-black">{internship.industry}</TableCell>
+                    <TableCell className="text-black">{internship.duration}</TableCell>
                     <TableCell className="text-center">
                       <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
                         internship.isPaid 

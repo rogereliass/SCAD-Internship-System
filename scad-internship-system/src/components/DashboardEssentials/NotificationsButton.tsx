@@ -35,8 +35,8 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({ notifications
       {isNotificationsOpen && (
         <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-10 overflow-hidden">
           <div className="p-3 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="font-medium">Notifications</h3>
-            <Button variant="ghost" size="sm" className="h-auto py-1">
+            <h3 className="font-medium font-bold text-black">Notifications</h3>
+            <Button size="sm" className="h-auto py-1 ">
               Mark all as read
             </Button>
           </div>
@@ -54,7 +54,7 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({ notifications
                     {notification.type === 'workshop' && <Calendar size={18} className="text-green-500" />}
                   </div>
                   <div>
-                    <p className="font-medium text-sm">{notification.title}</p>
+                    <p className="font-medium text-sm font-bold text-black">{notification.title}</p>
                     <p className="text-xs text-gray-600">{notification.description}</p>
                     <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
                   </div>
@@ -63,9 +63,10 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({ notifications
             ))}
           </div>
           <div className="p-2 border-t border-gray-200 text-center">
-            <Button variant="ghost" size="sm" className="w-full text-sm">
-              View all notifications
-            </Button>
+          <Button variant="ghost" size="sm" className="w-full text-sm bg-black text-white hover:bg-gray-800">
+            View all notifications
+          </Button>
+
           </div>
         </div>
       )}

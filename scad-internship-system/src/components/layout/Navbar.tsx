@@ -63,13 +63,13 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
                 )}
                 {userType === 'scadOffice' && (
                   <>
-                    <Link to="/dashboard/3" className="text-scad-dark hover:text-scad-red transition-colors">Dashboard</Link>
-                    <Link to="/applications" className="text-scad-dark hover:text-scad-red transition-colors">Company Applications</Link>
-                    <Link to="/students" className="text-scad-dark hover:text-scad-red transition-colors">Students</Link>
-                    <Link to="/reports" className="text-scad-dark hover:text-scad-red transition-colors">Reports</Link>
+                    <Link to="/dashboard/3" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Dashboard</Link>
+                    <Link to="/company-applications" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Company Applications</Link>
+                    <Link to="/students" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Students</Link>
+                    <Link to="/internship-reports" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Reports</Link>
                   </>
                 )}
-                <Link to="/" className="text-scad-red hover:text-opacity-80 transition-colors">Logout</Link>
+                <Link to="/" className="text-scad-red hover:text-opacity-80 transition-colors font-bold">Logout</Link>
               </>
             )}
           </div>

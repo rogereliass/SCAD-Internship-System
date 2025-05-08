@@ -198,13 +198,13 @@ const InternshipCycles = () => {
               <CardHeader className="bg-green-50 border-b border-green-100">
                 <div className="flex justify-between items-start">
                   <div>
-                    <CardTitle className="text-xl flex items-center">
+                    <CardTitle className="text-xl flex items-center text-black">
                       {cycle.name}
                       <span className="ml-2 px-2 py-1 rounded text-xs font-semibold bg-green-100 text-green-800">
                         Active
                       </span>
                     </CardTitle>
-                    <CardDescription className="mt-2">
+                    <CardDescription className="mt-2 text-gray-600">
                       Current active internship cycle
                     </CardDescription>
                   </div>
@@ -244,7 +244,7 @@ const InternshipCycles = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
                   <Card className="bg-gray-50 border shadow-none">
                     <CardContent className="p-4">
-                      <h3 className="text-lg font-semibold">{cycle.totalStudents}</h3>
+                      <h3 className="text-lg font-semibold text-black">{cycle.totalStudents}</h3>
                       <p className="text-sm text-gray-500 flex items-center">
                         <Users size={15} className="mr-1" /> Total Students
                       </p>
@@ -252,7 +252,7 @@ const InternshipCycles = () => {
                   </Card>
                   <Card className="bg-gray-50 border shadow-none">
                     <CardContent className="p-4">
-                      <h3 className="text-lg font-semibold">{cycle.completedInternships}</h3>
+                      <h3 className="text-lg font-semibold text-black">{cycle.completedInternships}</h3>
                       <p className="text-sm text-gray-500 flex items-center">
                         <CheckCircle size={15} className="mr-1" /> Completed Internships
                       </p>
@@ -260,7 +260,7 @@ const InternshipCycles = () => {
                   </Card>
                   <Card className="bg-gray-50 border shadow-none">
                     <CardContent className="p-4">
-                      <h3 className="text-lg font-semibold">{cycle.pendingReports}</h3>
+                      <h3 className="text-lg font-semibold text-black">{cycle.pendingReports}</h3>
                       <p className="text-sm text-gray-500 flex items-center">
                         <FileText size={15} className="mr-1" /> Pending Reports
                       </p>
@@ -319,10 +319,10 @@ const InternshipCycles = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between pt-2">
-                  <Button variant="ghost" size="sm" className="text-gray-600">
+                  <Button variant="ghost" size="sm" className="text-gray-400">
                     View Details
                   </Button>
-                  <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-600">
+                  <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-400">
                     <Download size={14} />
                     <span>Export</span>
                   </Button>
