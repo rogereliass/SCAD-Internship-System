@@ -171,7 +171,7 @@ const Internships = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar userType="scadOffice" />
+      <Navbar />
       
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
@@ -189,7 +189,7 @@ const Internships = () => {
               <Input 
                 type="text" 
                 placeholder="Search by job title or company name..." 
-                className="pl-10" 
+                className="pl-10 bg-white text-gray-900 border-gray-300 rounded-md focus:border-scad-dark focus:ring-0 focus:outline-none"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -214,68 +214,74 @@ const Internships = () => {
                 </Button>
               ) : null}
               
-              <div className="flex border rounded-md overflow-hidden">
-                <Button 
-                  variant={viewMode === 'table' ? "default" : "ghost"} 
-                  size="sm"
-                  onClick={() => setViewMode('table')} 
-                  className="rounded-none"
+              <div className="flex h-9 border rounded-md overflow-hidden">
+                <button
+                  onClick={() => setViewMode('table')}
+                  className={`w-20 px-4 text-sm font-medium transition-colors rounded-none ${
+                    viewMode === 'table'
+                      ? 'bg-scad-dark text-white'
+                      : 'bg-white text-gray-800 hover:bg-gray-100'
+                  }`}
                 >
                   Table
-                </Button>
-                <Button 
-                  variant={viewMode === 'card' ? "default" : "ghost"}
-                  size="sm"
+                </button>
+
+                <button
                   onClick={() => setViewMode('card')}
-                  className="rounded-none"
+                  className={`w-20 px-4 text-sm font-medium transition-colors rounded-none ${
+                    viewMode === 'card'
+                      ? 'bg-scad-dark text-white'
+                      : 'bg-white text-gray-800 hover:bg-gray-100'
+                  }`}
                 >
                   Cards
-                </Button>
+                </button>
               </div>
+
             </div>
           </div>
           
           {/* Expanded Filters */}
           {isFilterOpen && (
-            <div className="mt-4 border-t pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="mt-4 border-t border-gray-200 pt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Industry</label>
                 <select 
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-900"
                   value={filters.industry}
                   onChange={(e) => handleFilterChange('industry', e.target.value)}
                 >
                   <option value="">All Industries</option>
                   {industries.map(industry => (
-                    <option key={industry} value={industry}>{industry}</option>
+                    <option key={industry} value={industry} className="text-gray-900">{industry}</option>
                   ))}
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Duration</label>
                 <select 
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-900"
                   value={filters.duration}
                   onChange={(e) => handleFilterChange('duration', e.target.value)}
                 >
                   <option value="">All Durations</option>
                   {durations.map(duration => (
-                    <option key={duration} value={duration}>{duration}</option>
+                    <option key={duration} value={duration} className="text-gray-900">{duration}</option>
                   ))}
                 </select>
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
+                <label className="block text-sm font-medium text-gray-800 mb-1">Payment Status</label>
                 <select 
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-md bg-white text-gray-900"
                   value={filters.isPaid}
                   onChange={(e) => handleFilterChange('isPaid', e.target.value)}
                 >
                   <option value="">All</option>
-                  <option value="paid">Paid</option>
-                  <option value="unpaid">Unpaid</option>
+                  <option value="paid" className="text-gray-900">Paid</option>
+                  <option value="unpaid" className="text-gray-900">Unpaid</option>
                 </select>
               </div>
             </div>

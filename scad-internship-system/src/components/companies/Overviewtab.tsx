@@ -46,9 +46,12 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
             </div>
           </div>
           <div className="px-5 py-3 bg-white">
-            <Link to="/job-posts" className="text-sm text-scad-red hover:underline flex items-center justify-end">
-              Manage Postings <ChevronRight className="h-4 w-4 ml-1" />
-            </Link>
+          <button 
+            onClick={() => onTabChange('postings')}
+            className="text-sm text-scad-red hover:underline flex items-center justify-end"
+          >
+            Manage Postings <ChevronRight className="h-4 w-4 ml-1" />
+          </button>
           </div>
         </div>
         
@@ -65,9 +68,12 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
             </div>
           </div>
           <div className="px-5 py-3 bg-white">
-            <Link to="/applicants" className="text-sm text-blue-600 hover:underline flex items-center justify-end">
-              Review Applications <ChevronRight className="h-4 w-4 ml-1" />
-            </Link>
+          <button 
+            onClick={() => onTabChange('applicants')}
+            className="text-sm text-scad-red hover:underline flex items-center justify-end"
+          >
+            Review Applications <ChevronRight className="h-4 w-4 ml-1" />
+          </button>
           </div>
         </div>
         
@@ -84,9 +90,12 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
             </div>
           </div>
           <div className="px-5 py-3 bg-white">
-            <Link to="/interns" className="text-sm text-green-600 hover:underline flex items-center justify-end">
-              Manage Interns <ChevronRight className="h-4 w-4 ml-1" />
-            </Link>
+          <button 
+            onClick={() => onTabChange('interns')}
+            className="text-sm text-scad-red hover:underline flex items-center justify-end"
+          >
+            Manage Interns <ChevronRight className="h-4 w-4 ml-1" />
+          </button>
           </div>
         </div>
       </div>
@@ -181,7 +190,10 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
                 </div>
             </button>
             
-            <Link to="/interns" className="flex items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100">
+            <button 
+              onClick={() => onTabChange && onTabChange('interns')} 
+              className="flex items-center w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100"
+            >
               <div className="w-8 h-8 rounded-full bg-green-500 bg-opacity-10 flex items-center justify-center mr-3">
                 <ClipboardCheck className="h-4 w-4 text-green-500" />
               </div>
@@ -189,7 +201,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
                 <p className="font-medium text-scad-dark">Evaluate Interns</p>
                 <p className="text-sm text-gray-500">Submit performance reviews</p>
               </div>
-            </Link>
+            </button>
           </div>
         </div>
         
@@ -201,9 +213,12 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
                 <Users className="h-5 w-5 mr-2 text-scad-red" />
                 Recent Applications
               </h2>
-              <Link to="/applicants" className="text-sm text-scad-red hover:underline flex items-center">
-                View all <ChevronRight className="h-4 w-4 ml-1" />
-              </Link>
+              <button 
+                onClick={() => onTabChange('applicants')}
+                className="text-sm text-scad-red hover:underline flex items-center justify-end"
+              >
+                All Applications <ChevronRight className="h-4 w-4 ml-1" />
+              </button>
             </div>
             
             {recentApplications.length > 0 ? (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, ChevronDown, Filter, Eye, Edit, Plus, Trash2, AlertCircle } from 'lucide-react';
+import { Calendar, ChevronDown, Filter, Eye, Edit, Plus, Trash2, AlertCircle, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
@@ -84,51 +84,64 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
         </Button>
       </div>
 
-      {/* Filters Section */}
+      {/* Filters Section - Updated to match other tabs */}
       <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4">
-        <div className="flex justify-between items-center">
-          <button 
-            onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center text-sm text-gray-700 hover:text-scad-red"
-          >
-            <Filter className="h-4 w-4 mr-1" />
-            Filter & Sort
-            <ChevronDown className={`h-4 w-4 ml-1 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-          </button>
+        <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:items-center justify-between">
+          <div className="flex flex-wrap gap-1 items-center">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`border ${statusFilter === 'all' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
+              onClick={() => setStatusFilter('all')}
+            >
+              All
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`border ${statusFilter === 'active' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
+              onClick={() => setStatusFilter('active')}
+            >
+              Active
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`border ${statusFilter === 'closed' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
+              onClick={() => setStatusFilter('closed')}
+            >
+              Closed
+            </Button>
+          </div>
           
-          <p className="text-sm text-gray-500">
-            Showing {filteredPostings.length} of {jobPostings.length} postings
-          </p>
-        </div>
-        
-        {showFilters && (
-          <div className="mt-4 flex flex-wrap gap-4">
-            <div>
-              <label htmlFor="statusFilter" className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-              <select 
-                id="statusFilter"
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-scad-red focus:border-scad-red block w-full p-2"
-              >
-                <option value="all">All</option>
-                <option value="active">Active</option>
-                <option value="closed">Closed</option>
-              </select>
-            </div>
-            
-            <div>
-              <label htmlFor="sortBy" className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+          <div className="flex items-center space-x-2 ml-auto">
+            <div className="relative">
               <select 
                 id="sortBy"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-scad-red focus:border-scad-red block w-full p-2"
+                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md pr-8 pl-3 py-1.5 focus:ring-scad-red focus:border-scad-red"
               >
-                <option value="newest">Date Posted (Newest)</option>
-                <option value="oldest">Date Posted (Oldest)</option>
-                <option value="applicants">Number of Applicants</option>
+                <option value="newest">Latest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="applicants">Most Applicants</option>
               </select>
+            </div>
+          </div>
+        </div>
+        
+        {/* Filter indicators - optional */}
+        {statusFilter !== 'all' && (
+          <div className="mt-2 flex items-center">
+            <span className="text-xs text-gray-500 mr-2">Filtered by:</span>
+            <div className="text-xs flex items-center gap-1 bg-gray-50 border rounded px-2 py-1 text-gray-800">
+              Status: {statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
+              <button 
+                onClick={() => setStatusFilter('all')} 
+                className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+              >
+                <X className="h-3 w-3" />
+              </button>
             </div>
           </div>
         )}

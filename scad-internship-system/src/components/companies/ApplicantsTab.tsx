@@ -40,14 +40,6 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
   const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
 
-  const counts = {
-    all: applicants.length,
-    pending: applicants.filter(a => a.status === 'pending').length,
-    finalized: applicants.filter(a => a.status === 'finalized').length,
-    accepted: applicants.filter(a => a.status === 'accepted').length,
-    rejected: applicants.filter(a => a.status === 'rejected').length,
-  };
-
   const filteredApplicants = useMemo(() => {
     return applicants.filter(applicant => {
       if (statusFilter !== 'all' && applicant.status !== statusFilter) {
@@ -195,26 +187,59 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
       </div>
       
       <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4">
-        <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:items-center">
-          <div className="flex-1">
-            <Tabs defaultValue="all" value={statusFilter} onValueChange={setStatusFilter}>
-              <TabsList className="w-full grid grid-cols-5 gap-1 h-auto">
-                <TabsTrigger value="all" className="py-1.5 text-xs">All ({counts.all})</TabsTrigger>
-                <TabsTrigger value="pending" className="py-1.5 text-xs">Pending ({counts.pending})</TabsTrigger>
-                <TabsTrigger value="finalized" className="py-1.5 text-xs">Finalized ({counts.finalized})</TabsTrigger>
-                <TabsTrigger value="accepted" className="py-1.5 text-xs">Accepted ({counts.accepted})</TabsTrigger>
-                <TabsTrigger value="rejected" className="py-1.5 text-xs">Rejected ({counts.rejected})</TabsTrigger>
-              </TabsList>
-            </Tabs>
+        <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:items-center justify-between">
+          {/* Filter buttons on the left */}
+          <div className="flex flex-wrap gap-1 items-center">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`border ${statusFilter === 'all' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
+              onClick={() => setStatusFilter('all')}
+            >
+              All
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`border ${statusFilter === 'pending' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
+              onClick={() => setStatusFilter('pending')}
+            >
+              Pending
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`border ${statusFilter === 'finalized' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
+              onClick={() => setStatusFilter('finalized')}
+            >
+              Finalized
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`border ${statusFilter === 'accepted' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
+              onClick={() => setStatusFilter('accepted')}
+            >
+              Accepted
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={`border ${statusFilter === 'rejected' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
+              onClick={() => setStatusFilter('rejected')}
+            >
+              Rejected
+            </Button>
           </div>
-          
-          <div className="flex items-center md:ml-4 space-x-2">
-            <div className="relative flex-1 min-w-[180px] md:w-64">
+            
+          {/* Search and sliders moved to right */}
+          <div className="flex items-center space-x-2 ml-auto">
+            <div className="relative min-w-[180px] md:w-64">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
               <Input
                 type="text"
                 placeholder="Search applicants..."
-                className="pl-9"
+                className="pl-9 bg-white text-gray-900"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
