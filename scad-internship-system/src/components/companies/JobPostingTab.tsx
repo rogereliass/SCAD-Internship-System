@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, ChevronDown, Filter, Eye, Edit, Plus, Trash2, AlertCircle, X } from 'lucide-react';
+import { Calendar, ChevronDown, Filter, Eye, Edit, Plus, Trash2, AlertCircle, X, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import NewJobPostingModal, { JobPostingData } from './NewJobPostingPopup';
 
 interface JobPosting {
   id: number;
@@ -10,24 +12,44 @@ interface JobPosting {
   applicants: number;
   status: string;
   createdAt: string;
+  description?: string;
+  location?: string;
+  deadline?: Date;
+  requirements?: string;
+  isPaid?: boolean;
+  duration?: string;
+  industry?: string;
 }
 
 interface JobPostingTabProps {
   jobPostings: JobPosting[];
-  onDeletePosting?: (id: number) => void; // New prop for delete functionality
+  onDeletePosting?: (id: number) => void;
+  onAddPosting?: (posting: JobPosting) => void;
+  onUpdatePosting?: (id: number, posting: JobPosting) => void;
 }
 
 const JobPostingTab: React.FC<JobPostingTabProps> = ({ 
   jobPostings = [], 
-  onDeletePosting = () => {} // Default empty function if not provided
+  onDeletePosting = () => {},
+  onAddPosting,
+  onUpdatePosting
 }) => {
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [showFilters, setShowFilters] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [postingToDelete, setPostingToDelete] = useState<number | null>(null);
+  const [jobModalOpen, setJobModalOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [currentJobData, setCurrentJobData] = useState<JobPostingData | null>(null);
+  const [jobToEditId, setJobToEditId] = useState<number | null>(null);
+  const [localJobPostings, setLocalJobPostings] = useState<JobPosting[]>(jobPostings);
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Check if a posting is recent (less than 7 days old)
+  useEffect(() => {
+    setLocalJobPostings(jobPostings);
+  }, [jobPostings]);
+
   const isRecent = (dateString: string) => {
     const postDate = new Date(dateString);
     const currentDate = new Date();
@@ -36,9 +58,12 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
     return diffDays <= 7;
   };
 
-  // Filter and sort job postings
-  const filteredPostings = jobPostings
-    .filter(post => statusFilter === 'all' ? true : post.status === statusFilter)
+  const filteredPostings = localJobPostings
+    .filter(post => {
+      const statusMatch = statusFilter === 'all' ? true : post.status === statusFilter;
+      const searchMatch = !searchTerm || post.position.toLowerCase().includes(searchTerm.toLowerCase());
+      return statusMatch && searchMatch;
+    })
     .sort((a, b) => {
       if (sortBy === 'newest') {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -50,41 +75,115 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
       return 0;
     });
 
-  // Function to handle delete confirmation
+  const handleOpenEditModal = (id: number) => {
+    const jobToEdit = localJobPostings.find(job => job.id === id);
+    if (jobToEdit) {
+      setCurrentJobData({
+        position: jobToEdit.position,
+        description: jobToEdit.description || '',
+        location: jobToEdit.location || '',
+        deadline: jobToEdit.deadline,
+        status: jobToEdit.status as 'active' | 'closed',
+        requirements: jobToEdit.requirements || '',
+        isPaid: jobToEdit.isPaid !== undefined ? jobToEdit.isPaid : true,
+        duration: jobToEdit.duration || '3 months',
+        industry: jobToEdit.industry || ''
+      });
+      setJobToEditId(id);
+      setEditMode(true);
+      setJobModalOpen(true);
+    }
+  };
+
+  const handleOpenAddModal = () => {
+    setCurrentJobData(null);
+    setJobToEditId(null);
+    setEditMode(false);
+    setJobModalOpen(true);
+  };
+
   const handleOpenDeleteDialog = (id: number) => {
     setPostingToDelete(id);
     setDeleteDialogOpen(true);
   };
 
-  // Function to handle actual deletion
   const handleDeleteConfirm = () => {
     if (postingToDelete !== null) {
       onDeletePosting(postingToDelete);
+      setLocalJobPostings(prev => prev.filter(post => post.id !== postingToDelete));
     }
     setDeleteDialogOpen(false);
     setPostingToDelete(null);
   };
 
-  // Function to find posting title by ID
+  const handleJobSubmit = (jobData: JobPostingData) => {
+    if (editMode && jobToEditId !== null) {
+      const updatedPosting: JobPosting = {
+        ...localJobPostings.find(job => job.id === jobToEditId)!,
+        position: jobData.position,
+        description: jobData.description,
+        location: jobData.location,
+        deadline: jobData.deadline,
+        status: jobData.status,
+        requirements: jobData.requirements,
+        isPaid: jobData.isPaid,
+        duration: jobData.duration,
+        industry: jobData.industry
+      };
+      
+      setLocalJobPostings(prev => 
+        prev.map(job => job.id === jobToEditId ? updatedPosting : job)
+      );
+      
+      if (onUpdatePosting) {
+        onUpdatePosting(jobToEditId, updatedPosting);
+      }
+    } else {
+      const newPosting: JobPosting = {
+        id: Date.now(),
+        position: jobData.position,
+        applicants: 0,
+        status: jobData.status,
+        createdAt: new Date().toISOString().split('T')[0],
+        description: jobData.description,
+        location: jobData.location,
+        deadline: jobData.deadline,
+        requirements: jobData.requirements,
+        isPaid: jobData.isPaid,
+        duration: jobData.duration,
+        industry: jobData.industry
+      };
+      
+      setLocalJobPostings(prev => [newPosting, ...prev]);
+      
+      if (onAddPosting) {
+        onAddPosting(newPosting);
+      }
+    }
+    
+    setJobModalOpen(false);
+  };
+
   const getPostingTitle = (id: number) => {
-    const posting = jobPostings.find(p => p.id === id);
+    const posting = localJobPostings.find(p => p.id === id);
     return posting ? posting.position : "this job posting";
   };
 
   return (
     <div className="space-y-6">
-      {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
         <div>
           <h2 className="text-2xl font-bold text-scad-dark">Job Postings</h2>
           <p className="text-gray-500 text-sm mt-1">Manage and track your job openings</p>
         </div>
-        <Button className="mt-3 sm:mt-0 bg-scad-red hover:bg-scad-red/90">
+        <Button 
+          className="mt-3 sm:mt-0 bg-scad-red hover:bg-scad-red/90"
+          onClick={handleOpenAddModal}
+        >
           <Plus className="mr-1 h-4 w-4" /> New Posting
         </Button>
       </div>
 
-      {/* Filters Section - Updated to match other tabs */}
       <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4">
         <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:items-center justify-between">
           <div className="flex flex-wrap gap-1 items-center">
@@ -115,12 +214,23 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
           </div>
           
           <div className="flex items-center space-x-2 ml-auto">
+            <div className="relative md:w-64">
+              <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <Input 
+                type="text" 
+                placeholder="Search job titles..." 
+                className="pl-9 bg-white text-gray-900 border-gray-300 rounded-md focus:border-gray-700 focus:ring-0 focus:outline-none h-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            
             <div className="relative">
               <select 
                 id="sortBy"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md pr-8 pl-3 py-1.5 focus:ring-scad-red focus:border-scad-red"
+                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md pr-8 pl-3 py-2 focus:ring-scad-red focus:border-scad-red h-10"
               >
                 <option value="newest">Latest First</option>
                 <option value="oldest">Oldest First</option>
@@ -130,24 +240,37 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
           </div>
         </div>
         
-        {/* Filter indicators - optional */}
-        {statusFilter !== 'all' && (
-          <div className="mt-2 flex items-center">
-            <span className="text-xs text-gray-500 mr-2">Filtered by:</span>
-            <div className="text-xs flex items-center gap-1 bg-gray-50 border rounded px-2 py-1 text-gray-800">
-              Status: {statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
-              <button 
-                onClick={() => setStatusFilter('all')} 
-                className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </div>
+        {(statusFilter !== 'all' || searchTerm) && (
+          <div className="mt-2 flex items-center flex-wrap gap-2">
+            <span className="text-xs text-gray-500 mr-1">Filtered by:</span>
+            
+            {statusFilter !== 'all' && (
+              <div className="text-xs flex items-center gap-1 bg-gray-50 border rounded px-2 py-1 text-gray-800">
+                Status: {statusFilter.charAt(0).toUpperCase() + statusFilter.slice(1)}
+                <button 
+                  onClick={() => setStatusFilter('all')} 
+                  className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            )}
+            
+            {searchTerm && (
+              <div className="text-xs flex items-center gap-1 bg-gray-50 border rounded px-2 py-1 text-gray-800">
+                Search: "{searchTerm}"
+                <button 
+                  onClick={() => setSearchTerm('')} 
+                  className="ml-1 hover:bg-gray-200 rounded-full p-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
 
-      {/* Job Postings Table */}
       {filteredPostings.length > 0 ? (
         <div className="bg-white rounded-md shadow overflow-hidden">
           <div className="overflow-x-auto">
@@ -177,12 +300,12 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <Link 
-                        to={`/job-posts/${post.id}/applicants`}
-                        className="text-sm text-gray-900 hover:text-scad-red"
+                      <div 
+                        
+                        className="text-sm text-gray-900 hover:text-gray-400"
                       >
                         {post.applicants} {post.applicants === 1 ? 'applicant' : 'applicants'}
-                      </Link>
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="group relative">
@@ -207,9 +330,12 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
                         <Link to={`/job-posts/${post.id}`} className="text-gray-600 hover:text-scad-red flex items-center">
                           <Eye className="h-4 w-4 mr-1" /> View
                         </Link>
-                        <Link to={`/job-posts/${post.id}/edit`} className="text-gray-600 hover:text-blue-600 flex items-center">
+                        <button
+                          onClick={() => handleOpenEditModal(post.id)}
+                          className="text-gray-600 hover:text-blue-600 flex items-center"
+                        >
                           <Edit className="h-4 w-4 mr-1" /> Edit
-                        </Link>
+                        </button>
                         <button 
                           onClick={() => handleOpenDeleteDialog(post.id)}
                           className="text-gray-600 hover:text-red-600 flex items-center"
@@ -225,20 +351,21 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
           </div>
         </div>
       ) : (
-        /* Empty State */
         <div className="bg-white rounded-md shadow-sm border border-gray-200 py-16 flex flex-col items-center justify-center">
           <div className="bg-gray-50 rounded-full p-4 mb-4">
             <Calendar className="h-10 w-10 text-gray-400" />
           </div>
           <h3 className="text-lg font-medium text-gray-900 mb-1">No job postings yet</h3>
           <p className="text-gray-500 mb-6">Create your first job posting to start receiving applications</p>
-          <Button className="bg-scad-red hover:bg-scad-red/90">
+          <Button 
+            className="bg-scad-red hover:bg-scad-red/90"
+            onClick={handleOpenAddModal}
+          >
             <Plus className="mr-1.5 h-4 w-4" /> Create New Posting
           </Button>
         </div>
       )}
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -267,6 +394,13 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <NewJobPostingModal 
+        isOpen={jobModalOpen}
+        onClose={() => setJobModalOpen(false)}
+        onSubmit={handleJobSubmit}
+        editData={currentJobData || undefined}
+      />
     </div>
   );
 };

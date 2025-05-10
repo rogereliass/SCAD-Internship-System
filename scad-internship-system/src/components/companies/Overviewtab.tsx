@@ -167,15 +167,19 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
             Quick Actions
           </h2>
           <div className="space-y-3">
-            <Link to="/job-posts/new" className="flex items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100">
-              <div className="w-8 h-8 rounded-full bg-scad-red bg-opacity-10 flex items-center justify-center mr-3">
-                <PlusCircle className="h-4 w-4 text-scad-red" />
-              </div>
-              <div>
-                <p className="font-medium text-scad-dark">Post New Job</p>
-                <p className="text-sm text-gray-500">Create a new internship listing</p>
-              </div>
-            </Link>
+
+            <button 
+            onClick={() => onTabChange && onTabChange('postings')} 
+            className="flex items-center w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100"
+            >
+                <div className="w-8 h-8 rounded-full bg-scad-red bg-opacity-10 flex items-center justify-center mr-3">
+                    <PlusCircle className="h-4 w-4 text-scad-red" />
+                </div>
+                <div>
+                    <p className="font-medium text-scad-dark">Create a Job Posting</p>
+                    <p className="text-sm text-gray-500">Add a new job opportunity</p>
+                </div>
+            </button>
             
             <button 
             onClick={() => onTabChange && onTabChange('applicants')} 
@@ -202,6 +206,17 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
                 <p className="text-sm text-gray-500">Submit performance reviews</p>
               </div>
             </button>
+
+            <Link to="/internships/2" className="flex items-center p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100">
+                <div className="w-8 h-8 rounded-full bg-yellow-500 bg-opacity-10 flex items-center justify-center mr-3">
+                  <FileText className="h-4 w-4 text-yellow-500" />
+                </div>
+              <div>
+                <p className="font-medium text-scad-dark">View All Internships</p>
+                <p className="text-sm text-gray-500">Browse all internships across companies</p>
+              </div>
+            </Link>
+
           </div>
         </div>
         

@@ -4,6 +4,7 @@ import { Calendar, Search, Filter, ChevronDown, Eye, FileCheck, Users, Clock, Ch
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Intern {
   id: number;
@@ -21,6 +22,7 @@ interface InternTabProps {
 
 const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchType, setSearchType] = useState<'name' | 'position'>('name');
   const [statusFilter, setStatusFilter] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedInterns, setSelectedInterns] = useState<number[]>([]);
@@ -106,10 +108,10 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
     return months <= 0 ? "< 1 month" : `${months} ${months === 1 ? 'month' : 'months'}`;
   };
 
-  // Define filteredInterns before using it
   const filteredInterns = interns.filter(intern => {
-    const matchesSearch = intern.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         intern.position.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = searchType === 'name' 
+      ? intern.name.toLowerCase().includes(searchTerm.toLowerCase())
+      : intern.position.toLowerCase().includes(searchTerm.toLowerCase());
     
     let matchesFilter = true;
     if (statusFilter === 'active') {
@@ -119,14 +121,12 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
     } else if (statusFilter === 'evaluation_pending') {
       matchesFilter = intern.evaluationStatus !== 'submitted';
     } else {
-      // 'all' or any other value
       matchesFilter = true;
     }
     
     return matchesSearch && matchesFilter;
   });
 
-  // Now you can use debug logs safely
   console.log('Status Filter:', statusFilter);
   console.log('Interns:', interns);
   console.log('Filtered Interns:', filteredInterns);
@@ -193,7 +193,7 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
                 className={`border ${statusFilter === 'active' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
                 onClick={() => setStatusFilter('active')}
               >
-                Active
+                Current
               </Button>
               <Button 
                 variant="ghost" 
@@ -213,15 +213,28 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
               </Button>
             </div>
             
-            <div className="relative w-full md:w-64">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
-              <Input
-                type="text"
-                placeholder="Search interns..."
-                className="pl-9 bg-white text-gray-900"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+            <div className="flex items-center w-full md:w-auto">
+              <div className="relative flex-grow md:w-64">
+                <Search className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <Input
+                  type="text"
+                  placeholder={searchType === 'name' ? "Search by name..." : "Search by position..."}
+                  className="pl-9 bg-white text-gray-900 border-gray-300 focus:border-gray-700 focus:ring-0 focus:outline-none"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="relative ml-2">
+                <select
+                  value={searchType}
+                  onChange={(e) => setSearchType(e.target.value as 'name' | 'position')}
+                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-md pr-8 pl-3 py-1.5 focus:ring-scad-red focus:border-scad-red h-10"
+                  aria-label="Search type"
+                >
+                  <option value="name">By Name</option>
+                  <option value="position">By Position</option>
+                </select>
+              </div>
             </div>
           </div>
           
@@ -243,7 +256,7 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
               
               {searchTerm && (
                 <Badge variant="outline" className="text-xs flex items-center gap-1 bg-gray-50 text-gray-800">
-                  Search: {searchTerm}
+                  {searchType === 'name' ? 'Name' : 'Position'}: {searchTerm}
                   <button 
                     onClick={() => setSearchTerm('')} 
                     className="ml-1 hover:bg-gray-200 rounded-full p-0.5"

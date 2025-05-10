@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 
+// Update the status type to only include the three allowed statuses
 interface Applicant {
   id: string;
   name: string;
@@ -18,7 +19,7 @@ interface Applicant {
   jobPostingId: string;
   email: string;
   appliedDate: string;
-  status: 'pending' | 'finalized' | 'accepted' | 'rejected';
+  status: 'accepted' | 'rejected' | 'finalized';
 }
 
 interface JobPosting {
@@ -29,9 +30,14 @@ interface JobPosting {
 interface ApplicantsTabProps {
   applicants: Applicant[];
   jobPostings: JobPosting[];
+  onStatusChange?: (applicantId: string, newStatus: 'accepted' | 'rejected' | 'finalized') => void;
 }
 
-const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPostings = [] }) => {
+const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ 
+  applicants = [], 
+  jobPostings = [],
+  onStatusChange 
+}) => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [jobFilter, setJobFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -39,6 +45,8 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
   const [isSelectMode, setIsSelectMode] = useState<boolean>(false);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState<boolean>(false);
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
+  const [statusDialogOpen, setStatusDialogOpen] = useState<boolean>(false);
+  const [currentApplicant, setCurrentApplicant] = useState<string | null>(null);
 
   const filteredApplicants = useMemo(() => {
     return applicants.filter(applicant => {
@@ -115,19 +123,14 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
     }
   };
 
+  // Updated status info to only include the three allowed statuses
   const getStatusInfo = (status: string) => {
     switch (status) {
-      case 'pending':
-        return {
-          color: 'bg-yellow-100 text-yellow-800',
-          tooltip: 'Application is under review',
-          icon: <Clock className="h-3.5 w-3.5 mr-1" />
-        };
       case 'finalized':
         return {
           color: 'bg-blue-100 text-blue-800',
-          tooltip: 'Awaiting confirmation from SCAD',
-          icon: <CheckCircle className="h-3.5 w-3.5 mr-1" />
+          tooltip: 'Application has been processed and awaiting final decision',
+          icon: <Clock className="h-3.5 w-3.5 mr-1" />
         };
       case 'accepted':
         return {
@@ -148,6 +151,25 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
           icon: <Clock className="h-3.5 w-3.5 mr-1" />
         };
     }
+  };
+
+  const handleOpenStatusDialog = (applicantId: string) => {
+    setCurrentApplicant(applicantId);
+    setStatusDialogOpen(true);
+  };
+
+  const handleStatusChange = (status: 'accepted' | 'rejected' | 'finalized') => {
+    if (currentApplicant && onStatusChange) {
+      onStatusChange(currentApplicant, status);
+    }
+    setStatusDialogOpen(false);
+    setCurrentApplicant(null);
+  };
+
+  const getApplicantName = (id: string | null) => {
+    if (!id) return '';
+    const applicant = applicants.find(a => a.id === id);
+    return applicant ? applicant.name : '';
   };
 
   return (
@@ -188,7 +210,7 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
       
       <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4">
         <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 md:items-center justify-between">
-          {/* Filter buttons on the left */}
+          {/* Filter buttons on the left - Updated to only show the three statuses */}
           <div className="flex flex-wrap gap-1 items-center">
             <Button 
               variant="ghost" 
@@ -197,14 +219,6 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
               onClick={() => setStatusFilter('all')}
             >
               All
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className={`border ${statusFilter === 'pending' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
-              onClick={() => setStatusFilter('pending')}
-            >
-              Pending
             </Button>
             <Button 
               variant="ghost" 
@@ -258,8 +272,8 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
         
         {jobFilter !== 'all' && (
           <div className="mt-2 flex items-center">
-            <span className="text-xs text-gray-500 mr-2">Filtered by:</span>
-            <Badge variant="outline" className="text-xs flex items-center gap-1 bg-gray-50">
+            <span className="text-xs text-scad-dark mr-2">Filtered by:</span>
+            <Badge variant="outline" className="text-xs flex text-scad-dark items-center gap-1 bg-gray-50">
               {getJobTitle(jobFilter)}
               <button 
                 onClick={() => setJobFilter('all')} 
@@ -345,6 +359,15 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
                                 <Mail className="h-3.5 w-3.5 mr-1.5" />
                                 Email
                               </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-xs flex items-center"
+                                onClick={() => handleOpenStatusDialog(applicant.id)}
+                              >
+                                <Clock className="h-3.5 w-3.5 mr-1.5" />
+                                Status
+                              </Button>
                               <Link 
                                 to={`/applicants/${applicant.id}`} 
                                 className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded text-scad-red hover:bg-red-50 hover:border-scad-red"
@@ -363,6 +386,7 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
               
               {collapsedGroups[jobId] && (
                 <div className="py-3 px-5 text-sm text-center text-gray-500 italic">
+                  Click to expand
                 </div>
               )}
             </div>
@@ -401,6 +425,7 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
         </div>
       )}
       
+      {/* Advanced filters dialog */}
       <Dialog open={showAdvancedFilters} onOpenChange={setShowAdvancedFilters}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -450,6 +475,60 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ applicants = [], jobPosti
             >
               Apply Filters
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* New Status Update Dialog */}
+      <Dialog open={statusDialogOpen} onOpenChange={setStatusDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Update Application Status</DialogTitle>
+          </DialogHeader>
+          
+          <div className="py-2">
+            <p className="text-sm text-gray-500 mb-4">
+              Update status for <span className="font-medium text-scad-red">{getApplicantName(currentApplicant)}</span>
+            </p>
+            
+            <div className="grid grid-cols-1 gap-3">
+              <Button 
+                className="bg-blue-100 hover:bg-blue-200 text-blue-800 justify-start flex items-center gap-2 p-3 h-auto"
+                onClick={() => handleStatusChange('finalized')}
+              >
+                <Clock className="h-5 w-5" />
+                <div className="text-left">
+                  <p className="font-medium">Mark as Finalized</p>
+                  <p className="text-xs text-blue-700">Application is processed and waiting for final decision</p>
+                </div>
+              </Button>
+              
+              <Button 
+                className="bg-green-100 hover:bg-green-200 text-green-800 justify-start flex items-center gap-2 p-3 h-auto"
+                onClick={() => handleStatusChange('accepted')}
+              >
+                <CheckCircle className="h-5 w-5" />
+                <div className="text-left">
+                  <p className="font-medium">Accept Application</p>
+                  <p className="text-xs text-green-700">Approve this applicant for the position</p>
+                </div>
+              </Button>
+              
+              <Button 
+                className="bg-red-100 hover:bg-red-200 text-red-800 justify-start flex items-center gap-2 p-3 h-auto"
+                onClick={() => handleStatusChange('rejected')}
+              >
+                <XCircle className="h-5 w-5" />
+                <div className="text-left">
+                  <p className="font-medium">Reject Application</p>
+                  <p className="text-xs text-red-700">Decline this applicant for the position</p>
+                </div>
+              </Button>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setStatusDialogOpen(false)}>Cancel</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
