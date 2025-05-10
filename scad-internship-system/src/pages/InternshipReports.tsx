@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Search, Filter, Clock, AlertTriangle, Download, FileText, CheckCircle, X } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import { Input } from '../components/ui/input';
@@ -151,6 +151,14 @@ const mockReports = [
 ];
 
 const InternshipReports = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isFromFaculty = location.pathname.includes('/faculty') || location.state?.from === 'faculty';
+  
+  const handleBack = () => {
+    navigate(`/dashboard/${isFromFaculty ? '4' : '3'}`, { replace: true });
+  };
+
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({
     major: '',
@@ -267,9 +275,12 @@ const InternshipReports = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Internship Reports</h1>
-          <Link to="/dashboard/3" className="text-gray-600 hover:text-gray-900">
+          <button 
+            onClick={handleBack}
+            className="text-gray-600 hover:text-gray-900"
+          >
             Back to Dashboard
-          </Link>
+          </button>
         </div>
 
         {/* Summary Cards */}

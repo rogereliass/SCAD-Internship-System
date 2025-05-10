@@ -15,7 +15,7 @@ import InternshipCycles from "./pages/InternshipCycles";
 import CompanyApplications from "./pages/CompanyApplications";
 import Students from "./pages/Students";
 import InternshipReports from "./pages/InternshipReports";
-
+import FacultyDashboard from "./components/dashboard/FacultyDashboard";
 import ViewAllInternships from "./pages/Internships";
 import ViewInternshipApplicants from "./pages/InternshipApplicants";
 import ViewAllCompanies from "./pages/Companies";
@@ -42,6 +42,7 @@ const App = () => (
           <Route path="/students" element={<Students />} />
           <Route path="/internship-reports" element={<InternshipReports />} />
           <Route path="/scad-dashboard" element={<ScadDashboard />} />
+          <Route path="/faculty-dashboard" element={<FacultyDashboard />} />
           <Route path="/internships" element={<Internships />} />
           <Route path="/internship" element={<Internships />} />
           <Route path="/internships/:id" element={<Internships />} />
