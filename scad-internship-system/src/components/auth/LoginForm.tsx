@@ -28,7 +28,10 @@ const LoginForm = () => {
         navigate('/dashboard/3');
       } else if (email === 'faculty@example.com' && password === 'password') {
         navigate('/dashboard/4');
-      } else {
+      } else if (email === 'companypending@example.com' && password === 'password') {
+        navigate('/company-pending');
+      } 
+      else {
         setError('Invalid credentials. Please try again.');
       }
     }, 1000);
@@ -127,6 +130,9 @@ const LoginForm = () => {
           </div>
           <div className="p-2 bg-gray-50 rounded">
             <p><strong>Faculty:</strong> faculty@example.com / password</p>
+          </div>
+          <div className="p-2 bg-gray-50 rounded">
+            <p><strong>Company Pending:</strong> companypending@example.com / password</p>
           </div>
         </div>
       </div>

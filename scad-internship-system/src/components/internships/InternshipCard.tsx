@@ -53,7 +53,7 @@ const InternshipCard: React.FC<InternshipProps> = ({
         )}
         
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-scad-dark">{title}</h3>
+        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
           <p className="text-gray-700">{company}</p>
           
           <div className="flex flex-wrap items-center mt-2 text-sm text-gray-600">
@@ -78,7 +78,7 @@ const InternshipCard: React.FC<InternshipProps> = ({
               to={`/internships/${id}`} 
               className="text-sm font-medium text-scad-red hover:underline"
             >
-              View Details
+              Apply Now
             </Link>
           </div>
         </div>

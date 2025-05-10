@@ -38,8 +38,8 @@ const Footer = () => {
               <h4 className="text-md font-bold mb-4">Contact</h4>
               <ul className="space-y-2">
                 <li className="text-gray-400">Email: info@scadcompass.edu</li>
-                <li className="text-gray-400">Phone: (555) 123-4567</li>
-                <li className="text-gray-400">Address: 123 University Ave, City, State 12345</li>
+                <li className="text-gray-400">Phone: +20 110 099 6345</li>
+                <li className="text-gray-400">Address: New Cairo City . Main Entrance El-Tagamoa El-Khames</li>
               </ul>
             </div>
           </div>
