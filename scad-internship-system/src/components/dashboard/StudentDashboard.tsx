@@ -12,6 +12,7 @@ import InternshipCard from '../internships/InternshipCard';
 import AvailableInternships from '../internships/AvailableInternships';
 import CompanyCard from '../companies/CompanyCard';
 import MyInternshipsTab from '../students/MyInternshipsTab';
+import Reports from '../reports/Reports';
 
 interface Application {
   id: string;
@@ -399,8 +400,7 @@ const StudentDashboard = () => {
         
         <TabsContent value="reports">
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-semibold mb-4">Reports</h2>
-            <p className="text-gray-600">Report management features coming soon...</p>
+            <Reports />
           </div>
         </TabsContent>
         
