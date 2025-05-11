@@ -26,6 +26,7 @@ import ScrollToTop from "./hooks/ScrollToTop";
 import Workshops from "./pages/Workshops";
 import Notifications from './pages/Notifications';
 import About from './pages/About';
+import Contact from './pages/Contact';
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,7 @@ const App = () => (
           <Route path="/appointments" element={<VideoAppointments />} />
           <Route path="/workshops" element={<Workshops />} />
           <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/notifications/:id" element={<Notifications />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

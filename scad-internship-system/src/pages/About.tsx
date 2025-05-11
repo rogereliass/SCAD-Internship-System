@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Building, Users, GraduationCap, Briefcase, Award, Globe } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from '../components/ui/dialog';
 
 const About = () => {
+  const [open, setOpen] = useState(false);
   const features = [
     {
       icon: <Building className="w-12 h-12 text-scad-red" />,
@@ -146,17 +148,46 @@ const About = () => {
             >
               Register Now
             </Link>
-            <Link 
-              to="/contact" 
+            <button
+              onClick={() => setOpen(true)}
               className="bg-white text-scad-red border border-scad-red px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
             >
               Contact Us
-            </Link>
+            </button>
           </div>
         </div>
       </div>
 
-      <Footer />
+      {/* Contact Modal */}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="bg-scad-dark text-white max-w-md w-full">
+          <DialogHeader>
+            <DialogTitle>Contact</DialogTitle>
+            <DialogDescription className="text-white">
+              <div className="space-y-4 text-lg mt-4">
+                <div>
+                  <span className="font-semibold">Email:</span> info@scadcompass.edu
+                </div>
+                <div>
+                  <span className="font-semibold">Phone:</span> +20 110 099 6345
+                </div>
+                <div>
+                  <span className="font-semibold">Address:</span> New Cairo City. Main Entrance El-Tagamoa El-Khames
+                </div>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogClose asChild>
+            <button
+              type="button"
+              className="absolute right-4 top-4 text-gray-400 hover:text-white"
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
