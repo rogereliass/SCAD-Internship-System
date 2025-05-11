@@ -21,7 +21,7 @@ import ViewInternshipApplicants from "./pages/InternshipApplicants";
 import ViewAllCompanies from "./pages/Companies";
 import Companies from "./pages/Companies";
 import CompanyPeding from "./pages/CompanyPending";
-
+import Notifications from './pages/Notifications';
 
 const queryClient = new QueryClient();
 
@@ -50,6 +50,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
           <Route path="/internships/:id/applicants" element={<ViewInternshipApplicants />} />
           <Route path="/company-pending" element={<CompanyPeding />} />
+          <Route path="/notifications/:id" element={<Notifications />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
