@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { BarChart as RechartBarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend, PieChart as RechartPieChart, Pie, Cell } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Badge } from "../ui/badge";
+import NotificationsButton from '../DashboardEssentials/NotificationsButton';
 
 
 // Mock Data (replace with actual data fetching)
@@ -61,57 +62,7 @@ const FacultyDashboard = () => {
             <p className="text-gray-600">Faculty Dashboard</p>
           </div>
           
-          <div className="mt-4 sm:mt-0">
-            <div className="relative">
-              <Button 
-                variant="outline" 
-                className="flex items-center gap-2"
-                onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-              >
-                <Bell size={16} />
-                <span>Notifications</span>
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">
-                  {mockNotifications.filter(n => !n.read).length}
-                </div>
-              </Button>
-              
-              {isNotificationsOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-10 overflow-hidden">
-                  <div className="p-3 border-b border-gray-200 flex justify-between items-center">
-                    <h3 className="font-medium font-bold text-black">Notifications</h3>
-                    <Button size="sm" className="h-auto py-1">
-                      Mark all as read
-                    </Button>
-                  </div>
-                  <div className="max-h-80 overflow-y-auto">
-                    {mockNotifications.map(notification => (
-                      <div 
-                        key={notification.id}
-                        className={`p-3 border-b border-gray-100 hover:bg-gray-50 ${!notification.read ? 'bg-gray-50' : ''}`}
-                      >
-                        <div className="flex gap-3">
-                          <div className="flex-shrink-0 mt-1">
-                            {notification.type === 'report' && <FileText size={18} className="text-orange-500" />}
-                            {notification.type === 'clarification' && <AlertCircle size={18} className="text-blue-500" />}
-                          </div>
-                          <div>
-                            <p className="font-medium text-sm text-black font-bold">{notification.title}</p>
-                            <p className="text-xs text-gray-600">{notification.description}</p>
-                            <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="p-2 border-t border-gray-200 text-center">
-                    <Button variant="ghost" size="sm" className="w-full text-sm bg-black text-white hover:bg-gray-800">
-                      View all notifications
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+          < NotificationsButton notifications={mockNotifications} />
         </div>
 
         <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="mb-6">
@@ -122,8 +73,9 @@ const FacultyDashboard = () => {
 
           <TabsContent value="overview">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+
             <Link to="/internship-reports" state={{ from: 'faculty' }}>
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer">
                   <CardContent className="pt-6 flex items-center justify-between">
                     <div>
                       <FileText size={24} className="text-primary mb-2" />
@@ -132,8 +84,9 @@ const FacultyDashboard = () => {
                     </div>
                     <ChevronRight size={20} className="text-gray-400" />
                   </CardContent>
-                </Card>
-              </Link>
+              </Card>
+            </Link>
+
             <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Report Status</CardTitle>
