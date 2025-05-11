@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FileText, ChevronRight, Download } from 'lucide-react';
+import { FileText, ChevronRight, Download, Building2 } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   Card,
@@ -25,14 +25,18 @@ interface OverviewCardsProps {
     value: number;
     color: string;
   }>;
+  onTabChange?: (tab: string) => void;
 }
 
-const OverviewCards = ({ mockStatistics, reportStatusData }: OverviewCardsProps) => {
+const OverviewCards = ({ mockStatistics, reportStatusData, onTabChange }: OverviewCardsProps) => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <Link to="/internship-reports" state={{ from: 'faculty' }}>
-          <Card className="hover:shadow-md transition-shadow cursor-pointer">
+        <div className="w-full">
+          <Card 
+            className="hover:shadow-md transition-all duration-200 cursor-pointer w-full hover:bg-gray-100"
+            onClick={() => onTabChange?.('reports')}
+          >
             <CardContent className="pt-6 flex items-center justify-between">
               <div>
                 <FileText size={24} className="text-scad-dark mb-2" />
@@ -42,7 +46,33 @@ const OverviewCards = ({ mockStatistics, reportStatusData }: OverviewCardsProps)
               <ChevronRight size={20} className="text-gray-400" />
             </CardContent>
           </Card>
+        </div>
+
+        <Link to="/companies-evaluations" state={{ from: 'faculty' }} className="w-full">
+          <Card className="hover:shadow-md transition-all duration-200 cursor-pointer w-full hover:bg-gray-100">
+            <CardContent className="pt-6 flex items-center justify-between">
+              <div>
+                <Building2 size={24} className="text-scad-dark mb-2" />
+                <h3 className="font-medium">View Companies' Evaluations</h3>
+                <p className="text-sm text-gray-500">Access company performance metrics</p>
+              </div>
+              <ChevronRight size={20} className="text-gray-400" />
+            </CardContent>
+          </Card>
         </Link>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-lg">Average Review Time</CardTitle>
+          </CardHeader>
+          <CardContent className="pb-2">
+            <div className="text-3xl font-bold text-scad-dark">{mockStatistics.averageReviewTime}</div>
+            <p className="text-sm text-gray-500">Time to review reports</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">Report Status</CardTitle>
@@ -74,18 +104,6 @@ const OverviewCards = ({ mockStatistics, reportStatusData }: OverviewCardsProps)
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-lg">Average Review Time</CardTitle>
-          </CardHeader>
-          <CardContent className="pb-2">
-            <div className="text-3xl font-bold text-scad-dark">{mockStatistics.averageReviewTime}</div>
-            <p className="text-sm text-gray-500">Time to review reports</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">Top Courses</CardTitle>
@@ -119,7 +137,9 @@ const OverviewCards = ({ mockStatistics, reportStatusData }: OverviewCardsProps)
             </div>
           </CardContent>
         </Card>
+      </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">Top Companies</CardTitle>

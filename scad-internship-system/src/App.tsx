@@ -27,6 +27,7 @@ import Workshops from "./pages/Workshops";
 import Notifications from './pages/Notifications';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import CompaniesEvaluations from '@/pages/CompaniesEvaluations';
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const App = () => (
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/notifications/:id" element={<Notifications />} />
+          <Route path="/companies-evaluations" element={<CompaniesEvaluations />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -273,6 +273,7 @@ const FacultyDashboard = () => {
           <OverviewCards 
             mockStatistics={mockStatistics}
             reportStatusData={reportStatusData}
+            onTabChange={setActiveTab}
           />
         </TabsContent>
 

@@ -215,7 +215,7 @@ const ReportsTable = ({ reports, onViewReport, onReviewReport }: ReportsTablePro
                       className="bg-white text-green-600 hover:bg-green-100 hover:text-green-800 py-2 px-4 rounded-md transition-all duration-300"
                       onClick={() => onReviewReport(report)}
                     >
-                      Feedback
+                      Review
                     </Button>
                   </div>
                 </TableCell>
