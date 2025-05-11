@@ -57,20 +57,20 @@ const LoginForm = () => {
     id="email"
     value={email}
     onChange={(e) => setEmail(e.target.value)}
-    className="input-field w-full"
+    className="input-field w-full bg-gray-50 text-black"
     placeholder="your@email.com"
     required
   />
 </div>
 
 <div>
-  <label htmlFor="password" className="text-black block mb-1 font-medium">Password</label>
+  <label htmlFor="password" className="text-black block mb-1 font-medium ">Password</label>
   <input
     type="password"
     id="password"
     value={password}
     onChange={(e) => setPassword(e.target.value)}
-    className="input-field w-full"
+    className="input-field w-full bg-gray-50 text-black"
     placeholder="••••••••"
     required
   />

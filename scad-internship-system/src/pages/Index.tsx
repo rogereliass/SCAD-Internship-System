@@ -4,6 +4,7 @@ import Navbar from '../components/layout/Navbar';
 import InternshipCard from '../components/internships/InternshipCard';
 import CompanyCard from '../components/companies/CompanyCard';
 import Footer from '../components/layout/Footer';
+import logo from '@/components/assets/Internship.jpg';
 
 // Sample data
 const featuredInternships = [
@@ -87,9 +88,15 @@ const Index = () => {
             </div>
             
             <div className="md:w-1/2 flex justify-center">
-              <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1974" 
-                alt="Students collaborating" 
-                className="rounded-lg shadow-xl max-h-96 object-cover" />
+              
+              <img 
+                src={logo} 
+                alt="Internship" 
+                className=" rounded-md object-cover"
+              />
+
+              <span className="text-scad-dark font-bold text-xl hidden md:block"> </span>
+            
             </div>
           </div>
         </div>
@@ -170,7 +177,7 @@ const Index = () => {
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {featuredCompanies.map(company => (
-              <CompanyCard key={company.id} {...company} />
+              <CompanyCard email={''} key={company.id} {...company} />
             ))}
           </div>
         </div>

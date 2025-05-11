@@ -89,7 +89,7 @@ const WorkshopList = () => {
           placeholder="Search workshops by title, description, or speaker..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10"
+          className="pl-10 bg-white"
         />
       </div>
       
@@ -131,7 +131,8 @@ const WorkshopList = () => {
               
               <CardFooter className="pt-0 flex justify-between items-center">
                 <Button 
-                  variant="outline" 
+                  variant="default" 
+                  className='mt-3'
                   onClick={() => handleRegister(workshop.id)}
                 >
                   View Details & Register

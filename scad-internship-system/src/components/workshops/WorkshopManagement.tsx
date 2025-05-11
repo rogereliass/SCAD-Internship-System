@@ -19,6 +19,7 @@ import { CalendarIcon, Clock, Edit, Plus, Trash2 } from 'lucide-react';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { cn } from '@/lib/utils';
+import { toast } from '../ui/sonner';
 
 // Mock workshop data (same as in WorkshopList)
 const mockWorkshops = [
@@ -196,7 +197,7 @@ const WorkshopManagement = () => {
   return (
     <div className="mt-6">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold">Manage Workshops</h2>
+        <h2 className="text-xl font-semibold text-black">Manage Workshops</h2>
         <Button onClick={handleAddWorkshop} className="gap-2">
           <Plus size={16} />
           Add Workshop
@@ -206,11 +207,11 @@ const WorkshopManagement = () => {
       {/* Workshops Table */}
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead>Date & Time</TableHead>
-            <TableHead>Speaker</TableHead>
-            <TableHead className="w-[100px]">Actions</TableHead>
+          <TableRow className='text-black'>
+            <TableHead className='text-black'>Title</TableHead>
+            <TableHead className='text-black'>Date & Time</TableHead>
+            <TableHead className='text-black'>Speaker</TableHead>
+            <TableHead className=" text-black w-[100px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -218,22 +219,22 @@ const WorkshopManagement = () => {
             <TableRow key={workshop.id}>
               <TableCell>
                 <div>
-                  <div className="font-medium">{workshop.title}</div>
+                  <div className="font-medium text-black">{workshop.title}</div>
                   <div className="text-sm text-gray-600 truncate max-w-[300px]">
                     {workshop.shortDescription}
                   </div>
                 </div>
               </TableCell>
               <TableCell>
-                <div className="text-sm">
+                <div className="text-sm text-black">
                   {format(workshop.startDate, 'PPP')}
                   <br />
                   {format(workshop.startDate, 'p')} - {format(workshop.endDate, 'p')}
                 </div>
               </TableCell>
-              <TableCell>{workshop.speaker.name}</TableCell>
+              <TableCell className='text-black'>{workshop.speaker.name}</TableCell>
               <TableCell>
-                <div className="flex space-x-2">
+                <div className="flex space-x-2 text-black">
                   <Button 
                     size="sm" 
                     variant="ghost" 
@@ -265,8 +266,8 @@ const WorkshopManagement = () => {
       </Table>
       
       {/* Workshop Form Dialog */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="bg-white max-w-2xl">
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen} >
+        <DialogContent className="bg-white max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {isEditMode ? 'Edit Workshop' : 'Add New Workshop'}
@@ -386,13 +387,13 @@ const WorkshopManagement = () => {
                   control={form.control}
                   name="startTime"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="relative top-[-10px]">
                       <FormLabel>Start Time</FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Clock className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+                          <Clock className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-900 bg-white" />
                           <select
-                            className="w-full pl-8 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            className="w-full pl-8 h-10 rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                             {...field}
                           >
                             <option value="">Select time</option>
@@ -453,13 +454,13 @@ const WorkshopManagement = () => {
                   control={form.control}
                   name="endTime"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="relative top-[-10px]">
                       <FormLabel>End Time</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Clock className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
                           <select
-                            className="w-full pl-8 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                            className="w-full pl-8 h-10 rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                             {...field}
                           >
                             <option value="">Select time</option>
@@ -498,7 +499,7 @@ const WorkshopManagement = () => {
                 <Button variant="outline" type="button" onClick={() => setIsDialogOpen(false)}>
                   Cancel
                 </Button>
-                <Button type="submit">
+                <Button type="submit"onClick={() => toast.success(`Workshop edited`)}>
                   {isEditMode ? 'Update Workshop' : 'Add Workshop'}
                 </Button>
               </DialogFooter>
