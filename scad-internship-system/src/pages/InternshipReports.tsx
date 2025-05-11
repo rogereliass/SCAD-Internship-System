@@ -474,7 +474,7 @@ const InternshipReports = () => {
                         className="bg-white text-green-600 hover:bg-green-100 hover:text-green-800 py-2 px-4 rounded-md transition-all duration-300"
                         onClick={() => handleOpenReviewModal(report)}
                       >
-                        Review
+                        Feedback
                       </Button>
                     </div>
                   </TableCell>
@@ -580,17 +580,31 @@ const InternshipReports = () => {
                     </Card>
                   </div>
                   
-                  {/* Review Comments */}
-                  {selectedReport.comment && (
-                    <Card className={selectedReport.status === 'rejected' ? 'border-red-200' : selectedReport.status === 'flagged' ? 'border-orange-200' : 'border-green-200'}>
-                      <CardHeader className={selectedReport.status === 'rejected' ? 'bg-red-50' : selectedReport.status === 'flagged' ? 'bg-orange-50' : 'bg-green-50'}>
-                        <CardTitle className="text-lg text-black">Reviewer Comments</CardTitle>
-                      </CardHeader>
-                      <CardContent className="pt-4">
-                        <p className="text-white">{selectedReport.comment}</p>
-                      </CardContent>
-                    </Card>
-                  )}
+                  {/* Comments Section */}
+                  <Card className="mb-6">
+                    <CardHeader>
+                      <CardTitle className="text-lg">Comments & Feedback</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {selectedReport.comment ? (
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-2">
+                            <Badge className={getStatusColor(selectedReport.status)}>
+                              {selectedReport.status.charAt(0).toUpperCase() + selectedReport.status.slice(1)}
+                            </Badge>
+                            {selectedReport.reviewedBy && (
+                              <span className="text-sm text-gray-500">
+                                by {selectedReport.reviewedBy}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-gray-900">{selectedReport.comment}</p>
+                        </div>
+                      ) : (
+                        <p className="text-gray-500 italic">No feedback provided yet.</p>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
                 
                 <DialogFooter className="flex flex-wrap gap-3">
@@ -631,26 +645,8 @@ const InternshipReports = () => {
             
             <form onSubmit={handleReviewSubmit} className="space-y-4 py-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium" htmlFor="status">
-                  Review Status
-                </label>
-                <select 
-                  id="status"
-                  name="status"
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                  value={reviewData.status}
-                  onChange={handleReviewInputChange}
-                  required
-                >
-                  <option value="accepted">Accepted</option>
-                  <option value="flagged">Flagged (Needs Clarification)</option>
-                  <option value="rejected">Rejected</option>
-                </select>
-              </div>
-              
-              <div className="space-y-2">
                 <label className="text-sm font-medium" htmlFor="comment">
-                  {reviewData.status === 'accepted' ? 'Feedback (Optional)' : 'Feedback *'}
+                  Feedback
                 </label>
                 <Textarea
                   id="comment"
@@ -659,13 +655,8 @@ const InternshipReports = () => {
                   onChange={handleReviewInputChange}
                   placeholder="Provide feedback on the internship report"
                   rows={4}
-                  required={reviewData.status !== 'accepted'}
+                  required
                 />
-                {reviewData.status !== 'accepted' && (
-                  <p className="text-sm text-gray-500">
-                    Please provide a detailed explanation for flagging or rejecting this report.
-                  </p>
-                )}
               </div>
               
               <DialogFooter className="pt-4">
@@ -678,13 +669,9 @@ const InternshipReports = () => {
                 </Button>
                 <Button 
                   type="submit"
-                  className={
-                    reviewData.status === 'accepted' ? 'bg-green-600 hover:bg-green-700' :
-                    reviewData.status === 'flagged' ? 'bg-orange-600 hover:bg-orange-700' :
-                    'bg-red-600 hover:bg-red-700'
-                  }
+                  className="bg-green-600 hover:bg-green-700"
                 >
-                  Submit Review
+                  Submit Feedback
                 </Button>
               </DialogFooter>
             </form>
