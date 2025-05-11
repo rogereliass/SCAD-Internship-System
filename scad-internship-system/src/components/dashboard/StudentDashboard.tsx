@@ -1,27 +1,82 @@
-
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import NotificationsButton from './../DashboardEssentials/NotificationsButton';
+import TabsLayout from './../DashboardEssentials/TabsLayout';
+import { TabsContent } from '../ui/tabs';
+import ApplicationsTab from '../students/ApplicationsTab';
+import ApplicationDetails from '../students/ApplicationDetails';
+import { Search, Filter } from 'lucide-react';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import InternshipCard from '../internships/InternshipCard';
+import AvailableInternships from '../internships/AvailableInternships';
+import CompanyCard from '../companies/CompanyCard';
 
-// Sample data
-const internshipApplications = [
-  { id: 1, company: 'TechCorp', position: 'Frontend Developer', status: 'pending', appliedDate: '2023-11-15' },
-  { id: 2, company: 'DesignHub', position: 'UX Design Intern', status: 'accepted', appliedDate: '2023-11-10' },
-  { id: 3, company: 'DataSystems', position: 'Data Analyst', status: 'finalized', appliedDate: '2023-11-05' },
-];
+interface Application {
+  id: string;
+  jobTitle: string;
+  companyName: string;
+  description: string;
+  status: 'pending' | 'finalized' | 'accepted' | 'rejected';
+  startDate?: string;
+  endDate?: string;
+  contactEmail?: string;
+}
 
-const recommendedInternships = [
-  { id: 1, company: 'WebSolutions', position: 'Web Developer', location: 'Remote', duration: '3 months' },
-  { id: 2, company: 'MarketingPro', position: 'Marketing Intern', location: 'New York', duration: '6 months' },
-  { id: 3, company: 'SoftwareCo', position: 'Software Engineer', location: 'San Francisco', duration: '3 months' },
-];
-
-const upcomingDeadlines = [
-  { id: 1, title: 'Internship Report Submission', date: '2023-12-15' },
-  { id: 2, title: 'Online Assessment: Web Development', date: '2023-12-10' },
-  { id: 3, title: 'Career Workshop Registration', date: '2023-12-05' },
+// Placeholder data - to be replaced with actual data
+const mockNotifications = [
+  {
+    id: 1,
+    title: 'New Internship Cycle',
+    description: 'The Summer 2024 internship cycle is now open! Start applying for positions.',
+    time: '2 hours ago',
+    type: 'company' as const,
+    read: false
+  },
+  {
+    id: 2,
+    title: 'Upcoming Internship Cycle',
+    description: 'The Fall 2024 internship cycle will begin in 2 weeks. Prepare your applications!',
+    time: '1 day ago',
+    type: 'workshop' as const,
+    read: false
+  },
+  {
+    id: 3,
+    title: 'Internship Report Status',
+    description: 'Your internship report for TechCorp has been reviewed and approved',
+    time: '2 days ago',
+    type: 'report' as const,
+    read: true
+  },
+  {
+    id: 4,
+    title: 'Course Reminder',
+    description: 'Web Development 101 starts tomorrow at 10:00 AM',
+    time: '3 days ago',
+    type: 'workshop' as const,
+    read: false
+  }
 ];
 
 const StudentDashboard = () => {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [dateFilter, setDateFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [industryFilter, setIndustryFilter] = useState('all');
+  const [durationFilter, setDurationFilter] = useState('all');
+  const [paymentFilter, setPaymentFilter] = useState('all');
+
+  const studentTabs = [
+    { value: "overview", label: "Overview" },
+    { value: "internships", label: "Internships" },
+    { value: "reports", label: "Reports" },
+    { value: "profile", label: "Profile" }
+  ];
+
   const [student, setStudent] = useState({
     name: 'Alex Johnson',
     major: 'Computer Science',
@@ -30,123 +85,351 @@ const StudentDashboard = () => {
     isPRO: false,
   });
 
+  const applications = [
+    {
+      id: '1',
+      jobTitle: 'Frontend Developer Intern',
+      companyName: 'TechCorp',
+      description: 'A 3-month internship focused on React development',
+      status: 'finalized' as const,
+      startDate: '2024-06-01',
+      endDate: '2024-09-01',
+      contactEmail: 'hr@techcorp.com'
+    },
+    {
+      id: '2',
+      jobTitle: 'UX Design Intern',
+      companyName: 'DesignHub',
+      description: 'Work on user interface design and user experience',
+      status: 'pending' as const
+    }
+  ];
+
+  const recommendedCompanies = [
+    { 
+      name: 'TechCorp', 
+      industry: 'Information Technology', 
+      email: 'careers@techcorp.com',
+      contactPerson: 'John Smith',
+      phone: '+1 (555) 123-4567',
+      website: 'https://techcorp.com',
+      location: 'San Francisco, CA',
+      joinDate: '2023-01-15',
+      about: 'TechCorp is a leading technology company specializing in innovative software solutions. We focus on creating cutting-edge products that help businesses transform their digital presence.',
+      size: 'large' as const
+    },
+    { 
+      name: 'DesignHub', 
+      industry: 'Design', 
+      email: 'jobs@designhub.com',
+      contactPerson: 'Sarah Johnson',
+      phone: '+1 (555) 234-5678',
+      website: 'https://designhub.com',
+      location: 'New York, NY',
+      joinDate: '2023-03-20',
+      about: 'DesignHub is a creative design agency that helps brands establish their visual identity. Our team of expert designers creates stunning, user-centered designs that make an impact.',
+      size: 'medium' as const
+    },
+    { 
+      name: 'DataSystems', 
+      industry: 'Data Analytics', 
+      email: 'recruiting@datasystems.com',
+      contactPerson: 'Michael Chen',
+      phone: '+1 (555) 345-6789',
+      website: 'https://datasystems.com',
+      location: 'Boston, MA',
+      joinDate: '2023-06-10',
+      about: 'DataSystems is a data analytics company that helps organizations make data-driven decisions. We provide advanced analytics solutions and consulting services to businesses of all sizes.',
+      size: 'corporate' as const
+    }
+  ];
+
+  const availableInternships = [
+    { id: '1', company: 'TechCorp', title: 'Frontend Developer', duration: '3 months' },
+    { id: '2', company: 'DesignHub', title: 'UX Designer', duration: '6 months' },
+    { id: '3', company: 'DataSystems', title: 'Data Analyst', duration: '3 months' }
+  ];
+
+  const myInternships = [
+    { id: '1', company: 'TechCorp', title: 'Frontend Developer', status: 'current', startDate: '2024-01-01', endDate: '2024-04-01' },
+    { id: '2', company: 'DesignHub', title: 'UX Designer', status: 'completed', startDate: '2023-06-01', endDate: '2023-09-01' }
+  ];
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleApplicationClick = (id: string) => {
+    const application = applications.find(app => app.id === id);
+    if (application) {
+      setSelectedApplication(application);
+    }
+  };
+
+  const handleBack = () => {
+    setSelectedApplication(null);
+  };
+
   return (
     <div className="p-6">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-scad-dark mb-2">Welcome back, {student.name}!</h1>
-        <p className="text-gray-600">
-          {student.major} | Semester {student.semester} | {student.completedInternships} Completed Internship
-          {student.isPRO && <span className="ml-2 bg-scad-yellow text-scad-dark px-2 py-0.5 rounded-full text-xs font-semibold">PRO</span>}
-        </p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-scad-dark mb-2">Welcome back, {student.name}!</h1>
+          <p className="text-gray-600">{student.major} | Semester {student.semester}</p>
+        </div>
+        
+        <div className="mt-4 sm:mt-0">
+          <NotificationsButton notifications={mockNotifications} />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Applications */}
-        <div className="lg:col-span-2">
-          <div className="card h-full">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-scad-dark">Recent Applications</h2>
-              <Link to="/applications" className="text-sm text-scad-red hover:underline">View all</Link>
-            </div>
-            
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {internshipApplications.map((app) => (
-                    <tr key={app.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{app.company}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{app.position}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          app.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                          app.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                          app.status === 'finalized' ? 'bg-blue-100 text-blue-800' :
-                          'bg-yellow-100 text-yellow-800'
-                        }`}>
-                          {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {app.appliedDate}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {internshipApplications.length === 0 && (
-              <div className="text-center py-10">
-                <p className="text-gray-500">You haven't applied to any internships yet.</p>
-                <Link to="/internships" className="mt-3 btn btn-primary inline-block">
-                  Find Internships
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Deadlines */}
-        <div className="lg:col-span-1">
-          <div className="card h-full">
-            <h2 className="text-lg font-semibold text-scad-dark mb-4">Upcoming Deadlines</h2>
-            
-            <div className="space-y-3">
-              {upcomingDeadlines.map((deadline) => (
-                <div key={deadline.id} className="p-3 bg-gray-50 rounded-md">
-                  <p className="font-medium text-scad-dark">{deadline.title}</p>
-                  <p className="text-sm text-gray-500 mt-1">Due: {deadline.date}</p>
-                </div>
-              ))}
-            </div>
-
-            {upcomingDeadlines.length === 0 && (
-              <div className="text-center py-6">
-                <p className="text-gray-500">No upcoming deadlines.</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Recommended Internships */}
-        <div className="lg:col-span-3">
-          <div className="card">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold text-scad-dark">Recommended for You</h2>
-              <Link to="/internships" className="text-sm text-scad-red hover:underline">View all</Link>
-            </div>
-            
+      {/* Tabs section */}
+      <TabsLayout 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        tabs={studentTabs}
+        className="mb-6 space-x-12"
+      >
+        <TabsContent value="overview">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-xl font-semibold mb-4">Overview</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {recommendedInternships.map((internship) => (
-                <div key={internship.id} className="border border-gray-200 rounded-lg p-4 hover:border-scad-red transition-colors">
-                  <h3 className="font-medium text-scad-dark">{internship.position}</h3>
-                  <p className="text-gray-600 text-sm mb-2">{internship.company}</p>
-                  <div className="flex items-center text-gray-500 text-xs space-x-2 mb-3">
-                    <span>{internship.location}</span>
-                    <span>•</span>
-                    <span>{internship.duration}</span>
-                  </div>
-                  <Link to={`/internships/${internship.id}`} className="text-scad-red text-sm hover:underline">
-                    View Details
-                  </Link>
-                </div>
-              ))}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-medium text-gray-900">Completed Internships</h3>
+                <p className="text-2xl font-bold text-scad-dark">{student.completedInternships}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-medium text-gray-900">Current Semester</h3>
+                <p className="text-2xl font-bold text-scad-dark">{student.semester}</p>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="font-medium text-gray-900">PRO Status</h3>
+                <p className="text-2xl font-bold text-scad-dark">{student.isPRO ? 'Yes' : 'No'}</p>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </TabsContent>
+        
+        <TabsContent value="internships">
+          <div className="space-y-6">
+            {/* Recommended Companies Section */}
+            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-1 h-6 bg-scad-red rounded-full"></div>
+                <h2 className="text-xl font-semibold text-gray-900">Recommended for You</h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {recommendedCompanies.map((company, index) => (
+                  <CompanyCard
+                    key={index}
+                    name={company.name}
+                    industry={company.industry}
+                    email={company.email}
+                    size={company.size}
+                    contactPerson={company.contactPerson}
+                    phone={company.phone}
+                    website={company.website}
+                    location={company.location}
+                    joinDate={company.joinDate}
+                    about={company.about}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Available Internships Section */}
+            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-6 bg-scad-red rounded-full"></div>
+                  <h2 className="text-xl font-semibold text-gray-900">Available Internships</h2>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
+                    <Input
+                      type="text"
+                      placeholder="Search by title or company..."
+                      className="pl-9 w-64 border-gray-200 focus:border-scad-red focus:ring-scad-red/20"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="flex items-center gap-2 bg-black text-white border-black hover:bg-black/90 hover:text-white"
+                    onClick={() => setShowFilters(!showFilters)}
+                  >
+                    <Filter className="h-4 w-4" />
+                    Filters
+                  </Button>
+                </div>
+              </div>
+
+              {showFilters && (
+                <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Select value={industryFilter} onValueChange={setIndustryFilter}>
+                      <SelectTrigger className="border-gray-200 focus:border-scad-red focus:ring-scad-red/20">
+                        <SelectValue placeholder="Filter by industry" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Industries</SelectItem>
+                        <SelectItem value="technology">Technology</SelectItem>
+                        <SelectItem value="design">Design</SelectItem>
+                        <SelectItem value="marketing">Marketing</SelectItem>
+                        <SelectItem value="finance">Finance</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    <Select value={durationFilter} onValueChange={setDurationFilter}>
+                      <SelectTrigger className="border-gray-200 focus:border-scad-red focus:ring-scad-red/20">
+                        <SelectValue placeholder="Filter by duration" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Durations</SelectItem>
+                        <SelectItem value="1-3">1-3 months</SelectItem>
+                        <SelectItem value="3-6">3-6 months</SelectItem>
+                        <SelectItem value="6+">6+ months</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    <Select value={paymentFilter} onValueChange={setPaymentFilter}>
+                      <SelectTrigger className="border-gray-200 focus:border-scad-red focus:ring-scad-red/20">
+                        <SelectValue placeholder="Filter by payment" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Payment Types</SelectItem>
+                        <SelectItem value="paid">Paid</SelectItem>
+                        <SelectItem value="unpaid">Unpaid</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              )}
+
+              <div className="h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                <AvailableInternships 
+                  searchTerm={searchTerm}
+                  industryFilter={industryFilter}
+                  durationFilter={durationFilter}
+                  paymentFilter={paymentFilter}
+                />
+              </div>
+            </div>
+
+            {/* My Applications Section */}
+            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-6 bg-scad-red rounded-full"></div>
+                  <h2 className="text-xl font-semibold text-gray-900">My Applications</h2>
+                </div>
+                <div className="relative">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-white" />
+                  <Input
+                    type="text"
+                    placeholder="Search by title or company..."
+                    className="pl-9 w-64 bg-black text-white border-black placeholder:text-gray-400 focus:border-black focus:ring-black/20"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>
+              {selectedApplication ? (
+                <ApplicationDetails 
+                  application={selectedApplication} 
+                  onBack={handleBack}
+                />
+              ) : (
+                <ApplicationsTab 
+                  applications={applications}
+                  onClick={handleApplicationClick}
+                />
+              )}
+            </div>
+
+            {/* My Internships Section */}
+            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-6 bg-scad-red rounded-full"></div>
+                  <h2 className="text-xl font-semibold text-gray-900">My Internships</h2>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
+                    <Input
+                      type="text"
+                      placeholder="Search by title or company..."
+                      className="pl-9 w-64 border-gray-200 focus:border-scad-red focus:ring-scad-red/20"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <Select value={dateFilter} onValueChange={setDateFilter}>
+                    <SelectTrigger className="w-40 border-gray-200 focus:border-scad-red focus:ring-scad-red/20">
+                      <SelectValue placeholder="Filter by date" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Dates</SelectItem>
+                      <SelectItem value="current">Current</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="space-y-3">
+                {myInternships
+                  .filter(internship => 
+                    (dateFilter === 'all' || internship.status === dateFilter) &&
+                    (searchTerm === '' || 
+                      internship.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      internship.company.toLowerCase().includes(searchTerm.toLowerCase()))
+                  )
+                  .map((internship) => (
+                    <div 
+                      key={internship.id} 
+                      className="border rounded-lg p-4 hover:border-scad-red transition-colors bg-gradient-to-br from-white to-gray-50"
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-medium text-gray-900">{internship.title}</h3>
+                          <p className="text-gray-600 text-sm mb-2">{internship.company}</p>
+                          <p className="text-gray-500 text-sm">
+                            {new Date(internship.startDate).toLocaleDateString()} - {new Date(internship.endDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          internship.status === 'current' 
+                            ? 'bg-green-100 text-green-800 border border-green-200' 
+                            : 'bg-blue-100 text-blue-800 border border-blue-200'
+                        }`}>
+                          {internship.status === 'current' ? 'Current' : 'Completed'}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="reports">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-xl font-semibold mb-4">Reports</h2>
+            <p className="text-gray-600">Report management features coming soon...</p>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="profile">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-xl font-semibold mb-4">Profile</h2>
+            <p className="text-gray-600">Profile management features coming soon...</p>
+          </div>
+        </TabsContent>
+      </TabsLayout>
     </div>
   );
 };

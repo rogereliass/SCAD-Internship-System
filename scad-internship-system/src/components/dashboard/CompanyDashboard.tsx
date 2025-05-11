@@ -10,10 +10,6 @@ import JobPostingTab from '../companies/JobPostingTab';
 import ApplicantsTab from '../companies/ApplicantsTab';
 import InternTab from '../companies/InternTab';
 
-
-
-
-
 const recentApplications = [
   { 
     id: '1', 
@@ -172,6 +168,7 @@ const mockNotifications = [
 
 const CompanyDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [applications, setApplications] = useState(recentApplications);
 
   const companyTabs = [
     { value: "overview", label: "Overview" },
@@ -201,10 +198,17 @@ const CompanyDashboard = () => {
     currentInterns: 2,
   });
 
-
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleStatusChange = (applicantId: string, newStatus: 'accepted' | 'rejected' | 'finalized') => {
+    setApplications(prevApplications => 
+      prevApplications.map(app => 
+        app.id === applicantId ? { ...app, status: newStatus } : app
+      )
+    );
   };
 
   return (
@@ -230,7 +234,7 @@ const CompanyDashboard = () => {
           <OverviewTab 
             company={company} 
             jobPostings={jobPostings} 
-            recentApplications={recentApplications} 
+            recentApplications={applications} 
             onTabChange={handleTabChange}
           />
         </TabsContent>
@@ -241,7 +245,12 @@ const CompanyDashboard = () => {
         
         <TabsContent value="applicants">
         <ApplicantsTab 
-          applicants={recentApplications} 
+          applicants={recentApplications.map(app => ({
+            ...app,
+            email: `${app.name.toLowerCase().replace(' ', '.')}@example.com`,
+            jobPostingId: app.position === 'Frontend Developer' ? '1' : '2',
+            status: app.status as "pending" | "finalized" | "rejected" | "accepted",
+          }))} 
           jobPostings={jobPostings.map(post => ({
             id: post.id.toString(),
             position: post.position
@@ -257,9 +266,7 @@ const CompanyDashboard = () => {
           />
         </TabsContent>
       </TabsLayout>
-
     </div>
-
   );
 };
 

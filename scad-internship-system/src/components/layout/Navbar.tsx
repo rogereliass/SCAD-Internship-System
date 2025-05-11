@@ -34,7 +34,7 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
                 className="h-10 w-25 rounded-md object-cover"
               />
 
-              <span className="text-scad-dark font-bold text-xl hidden md:block">SCAD Compass</span>
+              <span className="text-scad-dark font-bold text-xl hidden md:block"> </span>
             </Link>
           </div>
           {/* Desktop menu */}
@@ -74,7 +74,7 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
                     <Link to="/internship-reports" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Reports</Link>
                   </>
                 )}
-                <Link to="/" className="text-scad-red hover:text-opacity-80 transition-colors font-bold">Logout</Link>
+                <Link to="/" className="btn btn-primary font-bold">Logout</Link>
               </>
             )}
           </div>
