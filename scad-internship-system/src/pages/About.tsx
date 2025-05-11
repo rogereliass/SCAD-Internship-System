@@ -166,7 +166,7 @@ const About = () => {
             <DialogDescription className="text-gray-900">
               <div className="space-y-4 text-lg mt-4">
                 <div>
-                  <span className="font-semibold">Email:</span> info@scadcompass.edu
+                  <span className="font-semibold">Email:</span> <a href="mailto:info@scadcompass.edu" className="underline hover:text-scad-red">info@scadcompass.edu</a>
                 </div>
                 <div>
                   <span className="font-semibold">Phone:</span> +20 110 099 6345
