@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Clock, CheckCircle, XCircle, AlertCircle, Building2 } from 'lucide-react';
+import ApplicationDetails from './ApplicationDetails';
 
 interface Application {
   id: string;
@@ -10,23 +11,29 @@ interface Application {
   startDate?: string;
   endDate?: string;
   contactEmail?: string;
+  industry: string;
+  location: string;
+  duration: string;
+  isPaid: boolean;
+  salary: string | number;
+  requirements: string[];
 }
 
 interface ApplicationsTabProps {
   applications: Application[];
-  onApplicationClick: (id: string) => void;
-  searchTerm: string;
 }
 
-const ApplicationsTab: React.FC<ApplicationsTabProps> = ({
-  applications,
-  onApplicationClick,
-  searchTerm
-}) => {
-  const filteredApplications = applications.filter(application => 
-    application.jobTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    application.companyName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ applications }) => {
+  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
+
+  if (selectedApplication) {
+    return (
+      <ApplicationDetails
+        application={selectedApplication}
+        onBack={() => setSelectedApplication(null)}
+      />
+    );
+  }
 
   const getStatusInfo = (status: Application['status']) => {
     switch (status) {
@@ -60,44 +67,30 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({
 
   return (
     <div className="space-y-4">
-      {filteredApplications.map((application) => {
+      {applications.map((application) => {
         const statusInfo = getStatusInfo(application.status);
         return (
-          <div 
+          <div
             key={application.id}
-            className="border rounded-lg p-4 hover:border-scad-red transition-colors cursor-pointer bg-white"
-            onClick={() => onApplicationClick(application.id)}
+            className="bg-white rounded-lg shadow-sm p-4 cursor-pointer hover:shadow-md transition-shadow"
+            onClick={() => setSelectedApplication(application)}
           >
-            <div className="space-y-3">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-medium text-gray-900">{application.jobTitle}</h3>
-                  <div className="flex items-center text-gray-600 text-sm mt-1">
-                    <Building2 className="h-4 w-4 mr-1" />
-                    <span>{application.companyName}</span>
-                  </div>
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">{application.jobTitle}</h3>
+                <div className="flex items-center text-gray-600 text-sm mt-1">
+                  <Building2 className="h-4 w-4 mr-1" />
+                  <span>{application.companyName}</span>
                 </div>
-                <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusInfo.color} flex items-center`}>
-                  {statusInfo.icon}
-                  {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
-                </span>
               </div>
-              <p className="text-gray-600 text-sm">{application.description}</p>
-              {application.startDate && application.endDate && (
-                <div className="text-sm text-gray-500">
-                  Duration: {new Date(application.startDate).toLocaleDateString()} - {new Date(application.endDate).toLocaleDateString()}
-                </div>
-              )}
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusInfo.color}`}>
+                {statusInfo.icon}
+                {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
+              </span>
             </div>
           </div>
         );
       })}
-
-      {filteredApplications.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
-          No applications found matching your criteria.
-        </div>
-      )}
     </div>
   );
 };

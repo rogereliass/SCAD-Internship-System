@@ -22,6 +22,12 @@ interface Application {
   startDate?: string;
   endDate?: string;
   contactEmail?: string;
+  industry: string;
+  location: string;
+  duration: string;
+  isPaid: boolean;
+  salary: string;
+  requirements: string[];
 }
 
 // Placeholder data - to be replaced with actual data
@@ -95,14 +101,26 @@ const StudentDashboard = () => {
       status: 'finalized' as const,
       startDate: '2024-06-01',
       endDate: '2024-09-01',
-      contactEmail: 'hr@techcorp.com'
+      contactEmail: 'hr@techcorp.com',
+      industry: 'Information Technology',
+      location: 'San Francisco, CA',
+      duration: '3 months',
+      isPaid: true,
+      salary: '20',
+      requirements: ['React', 'JavaScript', 'HTML', 'CSS']
     },
     {
       id: '2',
       jobTitle: 'UX Design Intern',
       companyName: 'DesignHub',
       description: 'Work on user interface design and user experience',
-      status: 'pending' as const
+      status: 'pending' as const,
+      industry: 'Design',
+      location: 'New York, NY',
+      duration: '6 months',
+      isPaid: true,
+      salary: '22',
+      requirements: ['Figma', 'Adobe XD', 'UI/UX Design', 'Prototyping']
     }
   ];
 
@@ -143,12 +161,6 @@ const StudentDashboard = () => {
       about: 'DataSystems is a data analytics company that helps organizations make data-driven decisions. We provide advanced analytics solutions and consulting services to businesses of all sizes.',
       size: 'corporate' as const
     }
-  ];
-
-  const availableInternships = [
-    { id: '1', company: 'TechCorp', title: 'Frontend Developer', duration: '3 months' },
-    { id: '2', company: 'DesignHub', title: 'UX Designer', duration: '6 months' },
-    { id: '3', company: 'DataSystems', title: 'Data Analyst', duration: '3 months' }
   ];
 
   const myInternships = [
@@ -318,7 +330,7 @@ const StudentDashboard = () => {
               )}
 
               <AvailableInternships 
-                onInternshipClick={handleApplicationClick} 
+                onInternshipClick={handleInternshipClick} 
                 searchTerm={searchTerm} 
                 dateFilter={dateFilter}
                 industryFilter={industryFilter}
@@ -347,8 +359,6 @@ const StudentDashboard = () => {
               </div>
               <ApplicationsTab 
                 applications={applications}
-                onApplicationClick={handleApplicationClick} 
-                searchTerm={searchTerm} 
               />
             </div>
 
