@@ -10,14 +10,10 @@ import JobPostingTab from '../companies/JobPostingTab';
 import ApplicantsTab from '../companies/ApplicantsTab';
 import InternTab from '../companies/InternTab';
 
-
-
-
-
 const recentApplications = [
-  { id: '1', name: 'Emily Johnson', position: 'Frontend Developer', appliedDate: '2023-11-15', status: 'pending' },
+  { id: '1', name: 'Emily Johnson', position: 'Frontend Developer', appliedDate: '2023-11-15', status: 'finalized' },
   { id: '2', name: 'Michael Brown', position: 'UX Design Intern', appliedDate: '2023-11-14', status: 'finalized' },
-  { id: '3', name: 'Sarah Wilson', position: 'Frontend Developer', appliedDate: '2023-11-12', status: 'pending' },
+  { id: '3', name: 'Sarah Wilson', position: 'Frontend Developer', appliedDate: '2023-11-12', status: 'finalized' },
   { id: '4', name: 'David Garcia', position: 'UX Design Intern', appliedDate: '2023-11-10', status: 'rejected' },
 ];
 
@@ -55,6 +51,7 @@ const mockNotifications = [
 
 const CompanyDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [applications, setApplications] = useState(recentApplications);
 
   const companyTabs = [
     { value: "overview", label: "Overview" },
@@ -84,10 +81,17 @@ const CompanyDashboard = () => {
     currentInterns: 2,
   });
 
-
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleStatusChange = (applicantId: string, newStatus: 'accepted' | 'rejected' | 'finalized') => {
+    setApplications(prevApplications => 
+      prevApplications.map(app => 
+        app.id === applicantId ? { ...app, status: newStatus } : app
+      )
+    );
   };
 
   return (
@@ -113,7 +117,7 @@ const CompanyDashboard = () => {
           <OverviewTab 
             company={company} 
             jobPostings={jobPostings} 
-            recentApplications={recentApplications} 
+            recentApplications={applications} 
             onTabChange={handleTabChange}
           />
         </TabsContent>
@@ -123,19 +127,19 @@ const CompanyDashboard = () => {
         </TabsContent>
         
         <TabsContent value="applicants">
-        <ApplicantsTab 
-          applicants={recentApplications.map(app => ({
-            ...app,
-            email: `${app.name.toLowerCase().replace(' ', '.')}@example.com`,
-            jobPostingId: app.position === 'Frontend Developer' ? '1' : '2',
-            status: app.status as "pending" | "finalized" | "rejected" | "accepted",
-          }))} 
-          jobPostings={jobPostings.map(post => ({
-            id: post.id.toString(),
-            position: post.position
-          }))}
-      />
-
+          <ApplicantsTab 
+            applicants={applications.map(app => ({
+              ...app,
+              email: `${app.name.toLowerCase().replace(' ', '.')}@example.com`,
+              jobPostingId: app.position === 'Frontend Developer' ? '1' : '2',
+              status: app.status as "accepted" | "rejected" | "finalized",
+            }))} 
+            jobPostings={jobPostings.map(post => ({
+              id: post.id.toString(),
+              position: post.position
+            }))}
+            onStatusChange={handleStatusChange}
+          />
         </TabsContent>
         
         <TabsContent value="interns">
@@ -150,9 +154,7 @@ const CompanyDashboard = () => {
           />
         </TabsContent>
       </TabsLayout>
-
     </div>
-
   );
 };
 
