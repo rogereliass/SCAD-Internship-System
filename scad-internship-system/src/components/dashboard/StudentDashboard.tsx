@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import InternshipCard from '../internships/InternshipCard';
 import AvailableInternships from '../internships/AvailableInternships';
 import CompanyCard from '../companies/CompanyCard';
+import MyInternshipsTab from '../students/MyInternshipsTab';
 
 interface Application {
   id: string;
@@ -167,6 +168,13 @@ const StudentDashboard = () => {
     }
   };
 
+  const handleInternshipClick = (id: string) => {
+    const internship = myInternships.find(intern => intern.id === id);
+    if (internship) {
+      console.log('Internship clicked:', internship);
+    }
+  };
+
   const handleBack = () => {
     setSelectedApplication(null);
   };
@@ -189,7 +197,7 @@ const StudentDashboard = () => {
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         tabs={studentTabs}
-        className="mb-6 space-x-12"
+        className="mb-6"
       >
         <TabsContent value="overview">
           <div className="bg-white rounded-lg shadow-sm p-6">
@@ -239,26 +247,26 @@ const StudentDashboard = () => {
             </div>
 
             {/* Available Internships Section */}
-            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-2">
                   <div className="w-1 h-6 bg-scad-red rounded-full"></div>
-                  <h2 className="text-xl font-semibold text-gray-900">Available Internships</h2>
+                  <h2 className="text-xl font-bold text-gray-900">Available Internships</h2>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <div className="relative">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
+                <div className="flex items-center gap-4">
+                  <div className="relative w-64">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
                     <Input
                       type="text"
-                      placeholder="Search by title or company..."
-                      className="pl-9 w-64 border-gray-200 focus:border-scad-red focus:ring-scad-red/20"
+                      placeholder="Search internships..."
+                      className="pl-9 bg-white text-gray-900 border-gray-200 focus:border-scad-red focus:ring-scad-red/20"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
                   <Button
                     variant="outline"
-                    className="flex items-center gap-2 bg-black text-white border-black hover:bg-black/90 hover:text-white"
+                    className="flex items-center gap-2 bg-white text-gray-500 border-gray-200 hover:bg-gray-50 hover:text-gray-500"
                     onClick={() => setShowFilters(!showFilters)}
                   >
                     <Filter className="h-4 w-4" />
@@ -271,52 +279,52 @@ const StudentDashboard = () => {
                 <div className="bg-gray-50 p-4 rounded-lg mb-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <Select value={industryFilter} onValueChange={setIndustryFilter}>
-                      <SelectTrigger className="border-gray-200 focus:border-scad-red focus:ring-scad-red/20">
+                      <SelectTrigger className="bg-white border-gray-200 text-gray-500 focus:border-scad-red focus:ring-scad-red/20">
                         <SelectValue placeholder="Filter by industry" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Industries</SelectItem>
-                        <SelectItem value="technology">Technology</SelectItem>
-                        <SelectItem value="design">Design</SelectItem>
-                        <SelectItem value="marketing">Marketing</SelectItem>
-                        <SelectItem value="finance">Finance</SelectItem>
+                        <SelectItem value="all" className="text-gray-500">All Industries</SelectItem>
+                        <SelectItem value="technology" className="text-gray-500">Technology</SelectItem>
+                        <SelectItem value="design" className="text-gray-500">Design</SelectItem>
+                        <SelectItem value="marketing" className="text-gray-500">Marketing</SelectItem>
+                        <SelectItem value="finance" className="text-gray-500">Finance</SelectItem>
                       </SelectContent>
                     </Select>
 
                     <Select value={durationFilter} onValueChange={setDurationFilter}>
-                      <SelectTrigger className="border-gray-200 focus:border-scad-red focus:ring-scad-red/20">
+                      <SelectTrigger className="bg-white border-gray-200 text-gray-500 focus:border-scad-red focus:ring-scad-red/20">
                         <SelectValue placeholder="Filter by duration" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Durations</SelectItem>
-                        <SelectItem value="1-3">1-3 months</SelectItem>
-                        <SelectItem value="3-6">3-6 months</SelectItem>
-                        <SelectItem value="6+">6+ months</SelectItem>
+                        <SelectItem value="all" className="text-gray-500">All Durations</SelectItem>
+                        <SelectItem value="1-3" className="text-gray-500">1-3 months</SelectItem>
+                        <SelectItem value="3-6" className="text-gray-500">3-6 months</SelectItem>
+                        <SelectItem value="6+" className="text-gray-500">6+ months</SelectItem>
                       </SelectContent>
                     </Select>
 
                     <Select value={paymentFilter} onValueChange={setPaymentFilter}>
-                      <SelectTrigger className="border-gray-200 focus:border-scad-red focus:ring-scad-red/20">
+                      <SelectTrigger className="bg-white border-gray-200 text-gray-500 focus:border-scad-red focus:ring-scad-red/20">
                         <SelectValue placeholder="Filter by payment" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Payment Types</SelectItem>
-                        <SelectItem value="paid">Paid</SelectItem>
-                        <SelectItem value="unpaid">Unpaid</SelectItem>
+                        <SelectItem value="all" className="text-gray-500">All Payment Types</SelectItem>
+                        <SelectItem value="paid" className="text-gray-500">Paid</SelectItem>
+                        <SelectItem value="unpaid" className="text-gray-500">Unpaid</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
               )}
 
-              <div className="h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                <AvailableInternships 
-                  searchTerm={searchTerm}
-                  industryFilter={industryFilter}
-                  durationFilter={durationFilter}
-                  paymentFilter={paymentFilter}
-                />
-              </div>
+              <AvailableInternships 
+                onInternshipClick={handleApplicationClick} 
+                searchTerm={searchTerm} 
+                dateFilter={dateFilter}
+                industryFilter={industryFilter}
+                durationFilter={durationFilter}
+                paymentFilter={paymentFilter}
+              />
             </div>
 
             {/* My Applications Section */}
@@ -326,92 +334,55 @@ const StudentDashboard = () => {
                   <div className="w-1 h-6 bg-scad-red rounded-full"></div>
                   <h2 className="text-xl font-semibold text-gray-900">My Applications</h2>
                 </div>
-                <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-white" />
+                <div className="relative w-64">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
                   <Input
                     type="text"
-                    placeholder="Search by title or company..."
-                    className="pl-9 w-64 bg-black text-white border-black placeholder:text-gray-400 focus:border-black focus:ring-black/20"
+                    placeholder="Search applications..."
+                    className="pl-9 bg-white text-gray-900 border-gray-200 focus:border-scad-red focus:ring-scad-red/20"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
               </div>
-              {selectedApplication ? (
-                <ApplicationDetails 
-                  application={selectedApplication} 
-                  onBack={handleBack}
-                />
-              ) : (
-                <ApplicationsTab 
-                  applications={applications}
-                  onClick={handleApplicationClick}
-                />
-              )}
+              <ApplicationsTab 
+                applications={applications}
+                onApplicationClick={handleApplicationClick} 
+                searchTerm={searchTerm} 
+              />
             </div>
 
             {/* My Internships Section */}
-            <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="flex items-center justify-between mb-4">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-2">
                   <div className="w-1 h-6 bg-scad-red rounded-full"></div>
-                  <h2 className="text-xl font-semibold text-gray-900">My Internships</h2>
+                  <h2 className="text-xl font-bold text-gray-900">My Internships</h2>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <div className="relative">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
+                <div className="flex items-center gap-4">
+                  <div className="relative w-64">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
                     <Input
                       type="text"
-                      placeholder="Search by title or company..."
-                      className="pl-9 w-64 border-gray-200 focus:border-scad-red focus:ring-scad-red/20"
+                      placeholder="Search internships..."
+                      className="pl-9 bg-white text-gray-900 border-gray-200 focus:border-scad-red focus:ring-scad-red/20"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
                   <Select value={dateFilter} onValueChange={setDateFilter}>
-                    <SelectTrigger className="w-40 border-gray-200 focus:border-scad-red focus:ring-scad-red/20">
+                    <SelectTrigger className="w-[180px] bg-white text-gray-500 border-gray-200 focus:border-scad-red focus:ring-scad-red/20">
                       <SelectValue placeholder="Filter by date" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Dates</SelectItem>
-                      <SelectItem value="current">Current</SelectItem>
-                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="all" className="text-gray-500">All Dates</SelectItem>
+                      <SelectItem value="current" className="text-gray-500">Current</SelectItem>
+                      <SelectItem value="completed" className="text-gray-500">Completed</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
-              <div className="space-y-3">
-                {myInternships
-                  .filter(internship => 
-                    (dateFilter === 'all' || internship.status === dateFilter) &&
-                    (searchTerm === '' || 
-                      internship.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                      internship.company.toLowerCase().includes(searchTerm.toLowerCase()))
-                  )
-                  .map((internship) => (
-                    <div 
-                      key={internship.id} 
-                      className="border rounded-lg p-4 hover:border-scad-red transition-colors bg-gradient-to-br from-white to-gray-50"
-                    >
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-medium text-gray-900">{internship.title}</h3>
-                          <p className="text-gray-600 text-sm mb-2">{internship.company}</p>
-                          <p className="text-gray-500 text-sm">
-                            {new Date(internship.startDate).toLocaleDateString()} - {new Date(internship.endDate).toLocaleDateString()}
-                          </p>
-                        </div>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          internship.status === 'current' 
-                            ? 'bg-green-100 text-green-800 border border-green-200' 
-                            : 'bg-blue-100 text-blue-800 border border-blue-200'
-                        }`}>
-                          {internship.status === 'current' ? 'Current' : 'Completed'}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-              </div>
+              <MyInternshipsTab onInternshipClick={handleInternshipClick} searchTerm={searchTerm} dateFilter={dateFilter} />
             </div>
           </div>
         </TabsContent>
