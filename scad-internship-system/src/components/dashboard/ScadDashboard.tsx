@@ -215,9 +215,11 @@ const ScadDashboard = () => {
                     ))}
                   </div>
                   <div className="p-2 border-t border-gray-200 text-center">
-                  <Button variant="ghost" size="sm" className="w-full text-sm bg-black text-white hover:bg-gray-800">
-                    View all notifications
-                  </Button>
+                 <Link to="/notifications/3" className="w-full">
+                    <Button variant="ghost" size="sm" className="w-full text-sm bg-black text-white hover:bg-gray-800">
+                      View all notifications
+                     </Button>
+                </Link>
 
                   </div>
                 </div>
