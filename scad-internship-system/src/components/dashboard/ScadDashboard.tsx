@@ -797,7 +797,7 @@ const ScadDashboard = () => {
                           <div className="flex gap-2">
                             {appointment.status === 'confirmed' ? (
                               <Button 
-                                className="flex items-center gap-2 bg-blue-600 hover:bg-primary/90"
+                                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-600/90"
                               >
                                 <Video size={16} />
                                 <span>Join Call</span>
@@ -829,6 +829,13 @@ const ScadDashboard = () => {
                     </div>
                   )}
                 </CardContent>
+                <CardFooter>
+                  <Link to="/appointments" className="w-full">
+                    <Button variant="default" size="sm" className="w-full">
+                      Manage Your Appointments
+                    </Button>
+                  </Link>
+                </CardFooter>
               </Card>
               
               <Card>

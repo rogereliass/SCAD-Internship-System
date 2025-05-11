@@ -21,6 +21,9 @@ import ViewInternshipApplicants from "./pages/InternshipApplicants";
 import ViewAllCompanies from "./pages/Companies";
 import Companies from "./pages/Companies";
 import CompanyPeding from "./pages/CompanyPending";
+import VideoAppointments from "./pages/VideoAppointments";
+import { BrowserRouter as Router } from "react-router-dom";
+import ScrollToTop from "./hooks/ScrollToTop";
 
 
 const queryClient = new QueryClient();
@@ -31,6 +34,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
@@ -50,6 +54,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
           <Route path="/internships/:id/applicants" element={<ViewInternshipApplicants />} />
           <Route path="/company-pending" element={<CompanyPeding />} />
+          <Route path="/appointments" element={<VideoAppointments />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
