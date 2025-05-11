@@ -258,7 +258,7 @@ const StudentDashboard = () => {
                   </div>
                   <Button
                     variant="outline"
-                    className="flex items-center gap-2 bg-black text-white border-black hover:bg-black/90 hover:text-white"
+                    className="flex items-center gap-2 bg-white text-black border-black hover:bg-black/90 hover:text-white"
                     onClick={() => setShowFilters(!showFilters)}
                   >
                     <Filter className="h-4 w-4" />
@@ -327,14 +327,14 @@ const StudentDashboard = () => {
                   <h2 className="text-xl font-semibold text-gray-900">My Applications</h2>
                 </div>
                 <div className="relative">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-white" />
-                  <Input
-                    type="text"
-                    placeholder="Search by title or company..."
-                    className="pl-9 w-64 bg-black text-white border-black placeholder:text-gray-400 focus:border-black focus:ring-black/20"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
+                    <Input
+                      type="text"
+                      placeholder="Search by title or company..."
+                      className="pl-9 w-64 border-gray-200 focus:border-scad-red focus:ring-scad-red/20"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </div>
               </div>
               {selectedApplication ? (

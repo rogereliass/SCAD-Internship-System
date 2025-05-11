@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 import { BarChart as RechartBarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend, PieChart as RechartPieChart, Pie, Cell } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Badge } from "../ui/badge";
-
+import ScrollToTop from "../../hooks/ScrollToTop";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 
 // Mock data for charts
@@ -148,7 +148,7 @@ const mockCompanyApplications = [
 ];
 
 const ScadDashboard = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('overview'); 
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
   const handleExportStats = () => {
@@ -237,19 +237,18 @@ const ScadDashboard = () => {
           <TabsContent value="overview">
             {/* Quick Actions */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              <Link to="/internship-cycles">
+              <Link to="/workshops">
                 <Card className="hover:shadow-md transition-shadow cursor-pointer">
                   <CardContent className="pt-6 flex items-center justify-between">
                     <div>
-                      <Calendar size={24} className="text-primary mb-2" />
-                      <h3 className="font-medium">Manage Cycles</h3>
-                      <p className="text-sm text-gray-500">Set internship periods</p>
+                      <FileText size={24} className="text-primary mb-2" />
+                      <h3 className="font-medium">View Workshops</h3>
+                      <p className="text-sm text-gray-500">View, Add & Edit workshops</p>
                     </div>
                     <ChevronRight size={20} className="text-gray-400" />
                   </CardContent>
                 </Card>
               </Link>
-              
               <Link to="/company-applications">
                 <Card className="hover:shadow-md transition-shadow cursor-pointer">
                   <CardContent className="pt-6 flex items-center justify-between">
@@ -288,6 +287,8 @@ const ScadDashboard = () => {
                   </CardContent>
                 </Card>
               </Link>
+
+              
             </div>
             
             {/* Current Cycle Stats */}
@@ -796,14 +797,17 @@ const ScadDashboard = () => {
                           
                           <div className="flex gap-2">
                             {appointment.status === 'confirmed' ? (
+                              <Link to={'/appointments'}>
                               <Button 
                                 className="flex items-center gap-2 bg-blue-600 hover:bg-blue-600/90"
                               >
                                 <Video size={16} />
                                 <span>Join Call</span>
                               </Button>
+                              </Link>
                             ) : (
                               <>
+                              
                                 <Button 
                                   variant="outline" 
                                   className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white"

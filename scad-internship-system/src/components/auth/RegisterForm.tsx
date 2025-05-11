@@ -65,16 +65,7 @@ const RegisterForm = () => {
       
       <div className="mb-6">
         <div className="flex border-b border-gray-200">
-          <button
-            className={`px-4 py-2 text-sm font-medium ${
-              userType === 'student'
-                ? 'border-b-2 border-scad-red text-scad-dark'
-                : 'text-gray-500 hover:text-scad-dark'
-            }`}
-            onClick={() => setUserType('student')}
-          >
-            Student Registration
-          </button>
+          
           <button
             className={`px-4 py-2 text-sm font-medium ${
               userType === 'company'
@@ -89,81 +80,7 @@ const RegisterForm = () => {
       </div>
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        {userType === 'student' ? (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label htmlFor="name" className="text-black block mb-1 font-medium">Full Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="input-field w-full"
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="email" className="text-black block mb-1 font-medium">Email</label>
-                 <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="input-field w-full"
-                  placeholder="your@email.com"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="password" className="text-black block mb-1 font-medium">Password</label>
-                 <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="input-field w-full"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="confirmPassword" className="text-black block mb-1 font-medium">Confirm Password</label>
-                 <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="input-field w-full"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label htmlFor="major" className="text-black block mb-1 font-medium">Major</label>
-                 <input
-                  type="text"
-                  id="major"
-                  name="major"
-                  value={formData.major}
-                  onChange={handleChange}
-                  className="input-field w-full"
-                  placeholder="Computer Science"
-                  required
-                />
-              </div>
-            </div>
-          </>
-        ) : (
+        {(
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -174,7 +91,7 @@ const RegisterForm = () => {
                   name="companyName"
                   value={formData.companyName}
                   onChange={handleChange}
-                  className="input-field w-full"
+                  className="input-field w-full bg-gray-50 text-black"
                   placeholder="Acme Inc."
                   required
                 />
@@ -188,7 +105,7 @@ const RegisterForm = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="input-field w-full"
+                  className="input-field w-full bg-gray-50 text-black"
                   placeholder="contact@company.com"
                   required
                 />
@@ -202,7 +119,7 @@ const RegisterForm = () => {
                   name="industry"
                   value={formData.industry}
                   onChange={handleChange}
-                  className="input-field w-full"
+                  className="input-field w-full bg-gray-50 text-black"
                   placeholder="Technology"
                   required
                 />
@@ -215,7 +132,7 @@ const RegisterForm = () => {
                   name="companySize"
                   value={formData.companySize}
                   onChange={handleChange}
-                  className="input-field w-full" // Explicitly add bg-white
+                  className="input-field w-full bg-gray-50 text-black"  // Explicitly add bg-white
                   required
                 >
                   <option value="small">Small (50 employees or less)</option>
@@ -233,7 +150,7 @@ const RegisterForm = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="input-field w-full"
+                  className="input-field w-full bg-gray-50 text-black"
                   placeholder="••••••••"
                   required
                 />
@@ -247,7 +164,7 @@ const RegisterForm = () => {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="input-field w-full"
+                  className="input-field w-full bg-gray-50 text-black"
                   placeholder="••••••••"
                   required
                 />

@@ -119,7 +119,7 @@ const Companies = () => {
         <CardContent className="pt-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-white" />
+              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-600" />
               <Input
                 placeholder="Search companies..."
                 className="pl-10 input-field  text-white"
