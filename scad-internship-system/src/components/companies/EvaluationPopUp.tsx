@@ -196,7 +196,7 @@ const EvaluationPopup: React.FC<EvaluationPopupProps> = ({
               
               {/* Evaluator Information */}
               <div>
-                <h3 className="text-sm font-medium text-gray-700 mb-0">Evaluator Information</h3>
+                <h3 className="text-sm font-medium text-gray-700 mb-3">Evaluator Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-0">
                     <Label htmlFor="evaluatorName">Your Name *</Label>
