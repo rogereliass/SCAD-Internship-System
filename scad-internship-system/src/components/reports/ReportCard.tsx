@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageSquare, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
+import { MessageSquare, AlertCircle, CheckCircle2, XCircle, Download, Eye } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Report } from './Reports';
 
@@ -59,29 +59,41 @@ const ReportCard: React.FC<ReportCardProps> = ({ report, onView, onAppeal }) => 
 
         <div className="flex items-center justify-between pt-2 border-t">
           <div className="flex items-center gap-2">
-            <MessageSquare className="h-4 w-4 text-gray-500" />
-            <span className="text-sm text-gray-500">
-              {report.comments.length} {report.comments.length === 1 ? 'Comment' : 'Comments'}
-            </span>
+            {(report.status === 'flagged' || report.status === 'rejected') && (
+              <>
+                <MessageSquare className="h-4 w-4 text-gray-500" />
+                <span className="text-sm text-gray-500">
+                  {report.comments.length}
+                </span>
+              </>
+            )}
           </div>
           <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => window.print()}
+              className="text-scad-red hover:text-scad-red/80 hover:bg-transparent"
+            >
+              <Download className="h-4 w-4" />
+            </Button>
             {(report.status === 'rejected' || report.status === 'flagged') && (
               <Button
-                variant="outline"
-                size="sm"
+                variant="ghost"
+                size="icon"
                 onClick={onAppeal}
                 className="text-scad-red hover:text-scad-red/80 hover:bg-transparent"
               >
-                Appeal
+                <AlertCircle className="h-4 w-4" />
               </Button>
             )}
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={onView}
               className="text-scad-red hover:text-scad-red/80 hover:bg-transparent"
             >
-              View Details
+              <Eye className="h-4 w-4" />
             </Button>
           </div>
         </div>

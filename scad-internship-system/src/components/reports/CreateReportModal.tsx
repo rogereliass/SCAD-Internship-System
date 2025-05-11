@@ -4,11 +4,25 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Report } from './Reports';
+import { Checkbox } from '../ui/checkbox';
 
 interface CreateReportModalProps {
   onClose: () => void;
   onSubmit: (report: Omit<Report, 'id' | 'submittedAt' | 'comments'>) => void;
 }
+
+const courses = [
+  'Web Development',
+  'Database Management',
+  'UI/UX Design',
+  'Software Engineering',
+  'Data Structures',
+  'Algorithms',
+  'Computer Networks',
+  'Operating Systems',
+  'Mobile App Development',
+  'Cloud Computing'
+];
 
 const CreateReportModal: React.FC<CreateReportModalProps> = ({ onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
@@ -16,7 +30,8 @@ const CreateReportModal: React.FC<CreateReportModalProps> = ({ onClose, onSubmit
     companyName: '',
     title: '',
     introduction: '',
-    body: ''
+    body: '',
+    relevantCourses: [] as string[]
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -34,6 +49,15 @@ const CreateReportModal: React.FC<CreateReportModalProps> = ({ onClose, onSubmit
     setFormData(prev => ({
       ...prev,
       [name]: value
+    }));
+  };
+
+  const handleCourseChange = (course: string) => {
+    setFormData(prev => ({
+      ...prev,
+      relevantCourses: prev.relevantCourses.includes(course)
+        ? prev.relevantCourses.filter(c => c !== course)
+        : [...prev.relevantCourses, course]
     }));
   };
 
@@ -123,6 +147,29 @@ const CreateReportModal: React.FC<CreateReportModalProps> = ({ onClose, onSubmit
                 required
                 className="w-full min-h-[200px] text-gray-900"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Relevant University Courses
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {courses.map((course) => (
+                  <div key={course} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={course}
+                      checked={formData.relevantCourses.includes(course)}
+                      onCheckedChange={() => handleCourseChange(course)}
+                    />
+                    <label
+                      htmlFor={course}
+                      className="text-sm font-medium text-gray-900 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      {course}
+                    </label>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="flex justify-end gap-2 pt-4 border-t">

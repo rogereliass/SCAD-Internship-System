@@ -171,75 +171,82 @@ const AvailableInternships: React.FC<AvailableInternshipsProps> = ({
 
   return (
     <div className="space-y-4">
-      <div className="max-h-[600px] overflow-y-auto pr-2 space-y-4 custom-scrollbar">
-        {filteredInternships.map((internship) => (
-          <div 
-            key={internship.id}
-            className="border rounded-lg p-4 hover:border-scad-red transition-colors cursor-pointer bg-white"
-          >
-            <div className="space-y-3">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-medium text-gray-900">{internship.title}</h3>
-                  <div className="flex items-center text-gray-600 text-sm mt-1">
-                    <Building2 className="h-4 w-4 mr-1" />
-                    <span>{internship.company}</span>
+      <div className="max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredInternships.map((internship) => (
+            <div 
+              key={internship.id}
+              className="border rounded-lg p-4 hover:border-scad-red transition-colors cursor-pointer bg-white"
+            >
+              <div className="space-y-3">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="font-medium text-gray-900">{internship.title}</h3>
+                    <div className="flex items-center text-gray-600 text-sm mt-1">
+                      <Building2 className="h-4 w-4 mr-1" />
+                      <span>{internship.company}</span>
+                    </div>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    className="text-scad-red hover:text-scad-red/80 hover:bg-transparent"
+                    onClick={() => setSelectedInternship(internship)}
+                  >
+                    View Details
+                  </Button>
+                </div>
+
+                <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                  <div className="flex items-center">
+                    <MapPin className="h-4 w-4 mr-1" />
+                    <span>{internship.location}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Clock className="h-4 w-4 mr-1" />
+                    <span>{internship.duration}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <Calendar className="h-4 w-4 mr-1" />
+                    <span>Starts {new Date(internship.startDate).toLocaleDateString()}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <DollarSign className="h-4 w-4 mr-1" />
+                    <span>{internship.isPaid ? `$${internship.salary}/hour` : 'Unpaid'}</span>
                   </div>
                 </div>
-                <Button 
-                  variant="ghost" 
-                  className="text-scad-red hover:text-scad-red/80 hover:bg-transparent"
-                  onClick={() => setSelectedInternship(internship)}
-                >
-                  View Details
-                </Button>
-              </div>
 
-              <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                <div className="flex items-center">
-                  <MapPin className="h-4 w-4 mr-1" />
-                  <span>{internship.location}</span>
-                </div>
-                <div className="flex items-center">
-                  <Clock className="h-4 w-4 mr-1" />
-                  <span>{internship.duration}</span>
-                </div>
-                <div className="flex items-center">
-                  <Calendar className="h-4 w-4 mr-1" />
-                  <span>Starts {new Date(internship.startDate).toLocaleDateString()}</span>
-                </div>
-                <div className="flex items-center">
-                  <DollarSign className="h-4 w-4 mr-1" />
-                  <span>{internship.isPaid ? `$${internship.salary}/hour` : 'Unpaid'}</span>
-                </div>
-              </div>
+                <p className="text-gray-600 text-sm line-clamp-2">{internship.description}</p>
 
-              <p className="text-gray-600 text-sm">{internship.description}</p>
-
-              <div className="flex flex-wrap gap-2">
-                {internship.requirements.map((req, index) => (
-                  <span 
-                    key={index}
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      index % 4 === 0 ? 'bg-blue-100 text-blue-800' :
-                      index % 4 === 1 ? 'bg-green-100 text-green-800' :
-                      index % 4 === 2 ? 'bg-purple-100 text-purple-800' :
-                      'bg-orange-100 text-orange-800'
-                    }`}
-                  >
-                    {req}
-                  </span>
-                ))}
+                <div className="flex flex-wrap gap-2">
+                  {internship.requirements.slice(0, 3).map((req, index) => (
+                    <span 
+                      key={index}
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        index % 4 === 0 ? 'bg-blue-100 text-blue-800' :
+                        index % 4 === 1 ? 'bg-green-100 text-green-800' :
+                        index % 4 === 2 ? 'bg-purple-100 text-purple-800' :
+                        'bg-orange-100 text-orange-800'
+                      }`}
+                    >
+                      {req}
+                    </span>
+                  ))}
+                  {internship.requirements.length > 3 && (
+                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      +{internship.requirements.length - 3} more
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
 
-        {filteredInternships.length === 0 && (
-          <div className="text-center py-8 text-gray-500">
-            No internships found matching your criteria.
-          </div>
-        )}
+          {filteredInternships.length === 0 && (
+            <div className="col-span-3 text-center py-8 text-gray-500">
+              No internships found matching your criteria.
+            </div>
+          )}
+        </div>
       </div>
 
       {selectedInternship && (

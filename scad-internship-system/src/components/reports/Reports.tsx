@@ -15,6 +15,7 @@ export interface Report {
   introduction: string;
   body: string;
   submittedAt: string;
+  relevantCourses: string[];
   comments: {
     id: string;
     content: string;
@@ -39,6 +40,7 @@ const Reports: React.FC = () => {
       introduction: 'This report details my experience as a Frontend Developer Intern at TechCorp during the summer of 2024.',
       body: 'During my internship at TechCorp, I worked on several key projects...',
       submittedAt: '2024-03-15',
+      relevantCourses: ['CS101', 'CS102'],
       comments: [
         {
           id: '1',
@@ -57,6 +59,7 @@ const Reports: React.FC = () => {
       introduction: 'A comprehensive report on my UX Design internship experience.',
       body: 'My time at DesignHub was focused on user research and interface design...',
       submittedAt: '2024-03-10',
+      relevantCourses: ['CS101', 'CS102'],
       comments: [
         {
           id: '1',
