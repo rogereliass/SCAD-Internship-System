@@ -25,7 +25,7 @@ import VideoAppointments from "./pages/VideoAppointments";
 import { BrowserRouter as Router } from "react-router-dom";
 import ScrollToTop from "./hooks/ScrollToTop";
 import Workshops from "./pages/Workshops";
-
+import Notifications from './pages/Notifications';
 
 const queryClient = new QueryClient();
 
@@ -57,6 +57,8 @@ const App = () => (
           <Route path="/appointments" element={<VideoAppointments />} />
           <Route path="/workshops" element={<Workshops />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/notifications/:id" element={<Notifications />} />
+
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

@@ -4,6 +4,8 @@ import { Button } from '../ui/button';
 
 interface AvailableInternshipsProps {
   searchTerm: string;
+  dateFilter: string;
+  onInternshipClick: (id: string) => void;
   industryFilter: string;
   durationFilter: string;
   paymentFilter: string;
@@ -74,6 +76,8 @@ const internships: Internship[] = [
 
 const AvailableInternships: React.FC<AvailableInternshipsProps> = ({
   searchTerm,
+  dateFilter,
+  onInternshipClick,
   industryFilter,
   durationFilter,
   paymentFilter
@@ -86,27 +90,16 @@ const AvailableInternships: React.FC<AvailableInternshipsProps> = ({
       internship.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
       internship.description.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesIndustry = 
-      industryFilter === 'all' || 
-      internship.industry.toLowerCase() === industryFilter.toLowerCase();
+    const matchesDate = 
+      dateFilter === 'all' || 
+      (dateFilter === 'current' && new Date(internship.startDate) <= new Date() && new Date(internship.endDate) >= new Date()) ||
+      (dateFilter === 'upcoming' && new Date(internship.startDate) > new Date());
 
-    const matchesDuration = (() => {
-      if (durationFilter === 'all') return true;
-      const months = parseInt(internship.duration);
-      switch (durationFilter) {
-        case '1-3': return months >= 1 && months <= 3;
-        case '3-6': return months > 3 && months <= 6;
-        case '6+': return months > 6;
-        default: return true;
-      }
-    })();
+    const matchesIndustry = industryFilter === 'all' || internship.industry === industryFilter;
+    const matchesDuration = durationFilter === 'all' || internship.duration === durationFilter;
+    const matchesPayment = paymentFilter === 'all' || (paymentFilter === 'paid' && internship.isPaid) || (paymentFilter === 'unpaid' && !internship.isPaid);
 
-    const matchesPayment = 
-      paymentFilter === 'all' || 
-      (paymentFilter === 'paid' && internship.isPaid) ||
-      (paymentFilter === 'unpaid' && !internship.isPaid);
-
-    return matchesSearch && matchesIndustry && matchesDuration && matchesPayment;
+    return matchesSearch && matchesDate && matchesIndustry && matchesDuration && matchesPayment;
   });
 
   return (
@@ -127,7 +120,7 @@ const AvailableInternships: React.FC<AvailableInternshipsProps> = ({
               </div>
               <Button 
                 variant="ghost" 
-                className="text-scad-red hover:text-scad-red/80"
+                className="text-scad-red hover:text-scad-red/80 hover:bg-transparent"
                 onClick={() => setSelectedInternship(internship)}
               >
                 View Details
@@ -159,7 +152,12 @@ const AvailableInternships: React.FC<AvailableInternshipsProps> = ({
               {internship.requirements.map((req, index) => (
                 <span 
                   key={index}
-                  className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
+                  className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    index % 4 === 0 ? 'bg-blue-100 text-blue-800' :
+                    index % 4 === 1 ? 'bg-green-100 text-green-800' :
+                    index % 4 === 2 ? 'bg-purple-100 text-purple-800' :
+                    'bg-orange-100 text-orange-800'
+                  }`}
                 >
                   {req}
                 </span>
@@ -226,7 +224,12 @@ const AvailableInternships: React.FC<AvailableInternshipsProps> = ({
                     {selectedInternship.requirements.map((req, index) => (
                       <span 
                         key={index}
-                        className="px-2 py-1 bg-gray-100 text-gray-700 rounded-full text-xs"
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          index % 4 === 0 ? 'bg-blue-100 text-blue-800' :
+                          index % 4 === 1 ? 'bg-green-100 text-green-800' :
+                          index % 4 === 2 ? 'bg-purple-100 text-purple-800' :
+                          'bg-orange-100 text-orange-800'
+                        }`}
                       >
                         {req}
                       </span>

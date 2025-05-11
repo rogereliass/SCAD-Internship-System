@@ -1,44 +1,40 @@
-import React, { useState, useMemo } from 'react';
-import { Search, SlidersHorizontal, Clock, CheckCircle, XCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React from 'react';
+import { Clock, CheckCircle, XCircle, AlertCircle, Building2 } from 'lucide-react';
 
 interface Application {
   id: string;
   jobTitle: string;
   companyName: string;
+  description: string;
   status: 'pending' | 'finalized' | 'accepted' | 'rejected';
+  startDate?: string;
+  endDate?: string;
+  contactEmail?: string;
 }
 
 interface ApplicationsTabProps {
   applications: Application[];
-  onClick: (id: string) => void;
+  onApplicationClick: (id: string) => void;
+  searchTerm: string;
 }
 
-const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ applications = [], onClick }) => {
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+const ApplicationsTab: React.FC<ApplicationsTabProps> = ({
+  applications,
+  onApplicationClick,
+  searchTerm
+}) => {
+  const filteredApplications = applications.filter(application => 
+    application.jobTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    application.companyName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-  const filteredApplications = useMemo(() => {
-    return applications.filter(application => {
-      if (statusFilter !== 'all' && application.status !== statusFilter) {
-        return false;
-      }
-      if (
-        searchTerm &&
-        !application.jobTitle.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        !application.companyName.toLowerCase().includes(searchTerm.toLowerCase())
-      ) {
-        return false;
-      }
-      return true;
-    });
-  }, [applications, statusFilter, searchTerm]);
-
-  const getStatusInfo = (status: string) => {
+  const getStatusInfo = (status: Application['status']) => {
     switch (status) {
+      case 'pending':
+        return {
+          color: 'bg-yellow-100 text-yellow-800',
+          icon: <AlertCircle className="h-3.5 w-3.5 mr-1" />
+        };
       case 'finalized':
         return {
           color: 'bg-blue-100 text-blue-800',
@@ -63,30 +59,45 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({ applications = [], on
   };
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-3">
-        {filteredApplications.map((application) => {
-          const statusInfo = getStatusInfo(application.status);
-          return (
-            <div 
-              key={application.id} 
-              className={`p-4 border rounded-lg ${statusInfo.color} cursor-pointer hover:shadow-md transition-shadow`}
-              onClick={() => onClick(application.id)}
-            >
-              <div className="flex justify-between items-center">
+    <div className="space-y-4">
+      {filteredApplications.map((application) => {
+        const statusInfo = getStatusInfo(application.status);
+        return (
+          <div 
+            key={application.id}
+            className="border rounded-lg p-4 hover:border-scad-red transition-colors cursor-pointer bg-white"
+            onClick={() => onApplicationClick(application.id)}
+          >
+            <div className="space-y-3">
+              <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="text-lg font-bold">{application.jobTitle}</h3>
-                  <p className="text-sm text-gray-600">{application.companyName}</p>
+                  <h3 className="font-medium text-gray-900">{application.jobTitle}</h3>
+                  <div className="flex items-center text-gray-600 text-sm mt-1">
+                    <Building2 className="h-4 w-4 mr-1" />
+                    <span>{application.companyName}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusInfo.color} flex items-center`}>
                   {statusInfo.icon}
-                  <span>{application.status}</span>
-                </div>
+                  {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
+                </span>
               </div>
+              <p className="text-gray-600 text-sm">{application.description}</p>
+              {application.startDate && application.endDate && (
+                <div className="text-sm text-gray-500">
+                  Duration: {new Date(application.startDate).toLocaleDateString()} - {new Date(application.endDate).toLocaleDateString()}
+                </div>
+              )}
             </div>
-          );
-        })}
-      </div>
+          </div>
+        );
+      })}
+
+      {filteredApplications.length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          No applications found matching your criteria.
+        </div>
+      )}
     </div>
   );
 };
