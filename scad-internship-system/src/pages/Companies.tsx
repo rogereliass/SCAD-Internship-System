@@ -179,8 +179,9 @@ const Companies = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <Button 
                       variant="ghost" 
-                      className="text-scad-red hover:text-scad-red/80 p-0 h-auto font-medium"
-                      onClick={() => setSelectedCompany(company)}
+                        size="sm" 
+                        className="bg-white text-blue-600 hover:bg-blue-100 hover:text-blue-800 py-2 px-4 rounded-md transition-all duration-300"
+                        onClick={() => setSelectedCompany(company)}
                     >
                       View
                     </Button>
@@ -239,7 +240,7 @@ const Companies = () => {
               </div>
               
               <div className="border-t pt-4 flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setSelectedCompany(null)} className="border-gray-300  text-white">
+                <Button variant="default" onClick={() => setSelectedCompany(null)} className="border-gray-300  text-white">
                   Close
                 </Button>
               </div>
