@@ -11,6 +11,20 @@ import StatisticsGraphs from '../facultyMembers/StatisticsGraphs';
 import ReportDetailsModal from '../facultyMembers/ReportDetailsModal';
 import ReviewModal from '../facultyMembers/ReviewModal';
 import { Button } from '../ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '../ui/card';
+import { toast } from 'sonner';
+import { BarChart as RechartBarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend, PieChart as RechartPieChart, Pie, Cell } from 'recharts';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Badge } from "../ui/badge";
+import NotificationsButton from '../DashboardEssentials/NotificationsButton';
+
 import { useReports } from '../../contexts/ReportsContext';
 
 // Mock Data (replace with actual data fetching)
