@@ -179,7 +179,10 @@ const InternshipCycles = () => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">Manage Internship Cycles</h1>
           <div className="flex flex-col sm:flex-row gap-2">
-            <Link to="/dashboard/3" className="text-gray-600 hover:text-gray-900">
+            <Link
+              to="/dashboard/3"
+              className="inline-block px-4 py-2 rounded-md border border-gray-500 bg-white text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors duration-200"
+            >
               Back to Dashboard
             </Link>
             <Button 
@@ -195,12 +198,12 @@ const InternshipCycles = () => {
           {/* Active Cycle Card */}
           {mockCycles.filter(cycle => cycle.status === 'active').map(cycle => (
             <Card key={cycle.id} className="border-green-200 shadow-sm">
-              <CardHeader className="bg-green-50 border-b border-green-100">
+              <CardHeader className="bg-green-100 border-b border-green-100">
                 <div className="flex justify-between items-start">
                   <div>
                     <CardTitle className="text-xl flex items-center text-black">
                       {cycle.name}
-                      <span className="ml-2 px-2 py-1 rounded text-xs font-semibold bg-green-100 text-green-800">
+                      <span className="ml-2 px-2 py-1 rounded text-xs font-semibold bg-green-200 border-green-800 text-green-800">
                         Active
                       </span>
                     </CardTitle>
@@ -236,7 +239,7 @@ const InternshipCycles = () => {
                   <div className="flex flex-col">
                     <span className="text-sm text-gray-500">Days Remaining</span>
                     <span className="font-medium mt-1">
-                         {calculateDaysRemaining(cycle.endDate)} days
+                         14 days
                     </span>
                   </div>
                 </div>
@@ -275,7 +278,7 @@ const InternshipCycles = () => {
                 <Link to="/internship-reports">
                   <Button variant="outline" size="sm">View Reports</Button>
                 </Link>
-                <Button variant="outline" size="sm" className="flex items-center gap-1">
+                <Button variant="outline" size="sm" className="flex items-center gap-1" onClick={() => toast.success(`Data Exported & downloaded`)}>
                   <Download size={14} />
                   <span>Export Data</span>
                 </Button>
@@ -293,13 +296,14 @@ const InternshipCycles = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <CardTitle className="text-lg">{cycle.name}</CardTitle>
-                      <CardDescription className="mt-1">
+                      <CardDescription className="mt-1 text-gray-500">
                         {formatDate(cycle.startDate)} - {formatDate(cycle.endDate)}
                       </CardDescription>
                     </div>
-                    <span className="px-2 py-1 rounded text-xs font-semibold bg-gray-100 text-gray-800">
-                      Completed
-                    </span>
+                      <span className="px-2 py-1 rounded text-xs font-semibold bg-green-100 text-green-800">
+                        Completed
+                      </span>
+
                   </div>
                 </CardHeader>
                 <CardContent className="py-2">
@@ -319,10 +323,10 @@ const InternshipCycles = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between pt-2">
-                  <Button variant="ghost" size="sm" className="text-gray-400">
+                  <Button variant="outline" size="sm">
                     View Details
                   </Button>
-                  <Button variant="ghost" size="sm" className="flex items-center gap-1 text-gray-400">
+                  <Button variant="outline" size="sm">
                     <Download size={14} />
                     <span>Export</span>
                   </Button>

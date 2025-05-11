@@ -275,12 +275,12 @@ const InternshipReports = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Internship Reports</h1>
-          <button 
+          <Button 
             onClick={handleBack}
-            className="text-gray-600 hover:text-gray-900"
+            variant="outline"
           >
             Back to Dashboard
-          </button>
+          </Button>
         </div>
 
         {/* Summary Cards */}
@@ -383,7 +383,7 @@ const InternshipReports = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Major</label>
                 <select 
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-md text-gray-900"
                   value={filters.major}
                   onChange={(e) => handleFilterChange('major', e.target.value)}
                 >
@@ -397,7 +397,7 @@ const InternshipReports = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                 <select 
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-md text-gray-900"
                   value={filters.status}
                   onChange={(e) => handleFilterChange('status', e.target.value)}
                 >
@@ -463,7 +463,7 @@ const InternshipReports = () => {
                       <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="text-blue-600 hover:text-blue-800"
+                        className="bg-white text-blue-600 hover:bg-blue-100 hover:text-blue-800 py-2 px-4 rounded-md transition-all duration-300"
                         onClick={() => viewReportDetails(report)}
                       >
                         View
@@ -471,7 +471,7 @@ const InternshipReports = () => {
                       <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="text-green-600 hover:text-green-800"
+                        className="bg-white text-green-600 hover:bg-green-100 hover:text-green-800 py-2 px-4 rounded-md transition-all duration-300"
                         onClick={() => handleOpenReviewModal(report)}
                       >
                         Review

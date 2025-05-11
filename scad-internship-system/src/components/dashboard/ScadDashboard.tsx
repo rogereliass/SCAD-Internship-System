@@ -227,11 +227,11 @@ const ScadDashboard = () => {
         </div>
 
         <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="mb-6">
-          <TabsList className="w-full md:w-auto grid grid-cols-2 md:grid-cols-4 gap-2 h-auto p-1">
-            <TabsTrigger value="overview" className="py-2">Overview</TabsTrigger>
-            <TabsTrigger value="analytics" className="py-2">Analytics</TabsTrigger>
-            <TabsTrigger value="companies" className="py-2">Companies</TabsTrigger>
-            <TabsTrigger value="appointments" className="py-2">Appointments</TabsTrigger>
+          <TabsList className="w-full md:w-auto grid grid-cols-2 md:grid-cols-4 gap-2 h-auto p-1 bg-white border border-gray-200 shadow-sm">
+            <TabsTrigger value="overview" className="py-2 data-[state=active]:bg-scad-red data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-700 hover:bg-gray-50">Overview</TabsTrigger>
+            <TabsTrigger value="analytics" className="py-2 data-[state=active]:bg-scad-red data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-700 hover:bg-gray-50">Analytics</TabsTrigger>
+            <TabsTrigger value="companies" className="py-2 data-[state=active]:bg-scad-red data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-700 hover:bg-gray-50">Companies</TabsTrigger>
+            <TabsTrigger value="appointments" className="py-2 data-[state=active]:bg-scad-red data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-700 hover:bg-gray-50">Appointments</TabsTrigger>
           </TabsList>
           
           <TabsContent value="overview">
@@ -299,30 +299,30 @@ const ScadDashboard = () => {
                 </CardHeader>
                 <CardContent className="pb-2">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                    <div className="bg-blue-100 rounded-lg p-4 border border-blue-100">
                       <p className="text-sm text-blue-600 font-medium">Total Students</p>
                       <p className="text-2xl font-bold text-gray-700">128</p>
                     </div>
-                    <div className="bg-green-50 rounded-lg p-4 border border-green-100">
+                    <div className="bg-green-100 rounded-lg p-4 border border-green-100">
                       <p className="text-sm text-green-600 font-medium">Placed</p>
                       <p className="text-2xl font-bold text-gray-700">104</p>
-                      <p className="text-xs text-gray-500">81% placement rate</p>
+                      <p className="text-xs text-gray-600">81% placement rate</p>
                     </div>
-                    <div className="bg-orange-50 rounded-lg p-4 border border-orange-100">
+                    <div className="bg-orange-100 rounded-lg p-4 border border-orange-100">
                       <p className="text-sm text-orange-600 font-medium">Searching</p>
                       <p className="text-2xl font-bold text-gray-700">18</p>
-                      <p className="text-xs text-gray-500">14% of students</p>
+                      <p className="text-xs text-gray-600">14% of students</p>
                     </div>
-                    <div className="bg-red-50 rounded-lg p-4 border border-red-100">
+                    <div className="bg-red-100 rounded-lg p-4 border border-red-100">
                       <p className="text-sm text-red-600 font-medium">No Placement</p>
                       <p className="text-2xl font-bold text-gray-700">6</p>
-                      <p className="text-xs text-gray-500">5% of students</p>
+                      <p className="text-xs text-gray-600">5% of students</p>
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Link to="/internship-cycles">
-                    <Button variant="outline" size="sm" className="text-blue-600">
+                  <Link to="/internship-cycles" className="w-full">
+                    <Button variant="default" size="sm" className="w-full">
                       Manage Cycle
                     </Button>
                   </Link>
@@ -392,7 +392,7 @@ const ScadDashboard = () => {
                 </CardContent>
                 <CardFooter>
                   <Link to="/internship-reports" className="w-full">
-                    <Button variant="outline" size="sm" className="w-full">
+                    <Button variant="default" size="sm" className="w-full">
                       View All Reports
                     </Button>
                   </Link>
@@ -428,6 +428,16 @@ const ScadDashboard = () => {
                     </ResponsiveContainer>
                   </div>
                 </CardContent>
+                <CardFooter>
+                  <Button 
+                    variant="default" 
+                    size="sm" 
+                    className="w-full" 
+                    onClick={() => setActiveTab("analytics")}
+                  >
+                    View Analytics
+                  </Button>
+                </CardFooter>
               </Card>
             </div>
             
@@ -452,7 +462,7 @@ const ScadDashboard = () => {
                 </CardContent>
                 <CardFooter>
                   <Link to="/internships" className="w-full">
-                    <Button variant="outline" size="sm" className="w-full">
+                    <Button variant="default" size="sm" className="w-full">
                       View All Internships
                     </Button>
                   </Link>
@@ -500,7 +510,7 @@ const ScadDashboard = () => {
                             <Button 
                               size="sm" 
                               variant="outline" 
-                              className="text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
+                              className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white"
                               onClick={() => handleAppointmentAction(appointment.id, 'reject')}
                             >
                               Reject
@@ -525,11 +535,14 @@ const ScadDashboard = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Link to="/appointments" className="w-full">
-                    <Button variant="outline" size="sm" className="w-full">
-                      Manage Appointments
-                    </Button>
-                  </Link>
+                  <Button 
+                    variant="default" 
+                    size="sm" 
+                    className="w-full" 
+                    onClick={() => setActiveTab("appointments")}
+                  >
+                    Manage Appointments
+                  </Button>
                 </CardFooter>
               </Card>
             </div>
@@ -650,7 +663,7 @@ const ScadDashboard = () => {
           <TabsContent value="companies">
             {/* Companies Tab Content */}
             <div className="grid grid-cols-1 gap-6">
-              <Card>
+              <Card className="bg-white">
                 <CardHeader>
                   <CardTitle className="text-lg">Company Applications</CardTitle>
                   <CardDescription>
@@ -679,7 +692,7 @@ const ScadDashboard = () => {
                         </div>
                         <div className="p-2 text-right">
                           <Link to="/company-applications">
-                            <Button variant="ghost" size="sm">Review</Button>
+                            <Button variant="secondary" size="sm">Review</Button>
                           </Link>
                         </div>
                       </div>
@@ -688,14 +701,14 @@ const ScadDashboard = () => {
                 </CardContent>
                 <CardFooter>
                   <Link to="/company-applications" className="w-full">
-                    <Button variant="outline" size="sm" className="w-full">
+                    <Button variant="default" size="sm" className="w-full">
                       View All Applications
                     </Button>
                   </Link>
                 </CardFooter>
               </Card>
               
-              <Card>
+              <Card className="bg-white">
                 <CardHeader>
                   <CardTitle className="text-lg">Partner Companies (15)</CardTitle>
                   <CardDescription>Active companies offering internships</CardDescription>
@@ -707,7 +720,7 @@ const ScadDashboard = () => {
                       <p className="text-sm text-gray-500">Information Technology</p>
                       <div className="mt-2 flex justify-between items-center">
                         <p className="text-xs text-gray-600">12 internships</p>
-                        <Button variant="ghost" size="sm">View</Button>
+                        <Button variant="secondary" size="sm">View</Button>
                       </div>
                     </div>
                     
@@ -716,7 +729,7 @@ const ScadDashboard = () => {
                       <p className="text-sm text-gray-500">Marketing</p>
                       <div className="mt-2 flex justify-between items-center">
                         <p className="text-xs text-gray-600">8 internships</p>
-                        <Button variant="ghost" size="sm">View</Button>
+                        <Button variant="secondary" size="sm">View</Button>
                       </div>
                     </div>
                     
@@ -725,14 +738,14 @@ const ScadDashboard = () => {
                       <p className="text-sm text-gray-500">Design</p>
                       <div className="mt-2 flex justify-between items-center">
                         <p className="text-xs text-gray-600">7 internships</p>
-                        <Button variant="ghost" size="sm">View</Button>
+                        <Button variant="secondary" size="sm">View</Button>
                       </div>
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter>
                   <Link to="/companies" className="w-full">
-                    <Button variant="outline" size="sm" className="w-full">
+                    <Button variant="default" size="sm" className="w-full">
                       View All Companies
                     </Button>
                   </Link>
@@ -784,7 +797,7 @@ const ScadDashboard = () => {
                           <div className="flex gap-2">
                             {appointment.status === 'confirmed' ? (
                               <Button 
-                                className="flex items-center gap-2 bg-primary hover:bg-primary/90"
+                                className="flex items-center gap-2 bg-blue-600 hover:bg-primary/90"
                               >
                                 <Video size={16} />
                                 <span>Join Call</span>
@@ -793,7 +806,7 @@ const ScadDashboard = () => {
                               <>
                                 <Button 
                                   variant="outline" 
-                                  className="text-red-600"
+                                  className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white"
                                   onClick={() => handleAppointmentAction(appointment.id, 'reject')}
                                 >
                                   Reject

@@ -245,7 +245,10 @@ const Students = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Students Management</h1>
           <div className="flex items-center gap-3">
-            <Link to="/dashboard/3" className="text-gray-600 hover:text-gray-900">
+            <Link
+              to="/dashboard/3"
+              className="inline-block px-4 py-2 rounded-md border border-gray-500 bg-white text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors duration-200"
+            >
               Back to Dashboard
             </Link>
             <Button 
@@ -345,7 +348,7 @@ const Students = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Major</label>
                 <select 
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-md text-gray-900"
                   value={filters.major}
                   onChange={(e) => handleFilterChange('major', e.target.value)}
                 >
@@ -359,7 +362,7 @@ const Students = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Internship Status</label>
                 <select 
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-md text-gray-900"
                   value={filters.internshipStatus}
                   onChange={(e) => handleFilterChange('internshipStatus', e.target.value)}
                 >
@@ -373,7 +376,7 @@ const Students = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Report Status</label>
                 <select 
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-md text-gray-900"
                   value={filters.reportStatus}
                   onChange={(e) => handleFilterChange('reportStatus', e.target.value)}
                 >
@@ -433,11 +436,11 @@ const Students = () => {
                   <TableCell className="text-right">
                     <Button 
                       variant="ghost" 
-                      size="sm" 
-                      className="text-blue-600 hover:text-blue-800"
-                      onClick={() => viewStudentDetails(student)}
+                        size="sm" 
+                        className="bg-white text-blue-600 hover:bg-blue-100 hover:text-blue-800 py-2 px-4 rounded-md transition-all duration-300"
+                        onClick={() => viewStudentDetails(student)}
                     >
-                      View Details
+                      View Profile
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -460,7 +463,7 @@ const Students = () => {
             {selectedStudent && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-xl">Student Details</DialogTitle>
+                  <DialogTitle className="text-xl">Student Profile</DialogTitle>
                   <DialogDescription>
                     Complete information about the student
                   </DialogDescription>
