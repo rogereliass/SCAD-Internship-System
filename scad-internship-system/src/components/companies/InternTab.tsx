@@ -5,9 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import InternDetailsPopup from './InternDetailsPopup';
-import EvaluationPopup, { EvaluationData } from './EvaluationPopUp';
-import { toast } from 'sonner';
 
 interface Intern {
   id: number;
@@ -15,11 +12,7 @@ interface Intern {
   position: string;
   startDate: string;
   endDate: string;
-  evaluationStatus?: 'pending' | 'submitted';
-  email: string;
-  major?: string;
-  year?: string;
-  status?: 'active' | 'completed';
+  evaluationStatus?: 'not_started' | 'in_progress' | 'submitted';
 }
 
 interface InternTabProps {
@@ -28,62 +21,38 @@ interface InternTabProps {
 }
 
 const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
-  const [selectedInternId, setSelectedInternId] = useState<number | null>(null);
-  const [detailsPopupOpen, setDetailsPopupOpen] = useState(false);
-
-  const handleOpenInternDetails = (internId: number) => {
-    setSelectedInternId(internId);
-    setDetailsPopupOpen(true);
-  };
-
-  const selectedIntern = selectedInternId ? interns.find(intern => intern.id === selectedInternId) : null;
-
   const [searchTerm, setSearchTerm] = useState('');
   const [searchType, setSearchType] = useState<'name' | 'position'>('name');
   const [statusFilter, setStatusFilter] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
   const [selectedInterns, setSelectedInterns] = useState<number[]>([]);
 
-  const [evaluationPopupOpen, setEvaluationPopupOpen] = useState(false);
-  const [internToEvaluate, setInternToEvaluate] = useState<Intern | null>(null);
-
-  const handleOpenEvaluation = (internId: number) => {
-    const intern = interns.find(i => i.id === internId);
-    if (intern) {
-      setInternToEvaluate(intern);
-      setEvaluationPopupOpen(true);
+  const isNearingCompletion = (endDate: string) => {
+    const end = new Date(endDate);
+    const now = new Date();
+    const daysLeft = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    return daysLeft >= 0 && daysLeft <= 14;
+  };
+  
+  const isActive = (endDate: string) => {
+    try {
+      const end = new Date(endDate);
+      const now = new Date();
+      return !isNaN(end.getTime()) && end > now;
+    } catch (e) {
+      console.error("Error parsing date:", endDate);
+      return false;
     }
   };
 
-  const handleEndInternship = (internId: number) => {
-    toast.success("Internship ended successfully!");
-  };
-
-  const handleSubmitEvaluation = async (evaluationData: EvaluationData) => {
-    console.log('Evaluation submitted:', evaluationData);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      }, 1000);
-    });
-  };
-
-  const isActive = (intern: Intern) => {
-    return intern.status === 'active';
-  };
-
-  const getInternStatus = (intern: Intern) => {
-    return intern.status === 'active'
-      ? { 
-          label: 'Active', 
-          color: 'bg-green-100 text-green-800',
-          icon: <CheckCircle className="h-3 w-3 mr-1" />
-        }
-      : { 
-          label: 'Completed', 
-          color: 'bg-blue-100 text-blue-800',
-          icon: <Clock className="h-3 w-3 mr-1" />
-        };
+  const getInternStatus = (endDate: string) => {
+    if (isActive(endDate)) {
+      if (isNearingCompletion(endDate)) {
+        return { label: 'Near End', color: 'bg-yellow-100 text-yellow-800' };
+      }
+      return { label: 'Active', color: 'bg-green-100 text-green-800' };
+    }
+    return { label: 'Completed', color: 'bg-blue-100 text-blue-800' };
   };
 
   const getEvaluationStatus = (status?: string) => {
@@ -94,17 +63,17 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
           color: 'bg-green-100 text-green-800',
           icon: <CheckCircle className="h-3 w-3 mr-1" />
         };
-      case 'pending':
+      case 'in_progress':
+        return { 
+          label: 'Evaluation In Progress', 
+          color: 'bg-yellow-100 text-yellow-800',
+          icon: <Clock className="h-3 w-3 mr-1" />
+        };
+      default:
         return { 
           label: 'Evaluation Needed', 
           color: 'bg-red-100 text-red-800',
           icon: <AlertCircle className="h-3 w-3 mr-1" />
-        };
-      default:
-        return { 
-          label: 'No Evaluation Required', 
-          color: 'bg-gray-100 text-gray-800',
-          icon: <Clock className="h-3 w-3 mr-1" />
         };
     }
   };
@@ -146,17 +115,21 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
     
     let matchesFilter = true;
     if (statusFilter === 'active') {
-      matchesFilter = intern.status === 'active';
+      matchesFilter = isActive(intern.endDate);
     } else if (statusFilter === 'completed') {
-      matchesFilter = intern.status === 'completed';
+      matchesFilter = !isActive(intern.endDate);
     } else if (statusFilter === 'evaluation_pending') {
-      matchesFilter = intern.evaluationStatus === 'pending';
+      matchesFilter = intern.evaluationStatus !== 'submitted';
     } else {
       matchesFilter = true;
     }
     
     return matchesSearch && matchesFilter;
   });
+
+  console.log('Status Filter:', statusFilter);
+  console.log('Interns:', interns);
+  console.log('Filtered Interns:', filteredInterns);
 
   const handleBulkEvaluate = () => {
     alert(`Preparing to evaluate ${selectedInterns.length} interns`);
@@ -170,11 +143,32 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
             <h2 className="text-2xl font-bold text-scad-dark">Current Interns</h2>
             {interns.length > 0 && (
               <Badge variant="outline" className="ml-2 bg-scad-red bg-opacity-10 text-scad-red">
-                {interns.filter(i => isActive(i)).length} Active
+                {interns.filter(i => isActive(i.endDate)).length} Active
               </Badge>
             )}
           </div>
           <p className="text-gray-500 text-sm mt-1">Monitor and evaluate interns currently placed in your company</p>
+        </div>
+        
+        <div className="mt-3 sm:mt-0 flex items-center space-x-3">
+          {selectedInterns.length > 0 ? (
+            <Button 
+              onClick={handleBulkEvaluate}
+              className="bg-scad-red hover:bg-scad-red/90"
+            >
+              <FileCheck className="h-4 w-4 mr-2" /> 
+              Evaluate Selected ({selectedInterns.length})
+            </Button>
+          ) : (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setSelectedInterns(filteredInterns.map(i => i.id))}
+              className="hidden sm:flex"
+            >
+              Select All
+            </Button>
+          )}
         </div>
       </div>
 
@@ -279,7 +273,7 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
       {filteredInterns.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredInterns.map((intern) => {
-            const status = getInternStatus(intern);
+            const status = getInternStatus(intern.endDate);
             const evaluationStatus = getEvaluationStatus(intern.evaluationStatus);
             
             return (
@@ -309,35 +303,36 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
                       {evaluationStatus.label}
                     </Badge>
                     
+                    <div className="flex items-center">
+                      <label className="flex items-center text-xs text-gray-500 mr-2">
+                        Select
+                      </label>
+                      <input
+                        type="checkbox"
+                        checked={selectedInterns.includes(intern.id)}
+                        onChange={() => toggleInternSelection(intern.id)}
+                        className="rounded text-scad-red focus:ring-scad-red h-4 w-4"
+                      />
+                    </div>
                   </div>
                 </div>
                 
                 <div className="flex items-center justify-between border-t border-gray-100 bg-gray-50 px-4 py-2">
-                  <button 
-                    onClick={() => handleOpenInternDetails(intern.id)}
-                    className="text-sm text-scad-red hover:underline flex items-center bg-transparent border-0 p-0 cursor-pointer"
+                  <Link 
+                    to={`/interns/${intern.id}`} 
+                    className="text-sm text-scad-red hover:underline flex items-center"
                   >
                     <Eye className="h-3.5 w-3.5 mr-1.5" />
                     View Details
-                  </button>
+                  </Link>
                   
-                  {intern.status === 'active' ? (
-                    <button 
-                      onClick={() => handleEndInternship(intern.id)}
-                      className="text-sm text-amber-600 hover:underline flex items-center bg-transparent border-0 p-0 cursor-pointer"
-                    >
-                      <Clock className="h-3.5 w-3.5 mr-1.5" />
-                      End Internship
-                    </button>
-                  ) : intern.evaluationStatus === 'pending' && (
-                    <button 
-                      onClick={() => handleOpenEvaluation(intern.id)}
-                      className="text-sm text-blue-600 hover:underline flex items-center bg-transparent border-0 p-0 cursor-pointer"
-                    >
-                      <FileCheck className="h-3.5 w-3.5 mr-1.5" />
-                      Evaluate
-                    </button>
-                  )}
+                  <Link 
+                    to={`/interns/${intern.id}/evaluate`} 
+                    className="text-sm text-blue-600 hover:underline flex items-center"
+                  >
+                    <FileCheck className="h-3.5 w-3.5 mr-1.5" />
+                    Evaluate
+                  </Link>
                 </div>
               </div>
             );
@@ -366,19 +361,6 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
           )}
         </div>
       )}
-
-      <EvaluationPopup
-        intern={internToEvaluate}
-        isOpen={evaluationPopupOpen}
-        onClose={() => setEvaluationPopupOpen(false)}
-        onSubmit={handleSubmitEvaluation}
-      />
-
-      <InternDetailsPopup
-        intern={selectedIntern}
-        isOpen={detailsPopupOpen}
-        onClose={() => setDetailsPopupOpen(false)}
-      />
     </div>
   );
 };
