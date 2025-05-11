@@ -245,12 +245,7 @@ const CompanyDashboard = () => {
         
         <TabsContent value="applicants">
         <ApplicantsTab 
-          applicants={recentApplications.map(app => ({
-            ...app,
-            email: `${app.name.toLowerCase().replace(' ', '.')}@example.com`,
-            jobPostingId: app.position === 'Frontend Developer' ? '1' : '2',
-            status: app.status as "pending" | "finalized" | "rejected" | "accepted",
-          }))} 
+          applicants={recentApplications} 
           jobPostings={jobPostings.map(post => ({
             id: post.id.toString(),
             position: post.position
