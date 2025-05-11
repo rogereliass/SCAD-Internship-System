@@ -3,12 +3,12 @@ import { Bell, Building, FileText, Video, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface Notification {
-  id: string | number;
+  id: number;
   title: string;
   description: string;
   time: string;
+  type: "report" | "company" | "appointment" | "workshop" | "clarification";
   read: boolean;
-  type: 'company' | 'report' | 'appointment' | 'workshop';
 }
 
 interface NotificationsButtonProps {

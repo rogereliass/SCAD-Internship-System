@@ -4,26 +4,139 @@ import NotificationsButton from './../DashboardEssentials/NotificationsButton';
 import TabsLayout from './../DashboardEssentials/TabsLayout';
 import { TabsContent } from '../ui/tabs';
 import Footer from '../layout/Footer';
-import { FileText, Users, GraduationCap, PlusCircle, ClipboardCheck } from 'lucide-react';
+import { FileText, Users, GraduationCap, PlusCircle, ClipboardCheck, CheckCircle, Clock, FileCheck } from 'lucide-react';
 import OverviewTab from './../companies/Overviewtab';
 import JobPostingTab from '../companies/JobPostingTab';
 import ApplicantsTab from '../companies/ApplicantsTab';
 import InternTab from '../companies/InternTab';
 
-
-
-
-
 const recentApplications = [
-  { id: '1', name: 'Emily Johnson', position: 'Frontend Developer', appliedDate: '2023-11-15', status: 'pending' },
-  { id: '2', name: 'Michael Brown', position: 'UX Design Intern', appliedDate: '2023-11-14', status: 'finalized' },
-  { id: '3', name: 'Sarah Wilson', position: 'Frontend Developer', appliedDate: '2023-11-12', status: 'pending' },
-  { id: '4', name: 'David Garcia', position: 'UX Design Intern', appliedDate: '2023-11-10', status: 'rejected' },
+  { 
+    id: '1', 
+    name: 'Emily Johnson', 
+    position: 'Frontend Developer', 
+    appliedDate: '2023-11-15', 
+    email: 'emily.johnson@example.com',
+    jobPostingId: '1',
+    status: 'accepted' as 'accepted' | 'rejected' | 'finalized',
+    education: 'B.S. Computer Science, University of Washington, 2023',
+    experiences: [
+      {
+        jobTitle: 'Web Developer Intern',
+        company: 'TechStart Solutions',
+        duration: 'May 2022 - August 2022',
+        description: 'Developed responsive web applications using React and Node.js'
+      },
+      {
+        jobTitle: 'Student Assistant',
+        company: 'University IT Department',
+        duration: 'Sep 2021 - May 2022',
+        description: 'Provided technical support to faculty and students'
+      }
+    ],
+    skills: ['JavaScript', 'React', 'HTML/CSS', 'Node.js', 'Git']
+  },
+  { 
+    id: '2', 
+    name: 'Michael Brown', 
+    position: 'UX Design Intern', 
+    appliedDate: '2023-11-14',
+    email: 'michael.brown@example.com',
+    jobPostingId: '2', 
+    status: 'finalized' as 'accepted' | 'rejected' | 'finalized',
+    education: 'B.F.A. Graphic Design, Rhode Island School of Design, 2023',
+    experiences: [
+      {
+        jobTitle: 'UI/UX Design Intern',
+        company: 'Creative Solutions Agency',
+        duration: 'June 2022 - September 2022',
+        description: 'Created wireframes and prototypes for mobile applications'
+      }
+    ],
+    skills: ['Figma', 'Adobe XD', 'Sketch', 'UI/UX Research', 'Prototyping']
+  },
+  { 
+    id: '3', 
+    name: 'Sarah Wilson', 
+    position: 'Frontend Developer', 
+    appliedDate: '2023-11-12',
+    email: 'sarah.wilson@example.com',
+    jobPostingId: '1', 
+    status: 'accepted' as 'accepted' | 'rejected' | 'finalized',
+    education: 'M.S. Software Engineering, Boston University, 2022',
+    experiences: [
+      {
+        jobTitle: 'Software Engineering Intern',
+        company: 'Global Tech Inc.',
+        duration: 'May 2021 - August 2021',
+        description: 'Worked on front-end development for enterprise web applications'
+      },
+      {
+        jobTitle: 'Teaching Assistant',
+        company: 'Boston University',
+        duration: 'Sep 2020 - May 2021',
+        description: 'Assisted in teaching web development courses'
+      }
+    ],
+    skills: ['TypeScript', 'Angular', 'React', 'AWS', 'Jest']
+  },
+  { 
+    id: '4', 
+    name: 'David Garcia', 
+    position: 'UX Design Intern', 
+    appliedDate: '2023-11-10',
+    email: 'david.garcia@example.com',
+    jobPostingId: '2', 
+    status: 'rejected' as 'accepted' | 'rejected' | 'finalized',
+    education: 'B.A. Interactive Media Design, California Institute of Arts, 2023',
+    experiences: [
+      {
+        jobTitle: 'Design Intern',
+        company: 'Innovative Media Group',
+        duration: 'June 2022 - August 2022',
+        description: 'Designed user interfaces for web and mobile applications'
+      }
+    ],
+    skills: ['Adobe Creative Suite', 'UI Design', 'Prototyping', 'User Research']
+  },
 ];
 
 const currentInterns = [
-  { id: 1, name: 'Alex Martinez', position: 'Web Developer', startDate: '2023-09-01', endDate: '2023-12-01' },
-  { id: 2, name: 'Jessica Lee', position: 'Marketing Assistant', startDate: '2023-10-15', endDate: '2024-01-15' },
+  { 
+    id: 1, 
+    name: 'Alex Martinez', 
+    position: 'Web Developer', 
+    startDate: '2023-09-01', 
+    endDate: '2023-12-01',
+    email: 'alex.martinez@example.com',
+    major: 'Computer Science',
+    year: '3',
+    evaluationStatus: "pending" as "pending" | "submitted",
+    status: 'completed' as "completed" | "active"
+  },
+  { 
+    id: 2, 
+    name: 'Jessica Lee', 
+    position: 'Marketing Assistant', 
+    startDate: '2023-10-15', 
+    endDate: '2024-01-15',
+    email: 'jessica.lee@example.com',
+    major: 'Marketing',
+    year: '4',
+    evaluationStatus: "submitted" as "pending" | "submitted",
+    status: 'completed' as "completed" | "active"
+  },
+  { 
+    id: 3, 
+    name: 'Ali Ahmed', 
+    position: 'Backend Developer', 
+    startDate: '2023-05-11', 
+    endDate: '2023-11-11',
+    email: 'ali.ahmed@example.com',
+    major: 'Software Engineering',
+    year: '4',
+    status: 'active' as "completed" | "active"
+  }
 ];
 
 const mockNotifications = [
@@ -55,6 +168,7 @@ const mockNotifications = [
 
 const CompanyDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  const [applications, setApplications] = useState(recentApplications);
 
   const companyTabs = [
     { value: "overview", label: "Overview" },
@@ -84,10 +198,17 @@ const CompanyDashboard = () => {
     currentInterns: 2,
   });
 
-
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleStatusChange = (applicantId: string, newStatus: 'accepted' | 'rejected' | 'finalized') => {
+    setApplications(prevApplications => 
+      prevApplications.map(app => 
+        app.id === applicantId ? { ...app, status: newStatus } : app
+      )
+    );
   };
 
   return (
@@ -113,7 +234,7 @@ const CompanyDashboard = () => {
           <OverviewTab 
             company={company} 
             jobPostings={jobPostings} 
-            recentApplications={recentApplications} 
+            recentApplications={applications} 
             onTabChange={handleTabChange}
           />
         </TabsContent>
@@ -124,12 +245,7 @@ const CompanyDashboard = () => {
         
         <TabsContent value="applicants">
         <ApplicantsTab 
-          applicants={recentApplications.map(app => ({
-            ...app,
-            email: `${app.name.toLowerCase().replace(' ', '.')}@example.com`,
-            jobPostingId: app.position === 'Frontend Developer' ? '1' : '2',
-            status: app.status as "pending" | "finalized" | "rejected" | "accepted",
-          }))} 
+          applicants={recentApplications} 
           jobPostings={jobPostings.map(post => ({
             id: post.id.toString(),
             position: post.position
@@ -140,19 +256,12 @@ const CompanyDashboard = () => {
         
         <TabsContent value="interns">
           <InternTab 
-            interns={currentInterns.map(intern => ({
-              ...intern,
-              evaluationStatus: Math.random() > 0.5 ? 
-                Math.random() > 0.5 ? 'submitted' : 'in_progress' : 
-                'not_started'
-            }))}
+            interns={currentInterns}
             onTabChange={handleTabChange}
           />
         </TabsContent>
       </TabsLayout>
-
     </div>
-
   );
 };
 

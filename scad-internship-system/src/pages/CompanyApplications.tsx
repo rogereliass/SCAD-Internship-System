@@ -176,7 +176,10 @@ const CompanyApplications = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Company Applications</h1>
-          <Link to="/dashboard/3" className="text-gray-600 hover:text-gray-900">
+          <Link
+            to="/dashboard/3"
+            className="inline-block px-4 py-2 rounded-md border border-gray-500 bg-white text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors duration-200"
+          >
             Back to Dashboard
           </Link>
         </div>
@@ -184,7 +187,7 @@ const CompanyApplications = () => {
         {/* Search and Filter Bar */}
         <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-grow">
+            <div className="relative flex-grow bg-white">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
               <Input 
                 type="text" 
@@ -222,7 +225,7 @@ const CompanyApplications = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
                 <select 
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-300 rounded-md text-gray-900"
                   value={filters.industry}
                   onChange={(e) => handleFilterChange('industry', e.target.value)}
                 >
@@ -269,9 +272,9 @@ const CompanyApplications = () => {
                   <TableCell className="text-right">
                     <Button 
                       variant="ghost" 
-                      size="sm" 
-                      className="text-blue-600 hover:text-blue-800"
-                      onClick={() => viewCompanyDetails(company)}
+                        size="sm" 
+                        className="bg-white text-blue-600 hover:bg-blue-100 hover:text-blue-800 py-2 px-4 rounded-md transition-all duration-300"
+                        onClick={() => viewCompanyDetails(company)}
                     >
                       Review
                     </Button>

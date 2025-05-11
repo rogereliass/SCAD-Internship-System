@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { BarChart as RechartBarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend, PieChart as RechartPieChart, Pie, Cell } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Badge } from "../ui/badge";
+import NotificationsButton from '../DashboardEssentials/NotificationsButton';
 
 
 // Mock Data (replace with actual data fetching)
@@ -104,12 +105,9 @@ const FacultyDashboard = () => {
                     ))}
                   </div>
                   <div className="p-2 border-t border-gray-200 text-center">
-                    
-                    <Link to="/notifications/4" className="w-full">
-                           <Button variant="ghost" size="sm" className="w-full text-sm bg-black text-white hover:bg-gray-800">
-                               View all notifications
-                            </Button>
-                    </Link>
+                    <Button variant="ghost" size="sm" className="w-full text-sm bg-black text-white hover:bg-gray-800">
+                      View all notifications
+                    </Button>
                   </div>
                 </div>
               )}
@@ -125,8 +123,9 @@ const FacultyDashboard = () => {
 
           <TabsContent value="overview">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+
             <Link to="/internship-reports" state={{ from: 'faculty' }}>
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
+              <Card className="hover:shadow-md transition-shadow cursor-pointer">
                   <CardContent className="pt-6 flex items-center justify-between">
                     <div>
                       <FileText size={24} className="text-primary mb-2" />
@@ -135,8 +134,9 @@ const FacultyDashboard = () => {
                     </div>
                     <ChevronRight size={20} className="text-gray-400" />
                   </CardContent>
-                </Card>
-              </Link>
+              </Card>
+            </Link>
+
             <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">Report Status</CardTitle>

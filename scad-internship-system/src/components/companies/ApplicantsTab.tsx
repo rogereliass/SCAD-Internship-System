@@ -10,6 +10,8 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { toast } from 'sonner';
+import ApplicantDetailsPopup from './ApplicantDetailsPopup';
 
 // Update the status type to only include the three allowed statuses
 interface Applicant {
@@ -47,6 +49,8 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const [statusDialogOpen, setStatusDialogOpen] = useState<boolean>(false);
   const [currentApplicant, setCurrentApplicant] = useState<string | null>(null);
+  const [detailsPopupOpen, setDetailsPopupOpen] = useState<boolean>(false);
+  const [selectedApplicant, setSelectedApplicant] = useState<Applicant | null>(null);
 
   const filteredApplicants = useMemo(() => {
     return applicants.filter(applicant => {
@@ -129,14 +133,14 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
       case 'finalized':
         return {
           color: 'bg-blue-100 text-blue-800',
-          tooltip: 'Application has been processed and awaiting final decision',
-          icon: <Clock className="h-3.5 w-3.5 mr-1" />
+          tooltip: 'Applicant has passed interview and is ready to start internship',
+          icon: <CheckCircle className="h-3.5 w-3.5 mr-1" />
         };
       case 'accepted':
         return {
           color: 'bg-green-100 text-green-800',
-          tooltip: 'Applicant has been accepted',
-          icon: <CheckCircle className="h-3.5 w-3.5 mr-1" />
+          tooltip: 'Applicant is accepted for interview',
+          icon: <Clock className="h-3.5 w-3.5 mr-1" />
         };
       case 'rejected':
         return {
@@ -166,10 +170,22 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
     setCurrentApplicant(null);
   };
 
+  const handleStartInternship = (applicantId: string) => {
+    toast.success("Internship started successfully!");
+  };
+
   const getApplicantName = (id: string | null) => {
     if (!id) return '';
     const applicant = applicants.find(a => a.id === id);
     return applicant ? applicant.name : '';
+  };
+
+  const handleOpenApplicantDetails = (applicantId: string) => {
+    const applicant = applicants.find(a => a.id === applicantId);
+    if (applicant) {
+      setSelectedApplicant(applicant);
+      setDetailsPopupOpen(true);
+    }
   };
 
   return (
@@ -195,11 +211,13 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
               <span className="text-xs text-gray-500 mr-1 hidden sm:inline-block">
                 {selectedApplicants.length} selected
               </span>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm"
+              onClick={() => toast.success("Emails Sent successfully!")}>
                 <Mail className="h-4 w-4 mr-1" />
                 Email
               </Button>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm"
+              onClick={() => toast.success("CVs downloaded successfully!")}>
                 <Download className="h-4 w-4 mr-1" />
                 Download CVs
               </Button>
@@ -336,7 +354,7 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
                                 <div className="group relative ml-2">
                                   <Badge variant="outline" className={`${statusInfo.color} border-none flex items-center py-0.5`}>
                                     {statusInfo.icon}
-                                    {applicant.status}
+                                    {applicant.status.charAt(0).toUpperCase() + applicant.status.slice(1)}
                                   </Badge>
                                   <div className="hidden group-hover:block absolute z-10 p-2 bg-black text-white text-xs rounded w-48 top-full left-0 mt-1">
                                     {statusInfo.tooltip}
@@ -351,11 +369,23 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
                             </div>
                             
                             <div className="flex space-x-2 mt-3 md:mt-0">
-                              <Button variant="outline" size="sm" className="text-xs flex items-center">
+                              {applicant.status === 'finalized' && (
+                                <Button
+                                  size="sm"
+                                  className="text-xs flex items-center bg-blue-600 hover:bg-blue-700 text-white"
+                                  onClick={() => handleStartInternship(applicant.id)}
+                                >
+                                  <Briefcase className="h-3.5 w-3.5 mr-1.5" />
+                                  Start Internship
+                                </Button>
+                              )}
+                              <Button variant="outline" size="sm" className="text-xs flex items-center"
+                              onClick={() => toast.success("Resume downloaded successfully!")}>
                                 <FileText className="h-3.5 w-3.5 mr-1.5" />
                                 Resume
                               </Button>
-                              <Button variant="outline" size="sm" className="text-xs flex items-center">
+                              <Button variant="outline" size="sm" className="text-xs flex items-center"
+                              onClick={() => toast.success("Email Sent successfully!")}>
                                 <Mail className="h-3.5 w-3.5 mr-1.5" />
                                 Email
                               </Button>
@@ -368,13 +398,16 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
                                 <Clock className="h-3.5 w-3.5 mr-1.5" />
                                 Status
                               </Button>
-                              <Link 
-                                to={`/applicants/${applicant.id}`} 
-                                className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded text-scad-red hover:bg-red-50 hover:border-scad-red"
+                              
+                              <Button 
+                                variant="outline"
+                                size="sm"
+                                className="text-xs flex items-center text-scad-red hover:bg-red-50 hover:border-scad-red"
+                                onClick={() => handleOpenApplicantDetails(applicant.id)}
                               >
                                 <Eye className="h-3.5 w-3.5 mr-1.5" />
                                 Review
-                              </Link>
+                              </Button>
                             </div>
                           </div>
                         </div>
@@ -481,57 +514,76 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
       
       {/* New Status Update Dialog */}
       <Dialog open={statusDialogOpen} onOpenChange={setStatusDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Update Application Status</DialogTitle>
+        <DialogContent className="sm:max-w-[550px] bg-white">
+          <DialogHeader className="border-b pb-3">
+            <DialogTitle className="text-xl text-gray-900">Update Application Status</DialogTitle>
           </DialogHeader>
           
-          <div className="py-2">
-            <p className="text-sm text-gray-500 mb-4">
-              Update status for <span className="font-medium text-scad-red">{getApplicantName(currentApplicant)}</span>
+          <div className="py-4">
+            <p className="text-sm text-gray-600 mb-4">
+              Update status for <span className="font-semibold text-gray-900">{getApplicantName(currentApplicant)}</span>
             </p>
             
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-4">
               <Button 
-                className="bg-blue-100 hover:bg-blue-200 text-blue-800 justify-start flex items-center gap-2 p-3 h-auto"
+                className="bg-blue-50 hover:bg-blue-100 text-blue-800 justify-start flex items-center gap-3 p-4 h-auto border border-blue-200"
                 onClick={() => handleStatusChange('finalized')}
               >
-                <Clock className="h-5 w-5" />
+                <div className="bg-blue-100 p-2 rounded-full">
+                  <CheckCircle className="h-5 w-5" />
+                </div>
                 <div className="text-left">
-                  <p className="font-medium">Mark as Finalized</p>
-                  <p className="text-xs text-blue-700">Application is processed and waiting for final decision</p>
+                  <p className="font-medium text-blue-900">Finalize & Approve</p>
+                  <p className="text-sm text-blue-700">Applicant has passed the interview and can begin internship</p>
                 </div>
               </Button>
               
               <Button 
-                className="bg-green-100 hover:bg-green-200 text-green-800 justify-start flex items-center gap-2 p-3 h-auto"
+                className="bg-green-50 hover:bg-green-100 text-green-800 justify-start flex items-center gap-3 p-4 h-auto border border-green-200"
                 onClick={() => handleStatusChange('accepted')}
               >
-                <CheckCircle className="h-5 w-5" />
+                <div className="bg-green-100 p-2 rounded-full">
+                  <Clock className="h-5 w-5" />
+                </div>
                 <div className="text-left">
-                  <p className="font-medium">Accept Application</p>
-                  <p className="text-xs text-green-700">Approve this applicant for the position</p>
+                  <p className="font-medium text-green-900">Accept for Interview</p>
+                  <p className="text-sm text-green-700">Approve applicant for interview phase</p>
                 </div>
               </Button>
               
               <Button 
-                className="bg-red-100 hover:bg-red-200 text-red-800 justify-start flex items-center gap-2 p-3 h-auto"
+                className="bg-red-50 hover:bg-red-100 text-red-800 justify-start flex items-center gap-3 p-4 h-auto border border-red-200"
                 onClick={() => handleStatusChange('rejected')}
               >
-                <XCircle className="h-5 w-5" />
+                <div className="bg-red-100 p-2 rounded-full">
+                  <XCircle className="h-5 w-5" />
+                </div>
                 <div className="text-left">
-                  <p className="font-medium">Reject Application</p>
-                  <p className="text-xs text-red-700">Decline this applicant for the position</p>
+                  <p className="font-medium text-red-900">Reject Application</p>
+                  <p className="text-sm text-red-700">Decline this applicant for the position</p>
                 </div>
               </Button>
             </div>
           </div>
           
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setStatusDialogOpen(false)}>Cancel</Button>
+          <DialogFooter className="border-t pt-3">
+            <Button 
+              variant="outline" 
+              onClick={() => setStatusDialogOpen(false)}
+              className="text-gray-700 border-gray-300"
+            >
+              Cancel
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Applicant Details Popup */}
+      <ApplicantDetailsPopup
+        applicant={selectedApplicant}
+        isOpen={detailsPopupOpen}
+        onClose={() => setDetailsPopupOpen(false)}
+      />
     </div>
   );
 };
