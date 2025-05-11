@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Bell, Building, FileText, Video, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 interface Notification {
   id: string | number;
@@ -14,15 +15,18 @@ interface Notification {
 interface NotificationsButtonProps {
   notifications: Notification[];
   onMarkAllAsRead?: () => void; // Add optional callback for parent component updates
+  notificationsPagePath?: string; // Add this prop
 }
 
 const NotificationsButton: React.FC<NotificationsButtonProps> = ({ 
   notifications: initialNotifications,
-  onMarkAllAsRead 
+  onMarkAllAsRead,
+  notificationsPagePath = '/notifications/2' // Default to company if not provided
 }) => {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   // Local state to manage notifications
   const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
+  const navigate = useNavigate();
   
   // Function to mark all notifications as read
   const handleMarkAllAsRead = () => {
@@ -103,7 +107,12 @@ const NotificationsButton: React.FC<NotificationsButtonProps> = ({
             )}
           </div>
           <div className="p-2 border-t border-gray-200 text-center">
-            <Button variant="ghost" size="sm" className="w-full text-sm bg-black text-white hover:bg-gray-800">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="w-full text-sm bg-black text-white hover:bg-gray-800"
+              onClick={() => navigate(notificationsPagePath)}
+            >
               View all notifications
             </Button>
           </div>

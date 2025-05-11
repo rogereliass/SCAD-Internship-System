@@ -200,7 +200,7 @@ const StudentDashboard = () => {
         </div>
         
         <div className="mt-4 sm:mt-0">
-          <NotificationsButton notifications={mockNotifications} />
+          <NotificationsButton notifications={mockNotifications} notificationsPagePath="/notifications/1" />
         </div>
       </div>
 
