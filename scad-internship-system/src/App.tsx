@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -26,6 +25,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import ScrollToTop from "./hooks/ScrollToTop";
 import Workshops from "./pages/Workshops";
 import Notifications from './pages/Notifications';
+import About from './pages/About';
 
 const queryClient = new QueryClient();
 
@@ -56,9 +56,9 @@ const App = () => (
           <Route path="/company-pending" element={<CompanyPeding />} />
           <Route path="/appointments" element={<VideoAppointments />} />
           <Route path="/workshops" element={<Workshops />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/about" element={<About />} />
           <Route path="/notifications/:id" element={<Notifications />} />
-
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
