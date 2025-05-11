@@ -34,8 +34,8 @@ This web application was built as part of a university project to simulate an in
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/guc-internship-system.git
-   cd guc-internship-system
+   git clone https://github.com/CSEN603-2025/Softies.git
+   cd scad-internship-system
 
 2. Install dependencies
    ```bash
