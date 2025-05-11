@@ -24,6 +24,7 @@ import CompanyPeding from "./pages/CompanyPending";
 import VideoAppointments from "./pages/VideoAppointments";
 import { BrowserRouter as Router } from "react-router-dom";
 import ScrollToTop from "./hooks/ScrollToTop";
+import Workshops from "./pages/Workshops";
 
 
 const queryClient = new QueryClient();
@@ -51,10 +52,11 @@ const App = () => (
           <Route path="/internship" element={<Internships />} />
           <Route path="/internships/:id" element={<Internships />} />
           <Route path="/companies/:id" element={<ViewAllCompanies />} />
-          <Route path="*" element={<NotFound />} />
           <Route path="/internships/:id/applicants" element={<ViewInternshipApplicants />} />
           <Route path="/company-pending" element={<CompanyPeding />} />
           <Route path="/appointments" element={<VideoAppointments />} />
+          <Route path="/workshops" element={<Workshops />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
