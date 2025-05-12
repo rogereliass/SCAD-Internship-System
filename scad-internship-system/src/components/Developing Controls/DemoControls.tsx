@@ -36,6 +36,12 @@ const DemoControls: React.FC<DemoControlsProps> = ({ currentId }) => {
           >
             Faculty
           </button>
+          <button 
+            onClick={() => navigate('/dashboard/5')}
+            className={`px-4 py-2 text-sm rounded ${currentId === '5' ? 'bg-scad-red text-white' : 'bg-gray-200 text-gray-700'}`}
+          >
+            PRO Student
+          </button>
         </div>
       </div>
     </div>

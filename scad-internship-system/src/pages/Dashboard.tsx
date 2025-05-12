@@ -4,6 +4,7 @@ import StudentDashboard from '../components/dashboard/StudentDashboard';
 import CompanyDashboard from '../components/dashboard/CompanyDashboard';
 import ScadOfficeDashboard from '../components/dashboard/ScadDashboard';
 import FacultyDashboard from '../components/dashboard/FacultyDashboard';
+import PROStudentDashboard from '../components/dashboard/PROStudentDashboard';
 import Navbar from '../components/layout/Navbar';
 import DemoControls from '@/components/Developing Controls/DemoControls';
 import Footer from '@/components/layout/Footer';
@@ -13,6 +14,7 @@ const DASHBOARD_MAP = {
   '2': CompanyDashboard,
   '3': ScadOfficeDashboard,
   '4': FacultyDashboard,
+  '5': PROStudentDashboard,
 } as const;
 
 const USER_TYPE_MAP = {
@@ -20,6 +22,7 @@ const USER_TYPE_MAP = {
   '2': 'company',
   '3': 'scadOffice',
   '4': 'faculty',
+  '5': 'proStudent',
 } as const;
 
 const Dashboard = () => {
