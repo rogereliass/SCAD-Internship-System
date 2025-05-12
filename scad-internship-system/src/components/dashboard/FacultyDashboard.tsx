@@ -1,39 +1,56 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { 
-    Users, Briefcase, FileText, Calendar, Building, Bell, 
-    BarChart, PieChart, TrendingUp, Download, CheckCircle, 
-    AlertCircle, Clock, X, ChevronRight, Video, MapPin, Globe, Phone, Mail,  Plus 
-  } from 'lucide-react';
-import { Button } from '../ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '../ui/card';
+import { useNavigate } from 'react-router-dom';
+import { Bell, FileText } from 'lucide-react';
 import { toast } from 'sonner';
-import { BarChart as RechartBarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend, PieChart as RechartPieChart, Pie, Cell } from 'recharts';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { Badge } from "../ui/badge";
+import { TabsContent } from '../ui/tabs';
 import NotificationsButton from './../DashboardEssentials/NotificationsButton';
-
+import TabsLayout from './../DashboardEssentials/TabsLayout';
+import OverviewCards from '../facultyMembers/OverviewCards';
+import ReportsTable from '../facultyMembers/ReportsTable';
+import StatisticsGraphs from '../facultyMembers/StatisticsGraphs';
+import ReportDetailsModal from '../facultyMembers/ReportDetailsModal';
+import ReviewModal from '../facultyMembers/ReviewModal';
+import { Button } from '../ui/button';
 
 // Mock Data (replace with actual data fetching)
 const mockNotifications = [
   { id: 1, title: 'New Report Submitted', description: 'John Doe submitted an internship report.', time: '2 hours ago', type: 'report' as const, read: false },
-  { id: 2, title: 'Clarification Requested', description: 'A clarification has been requested for report #123', time: '1 day ago', type: 'clarification' as const, read: false },
+  { id: 2, title: 'Clarification Requested', description: 'A clarification has been requested for report #123', time: '1 day ago', type: 'report' as const, read: false },
+];
+
+// New mock data for graphs
+const courseInternshipData = [
+  { name: 'Graphic Design', internships: 45 },
+  { name: 'Illustration', internships: 38 },
+  { name: 'Motion Media', internships: 32 },
+  { name: 'Industrial Design', internships: 28 },
+  { name: 'Architecture', internships: 25 },
+];
+
+const companyRatingData = [
+  { name: 'Adobe', rating: 4.8 },
+  { name: 'Pixar', rating: 4.7 },
+  { name: 'Nike', rating: 4.6 },
+  { name: 'Apple', rating: 4.5 },
+  { name: 'Google', rating: 4.4 },
+];
+
+const companyInternshipData = [
+  { name: 'Adobe', count: 65 },
+  { name: 'Pixar', count: 58 },
+  { name: 'Nike', count: 52 },
+  { name: 'Apple', count: 48 },
+  { name: 'Google', count: 45 },
 ];
 
 const mockStatistics = {
   acceptedReports: 120,
   flaggedReports: 5,
   averageReviewTime: '2 days',
-  topCourses: ['Graphic Design', 'Illustration', 'Motion Media Design'],
-  topRatedCompanies: ['Company A', 'Company B', 'Company C'],
-  topCompaniesByInternshipCount: ['Company X', 'Company Y', 'Company Z'],
+  unreviewedReports: 15,
+  topCourses: ['Graphic Design', 'Illustration', 'Motion Media'],
+  topRatedCompanies: ['Adobe', 'Pixar', 'Nike'],
+  topCompaniesByInternshipCount: ['Adobe', 'Pixar', 'Nike'],
 };
 
 const reportStatusData = [
@@ -43,172 +60,263 @@ const reportStatusData = [
   { name: 'Rejected', value: 4, color: '#ef4444' },
 ];
 
+// Mock reports data
+const mockReports = [
+  {
+    id: 1,
+    studentName: "Ahmed Al-Farsi",
+    studentId: "S12345",
+    major: "Computer Science",
+    company: "TechSolutions Inc.",
+    position: "Frontend Developer Intern",
+    submissionDate: "2023-11-10",
+    reviewDate: null,
+    status: "pending",
+    reviewedBy: null,
+    comment: null,
+    skills: ["React", "JavaScript", "HTML/CSS"],
+    learningOutcomes: [
+      "Developed responsive web interfaces using React",
+      "Collaborated with a team using Git version control",
+      "Implemented REST API integration with backend services"
+    ]
+  },
+  {
+    id: 2,
+    studentName: "Fatima Al-Balushi",
+    studentId: "S12346",
+    major: "Marketing",
+    company: "MarketingPro Ltd.",
+    position: "Marketing Assistant",
+    submissionDate: "2023-11-08",
+    reviewDate: "2023-11-12",
+    status: "accepted",
+    reviewedBy: "Dr. Mohammed",
+    comment: "Excellent report with detailed learning outcomes and evidence of practical skills acquired.",
+    skills: ["Social Media", "Content Creation", "Analytics"],
+    learningOutcomes: [
+      "Managed social media campaigns for multiple clients",
+      "Created content calendars and marketing materials",
+      "Analyzed campaign performance metrics and prepared reports"
+    ]
+  },
+  {
+    id: 3,
+    studentName: "Omar Al-Habsi",
+    studentId: "S12349",
+    major: "Design",
+    company: "DesignHub Co.",
+    position: "UI/UX Design Intern",
+    submissionDate: "2023-11-05",
+    reviewDate: "2023-11-14",
+    status: "flagged",
+    reviewedBy: "Dr. Aisha",
+    comment: "The report is well-structured but lacks sufficient detail about the specific design methodologies used. Please elaborate on the design process and user research methodology.",
+    skills: ["Figma", "UI/UX", "User Research"],
+    learningOutcomes: [
+      "Designed user interfaces for mobile applications",
+      "Conducted user testing sessions",
+      "Created wireframes and prototypes"
+    ]
+  }
+];
+
+// Move mockReports outside the component to make it accessible globally
+const initialMockReports = [
+  {
+    id: 1,
+    studentName: "Ahmed Al-Farsi",
+    studentId: "S12345",
+    major: "Computer Science",
+    company: "TechSolutions Inc.",
+    position: "Frontend Developer Intern",
+    submissionDate: "2023-11-10",
+    reviewDate: null,
+    status: "pending",
+    reviewedBy: null,
+    comment: null,
+    skills: ["React", "JavaScript", "HTML/CSS"],
+    learningOutcomes: [
+      "Developed responsive web interfaces using React",
+      "Collaborated with a team using Git version control",
+      "Implemented REST API integration with backend services"
+    ]
+  },
+  {
+    id: 2,
+    studentName: "Fatima Al-Balushi",
+    studentId: "S12346",
+    major: "Marketing",
+    company: "MarketingPro Ltd.",
+    position: "Marketing Assistant",
+    submissionDate: "2023-11-08",
+    reviewDate: "2023-11-12",
+    status: "accepted",
+    reviewedBy: "Dr. Mohammed",
+    comment: "Excellent report with detailed learning outcomes and evidence of practical skills acquired.",
+    skills: ["Social Media", "Content Creation", "Analytics"],
+    learningOutcomes: [
+      "Managed social media campaigns for multiple clients",
+      "Created content calendars and marketing materials",
+      "Analyzed campaign performance metrics and prepared reports"
+    ]
+  },
+  {
+    id: 3,
+    studentName: "Omar Al-Habsi",
+    studentId: "S12349",
+    major: "Design",
+    company: "DesignHub Co.",
+    position: "UI/UX Design Intern",
+    submissionDate: "2023-11-05",
+    reviewDate: "2023-11-14",
+    status: "flagged",
+    reviewedBy: "Dr. Aisha",
+    comment: "The report is well-structured but lacks sufficient detail about the specific design methodologies used. Please elaborate on the design process and user research methodology.",
+    skills: ["Figma", "UI/UX", "User Research"],
+    learningOutcomes: [
+      "Designed user interfaces for mobile applications",
+      "Conducted user testing sessions",
+      "Created wireframes and prototypes"
+    ]
+  }
+];
+
+// Create a global state for reports
+let globalMockReports = [...initialMockReports];
+
 const FacultyDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [faculty, setFaculty] = useState({ name: 'Dr. Eleanor Reed' }); // Replace with actual faculty data
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [mockReports, setMockReports] = useState(globalMockReports);
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const facultyTabs = [
     { value: "overview", label: "Overview" },
     { value: "reports", label: "Reports" },
+    { value: "statistics", label: "Statistics" },
   ];
 
+  const viewReportDetails = (report) => {
+    setSelectedReport(report);
+    setIsReportModalOpen(true);
+  };
+
+  const closeReportDetails = () => {
+    setIsReportModalOpen(false);
+    setSelectedReport(null);
+  };
+
+  const handleOpenReviewModal = (report) => {
+    setSelectedReport(report);
+    setIsReviewModalOpen(true);
+  };
+
+  const handleReviewSubmit = (status, comment) => {
+    // Update the report in the mock data
+    const updatedReports = mockReports.map(report => {
+      if (report.id === selectedReport.id) {
+        return {
+          ...report,
+          status,
+          comment,
+          reviewDate: new Date().toISOString().split('T')[0],
+          reviewedBy: faculty.name
+        };
+      }
+      return report;
+    });
+
+    // Update both local and global state
+    setMockReports(updatedReports);
+    globalMockReports = updatedReports;
+    
+    // Update the selected report for the modal
+    setSelectedReport({
+      ...selectedReport,
+      status,
+      comment,
+      reviewDate: new Date().toISOString().split('T')[0],
+      reviewedBy: faculty.name
+    });
+    
+    toast.success(`Report review submitted successfully`);
+    
+    setIsReviewModalOpen(false);
+    setIsReportModalOpen(false);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-800">Welcome, {faculty.name}!</h1>
-            <p className="text-gray-600">Faculty Dashboard</p>
-          </div>
-          
-          <div className="mt-4 sm:mt-0">
-            <NotificationsButton notifications={mockNotifications} notificationsPagePath="/notifications/4" />
-          </div>
+    <div className="p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-scad-dark mb-2">Welcome back, {faculty.name}!</h1>
+          <p className="text-gray-600">Faculty Dashboard</p>
         </div>
-
-        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="mb-6">
-          <TabsList className="w-full md:w-auto grid grid-cols-2 gap-2 h-auto p-1">
-            <TabsTrigger value="overview" className="py-2">Overview</TabsTrigger>
-            <TabsTrigger value="reports" className="py-2">Reports</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="overview">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <Link to="/internship-reports" state={{ from: 'faculty' }}>
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                  <CardContent className="pt-6 flex items-center justify-between">
-                    <div>
-                      <FileText size={24} className="text-primary mb-2" />
-                      <h3 className="font-medium">Review Reports</h3>
-                      <p className="text-sm text-gray-500">Evaluate internship reports</p>
-                    </div>
-                    <ChevronRight size={20} className="text-gray-400" />
-                  </CardContent>
-                </Card>
-              </Link>
-            <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Report Status</CardTitle>
-                  <CardDescription>Current cycle reports by status</CardDescription>
-                </CardHeader>
-                <CardContent className="flex justify-center">
-                  <div className="h-60 w-full max-w-xs">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <RechartPieChart>
-                        <Pie
-                          data={reportStatusData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={50}
-                          outerRadius={80}
-                          paddingAngle={2}
-                          dataKey="value"
-                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                          labelLine={false}
-                        >
-                          {reportStatusData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                      </RechartPieChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Average Review Time</CardTitle>
-                </CardHeader>
-                <CardContent className="pb-2">
-                  <div className="text-3xl font-bold">{mockStatistics.averageReviewTime}</div>
-                  <p className="text-sm text-gray-500">Time to review reports</p>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Top Courses</CardTitle>
-                  <CardDescription>Most active in internships</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {mockStatistics.topCourses.map(course => (
-                      <div key={course} className="flex items-center justify-between">
-                        <span className="text-sm">{course}</span>
-                        <Badge variant="secondary">{course}</Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Top Rated Companies</CardTitle>
-                  <CardDescription>Highest rated by students</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {mockStatistics.topRatedCompanies.map(company => (
-                      <div key={company} className="flex items-center justify-between">
-                        <span className="text-sm">{company}</span>
-                        <Badge variant="secondary">{company}</Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">Top Companies</CardTitle>
-                  <CardDescription>By internship count</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {mockStatistics.topCompaniesByInternshipCount.map(company => (
-                      <div key={company} className="flex items-center justify-between">
-                        <span className="text-sm">{company}</span>
-                        <Badge variant="secondary">{company}</Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="flex justify-end">
-              <Button 
-                onClick={() => toast.success('Report generation started')}
-                className="flex items-center gap-2"
-              >
-                <Download size={16} />
-                <span>Generate Report</span>
-              </Button>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="reports">
-            <Link to="/internship-reports" state={{ from: 'faculty' }}>
-              <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                <CardContent className="pt-6 flex items-center justify-between">
-                  <div>
-                    <FileText size={24} className="text-primary mb-2" />
-                    <h3 className="font-medium">Review Reports</h3>
-                    <p className="text-sm text-gray-500">Evaluate internship reports</p>
-                  </div>
-                  <ChevronRight size={20} className="text-gray-400" />
-                </CardContent>
-              </Card>
-            </Link>
-          </TabsContent>
-        </Tabs>
+        
+        <div className="mt-4 sm:mt-0">
+          <NotificationsButton notifications={mockNotifications} notificationsPagePath="/notifications/4" />
+        </div>
       </div>
+
+      <TabsLayout 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        tabs={facultyTabs}
+        className="mb-6"
+      >
+        <TabsContent value="overview">
+          <OverviewCards 
+            mockStatistics={mockStatistics}
+            reportStatusData={reportStatusData}
+            onTabChange={setActiveTab}
+          />
+        </TabsContent>
+
+        <TabsContent value="reports">
+          <ReportsTable 
+            reports={mockReports}
+            onViewReport={viewReportDetails}
+            onReviewReport={handleOpenReviewModal}
+          />
+
+          <div className="mt-6 flex justify-end">
+            <Button
+              onClick={() => navigate('/internship-reports', { state: { from: 'faculty' } })}
+              className="flex items-center gap-2"
+            >
+              <FileText size={16} />
+              View All Reports
+            </Button>
+          </div>
+
+          <ReportDetailsModal 
+            isOpen={isReportModalOpen}
+            onClose={closeReportDetails}
+            report={selectedReport}
+            onReview={handleOpenReviewModal}
+          />
+
+          <ReviewModal 
+            isOpen={isReviewModalOpen}
+            onClose={() => setIsReviewModalOpen(false)}
+            report={selectedReport}
+            onSubmit={handleReviewSubmit}
+          />
+        </TabsContent>
+
+        <TabsContent value="statistics">
+          <StatisticsGraphs 
+            courseInternshipData={courseInternshipData}
+            companyRatingData={companyRatingData}
+            companyInternshipData={companyInternshipData}
+          />
+        </TabsContent>
+      </TabsLayout>
     </div>
   );
 };
