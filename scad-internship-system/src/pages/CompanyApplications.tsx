@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, Building, MapPin, Globe, Phone, Mail } from 'lucide-react';
+import { Search, Filter, Building, MapPin, Globe, Phone, Mail, Eye } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import { Input } from '../components/ui/input';
 import {
@@ -276,7 +276,7 @@ const CompanyApplications = () => {
                         className="bg-white text-blue-600 hover:bg-blue-100 hover:text-blue-800 py-2 px-4 rounded-md transition-all duration-300"
                         onClick={() => viewCompanyDetails(company)}
                     >
-                      Review
+                      <Eye className="h-4 w-4" />Review
                     </Button>
                   </TableCell>
                 </TableRow>

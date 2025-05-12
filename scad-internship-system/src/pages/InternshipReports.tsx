@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Search, Filter, Clock, AlertTriangle, Download, FileText, CheckCircle, X } from 'lucide-react';
+import { Search, Filter, Clock, AlertTriangle, Download, FileText, CheckCircle, X, Eye, Edit } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import { Input } from '../components/ui/input';
 import {
@@ -466,7 +466,7 @@ const InternshipReports = () => {
                         className="bg-white text-blue-600 hover:bg-blue-100 hover:text-blue-800 py-2 px-4 rounded-md transition-all duration-300"
                         onClick={() => viewReportDetails(report)}
                       >
-                        View
+                        <Eye className="h-4 w-4" />View
                       </Button>
                       <Button 
                         variant="ghost" 
@@ -474,7 +474,7 @@ const InternshipReports = () => {
                         className="bg-white text-green-600 hover:bg-green-100 hover:text-green-800 py-2 px-4 rounded-md transition-all duration-300"
                         onClick={() => handleOpenReviewModal(report)}
                       >
-                        Feedback
+                        <Edit className="h-4 w-4" />Feedback
                       </Button>
                     </div>
                   </TableCell>
@@ -494,7 +494,7 @@ const InternshipReports = () => {
 
         {/* Report Details Modal */}
         <Dialog open={isReportModalOpen} onOpenChange={setIsReportModalOpen}>
-          <DialogContent className="max-w-4xl">
+          <DialogContent className="max-w-4xl bg-white max-h-[90vh] overflow-y-auto">
             {selectedReport && (
               <>
                 <DialogHeader>

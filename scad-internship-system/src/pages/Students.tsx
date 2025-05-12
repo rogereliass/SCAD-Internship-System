@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, Download, FileText, Check, X, AlertTriangle } from 'lucide-react';
+import { Search, Filter, Download, FileText, Check, X, AlertTriangle, Eye } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import { Input } from '../components/ui/input';
 import {
@@ -440,7 +440,7 @@ const Students = () => {
                         className="bg-white text-blue-600 hover:bg-blue-100 hover:text-blue-800 py-2 px-4 rounded-md transition-all duration-300"
                         onClick={() => viewStudentDetails(student)}
                     >
-                      View Profile
+                      <Eye className="h-4 w-4" />View Profile
                     </Button>
                   </TableCell>
                 </TableRow>

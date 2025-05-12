@@ -273,7 +273,7 @@ const InternshipCycles = () => {
               </CardContent>
               <CardFooter className="flex flex-wrap gap-3 border-t pt-4 bg-gray-50">
                 <Link to="/students">
-                  <Button variant="outline" size="sm">View Students</Button>
+                  <Button variant="outline" size="sm"> View Students</Button>
                 </Link>
                 <Link to="/internship-reports">
                   <Button variant="outline" size="sm">View Reports</Button>

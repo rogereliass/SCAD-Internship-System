@@ -1,7 +1,7 @@
 import { useState } from 'react';
 // Add useParams hook import
 import { Link, useParams } from 'react-router-dom';
-import { Search, Filter, Calendar } from 'lucide-react';
+import { Search, Filter, Calendar, Eye } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import { Input } from '../components/ui/input';
 import {
@@ -331,10 +331,10 @@ const Internships = () => {
                       <Button 
                         variant="ghost" 
                         size="sm" 
-                        className="text-blue-600 hover:text-blue-800"
+                        className="bg-white text-blue-600 hover:bg-blue-100 hover:text-blue-800 py-2 px-4 rounded-md transition-all duration-300"
                         onClick={() => viewInternshipDetails(internship)}
                       >
-                        View Details
+                        <Eye className="h-4 w-4" /> View Details
                       </Button>
                     </TableCell>
                   </TableRow>

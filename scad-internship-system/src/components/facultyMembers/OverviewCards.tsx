@@ -39,7 +39,7 @@ const OverviewCards = ({ mockStatistics, reportStatusData, onTabChange }: Overvi
           >
             <CardContent className="pt-6 flex items-center justify-between">
               <div>
-                <FileText size={24} className="text-scad-dark mb-2" />
+                <FileText size={24} className="text-primary mb-2" />
                 <h3 className="font-medium">Review Reports</h3>
                 <p className="text-sm text-gray-500">{mockStatistics.unreviewedReports} reports pending review</p>
               </div>
@@ -52,7 +52,7 @@ const OverviewCards = ({ mockStatistics, reportStatusData, onTabChange }: Overvi
           <Card className="hover:shadow-md transition-all duration-200 cursor-pointer w-full hover:bg-gray-100">
             <CardContent className="pt-6 flex items-center justify-between">
               <div>
-                <Building2 size={24} className="text-scad-dark mb-2" />
+                <Building2 size={24} className="text-primary mb-2" />
                 <h3 className="font-medium">View Companies' Evaluations</h3>
                 <p className="text-sm text-gray-500">Access company performance metrics</p>
               </div>

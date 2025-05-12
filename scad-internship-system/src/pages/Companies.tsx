@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Building, Filter, Plus } from 'lucide-react';
+import { Search, Building, Filter, Plus, Eye } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
@@ -183,7 +183,7 @@ const Companies = () => {
                         className="bg-white text-blue-600 hover:bg-blue-100 hover:text-blue-800 py-2 px-4 rounded-md transition-all duration-300"
                         onClick={() => setSelectedCompany(company)}
                     >
-                      View
+                      <Eye className="h-4 w-4" />View
                     </Button>
                   </td>
                 </tr>
