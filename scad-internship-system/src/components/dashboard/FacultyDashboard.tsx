@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, FileText, Download } from 'lucide-react';
+import { Bell, FileText, Download, BriefcaseIcon, ClipboardCheck, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import NotificationsButton from './../DashboardEssentials/NotificationsButton';
 import TabsLayout from './../DashboardEssentials/TabsLayout';
@@ -23,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Badge } from "../ui/badge";
 
 import { useReports } from '../../contexts/ReportsContext';
+import { Card, CardContent } from '../ui/card';
 
 // Mock Data (replace with actual data fetching)
 const mockNotifications = [
@@ -137,11 +138,52 @@ const FacultyDashboard = () => {
         className="mb-6"
       >
         <TabsContent value="overview">
-          <OverviewCards 
-            mockStatistics={mockStatistics}
-            reportStatusData={reportStatusData}
-            onTabChange={setActiveTab}
-          />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Quick Actions Card */}
+            <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-scad-dark mb-4 flex items-center">
+                <BriefcaseIcon className="h-5 w-5 mr-2 text-scad-red" />
+                Quick Actions
+              </h2>
+              <div className="space-y-3">
+                <button 
+                  onClick={() => navigate('/internship-reports')}
+                  className="flex items-center w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100"
+                >
+                  <div className="w-8 h-8 rounded-full bg-scad-red bg-opacity-10 flex items-center justify-center mr-3">
+                    <FileText className="h-4 w-4 text-scad-red" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-scad-dark">Review Reports</p>
+                    <p className="text-sm text-gray-500">15 reports pending review</p>
+                  </div>
+                </button>
+
+                <button 
+                  onClick={() => navigate('/companies-evaluations')}
+                  className="flex items-center w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100"
+                >
+                  <div className="w-8 h-8 rounded-full bg-blue-500 bg-opacity-10 flex items-center justify-center mr-3">
+                    <ClipboardCheck className="h-4 w-4 text-blue-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-scad-dark">View Companies Evaluations</p>
+                    <p className="text-sm text-gray-500">Access company performance metrics</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Existing Overview Cards */}
+            <div className="lg:col-span-2">
+              <OverviewCards 
+                mockStatistics={mockStatistics}
+                reportStatusData={reportStatusData}
+                onTabChange={setActiveTab}
+              />
+            </div>
+          </div>
+
           <div className="mt-6 flex justify-end">
             <Button
               onClick={() => toast.success('Report generation started')}
