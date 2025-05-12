@@ -166,6 +166,22 @@ const mockNotifications = [
   }
 ];
 
+interface JobPosting {
+  id: number;
+  position: string;
+  description: string;
+  requirements: string[];
+  responsibilities: string[];
+  status: 'active' | 'closed';
+  isPaid: boolean;
+  location: string;
+  duration: string;
+  applicants: number;
+  createdAt: string;
+  deadline: string;
+  department: string;
+}
+
 const CompanyDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [applications, setApplications] = useState(recentApplications);
@@ -177,15 +193,110 @@ const CompanyDashboard = () => {
     { value: "interns", label: "Interns" }
   ];
 
-  // Sample data
-  const [jobPostings, setJobPostings] = useState([
-    { id: 1, position: 'Frontend Developer', applicants: 15, status: 'active', createdAt: '2023-11-01' },
-    { id: 2, position: 'UX Design Intern', applicants: 8, status: 'active', createdAt: '2023-11-05' },
-    { id: 3, position: 'Backend Developer', applicants: 12, status: 'closed', createdAt: '2023-10-15' },
-  ]);
+  const [jobPostings, setJobPostings] = useState<JobPosting[]>([
+  { 
+    id: 1, 
+    position: 'Frontend Developer',
+    description: 'We are looking for a talented Frontend Developer intern to join our web development team. This position offers hands-on experience working with modern JavaScript frameworks.',
+    requirements: [
+      'Currently pursuing a degree in Computer Science or related field',
+      'Knowledge of HTML, CSS, and JavaScript',
+      'Familiarity with React is a plus',
+      'Strong problem-solving skills',
+      'Ability to work in a team environment'
+    ],
+    responsibilities: [
+      'Develop and maintain user interfaces for web applications',
+      'Collaborate with backend developers and designers',
+      'Implement responsive design principles',
+      'Test and debug code',
+      'Participate in code reviews and team meetings'
+    ],
+    status: 'active',
+    isPaid: true,
+    location: 'Atlanta, GA (Hybrid)',
+    duration: '3 months',
+    applicants: 15,
+    createdAt: '2023-11-01',
+    deadline: '2023-12-01',
+    department: 'Engineering'
+  },
+  { 
+    id: 2, 
+    position: 'UX Design Intern',
+    description: 'Join our design team to create intuitive and engaging user experiences. You will work closely with product managers and developers to design user-centered solutions.',
+    requirements: [
+      'Currently pursuing a degree in Design, HCI, or related field',
+      'Portfolio demonstrating UI/UX projects',
+      'Experience with design tools (Figma, Adobe XD, etc.)',
+      'Understanding of design principles and usability',
+      'Strong communication skills'
+    ],
+    responsibilities: [
+      'Create wireframes and prototypes',
+      'Conduct user research and usability testing',
+      'Design user interfaces for web and mobile applications',
+      'Collaborate with developers on implementation',
+      'Present design concepts to stakeholders'
+    ],
+    status: 'active',
+    isPaid: true,
+    location: 'Remote',
+    duration: '4 months',
+    applicants: 8,
+    createdAt: '2023-11-05',
+    deadline: '2023-12-15',
+    department: 'Design'
+  },
+  { 
+    id: 3, 
+    position: 'Backend Developer',
+    description: 'We are seeking a Backend Developer intern to assist our engineering team in building robust server-side applications. This role will provide experience with API development and database management.',
+    requirements: [
+      'Currently pursuing a degree in Computer Science or related field',
+      'Knowledge of at least one backend language (Node.js, Python, Java)',
+      'Basic understanding of databases (SQL or NoSQL)',
+      'Familiarity with RESTful APIs',
+      'Willingness to learn new technologies'
+    ],
+    responsibilities: [
+      'Develop and maintain server-side applications',
+      'Design and implement database schemas',
+      'Create API endpoints for frontend consumption',
+      'Write unit tests for backend functionality',
+      'Document code and processes'
+    ],
+    status: 'closed',
+    isPaid: true,
+    location: 'New York, NY (On-site)',
+    duration: '6 months',
+    applicants: 12,
+    createdAt: '2023-10-15',
+    deadline: '2023-11-15',
+    department: 'Engineering'
+  },
+]);
+
+  const handleAddPosting = (posting: Omit<JobPosting, 'id' | 'createdAt' | 'applicants'>) => {
+    const newPosting: JobPosting = {
+      ...posting,
+      id: jobPostings.length > 0 ? Math.max(...jobPostings.map(p => p.id)) + 1 : 1,
+      createdAt: new Date().toISOString().split('T')[0],
+      applicants: 0
+    };
+    
+    setJobPostings(prevPostings => [...prevPostings, newPosting]);
+  };
+
+  const handleUpdatePosting = (id: number, data: Partial<JobPosting>) => {
+    setJobPostings(prevPostings => 
+      prevPostings.map(posting => 
+        posting.id === id ? { ...posting, ...data } : posting
+      )
+    );
+  };
 
   const handleDeletePosting = (id: number) => {
-    // Update the local state to remove the deleted posting
     setJobPostings(prevPostings => prevPostings.filter(post => post.id !== id));
   };
 
@@ -240,7 +351,12 @@ const CompanyDashboard = () => {
         </TabsContent>
         
         <TabsContent value="postings">
-          <JobPostingTab jobPostings={jobPostings} onDeletePosting={handleDeletePosting}/>
+          <JobPostingTab 
+            jobPostings={jobPostings} 
+            onDeletePosting={handleDeletePosting}
+            onAddPosting={handleAddPosting}
+            onUpdatePosting={handleUpdatePosting}
+          />
         </TabsContent>
         
         <TabsContent value="applicants">

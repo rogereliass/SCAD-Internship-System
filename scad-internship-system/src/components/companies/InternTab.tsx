@@ -27,6 +27,7 @@ interface InternTabProps {
   onTabChange?: (tab: string) => void;
 }
 
+
 const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
   const [selectedInternId, setSelectedInternId] = useState<number | null>(null);
   const [detailsPopupOpen, setDetailsPopupOpen] = useState(false);
@@ -46,6 +47,7 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
 
   const [evaluationPopupOpen, setEvaluationPopupOpen] = useState(false);
   const [internToEvaluate, setInternToEvaluate] = useState<Intern | null>(null);
+  const [existingEvaluationData, setExistingEvaluationData] = useState<EvaluationData | null>(null);
 
   const handleOpenEvaluation = (internId: number) => {
     const intern = interns.find(i => i.id === internId);
@@ -91,21 +93,67 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
       case 'submitted':
         return { 
           label: 'Evaluation Submitted', 
-          color: 'bg-green-100 text-green-800',
-          icon: <CheckCircle className="h-3 w-3 mr-1" />
+          color: 'bg-green-100 text-green-800 hover:bg-green-200 cursor-pointer',
+          icon: <CheckCircle className="h-3 w-3 mr-1" />,
+          actionable: true,
+          action: 'view'
         };
       case 'pending':
         return { 
           label: 'Evaluation Needed', 
-          color: 'bg-red-100 text-red-800',
-          icon: <AlertCircle className="h-3 w-3 mr-1" />
+          color: 'bg-red-100 text-red-800 hover:bg-red-200 cursor-pointer',
+          icon: <AlertCircle className="h-3 w-3 mr-1" />,
+          actionable: true,
+          action: 'create'
         };
       default:
         return { 
           label: 'No Evaluation Required', 
           color: 'bg-gray-100 text-gray-800',
-          icon: <Clock className="h-3 w-3 mr-1" />
+          icon: <Clock className="h-3 w-3 mr-1" />,
+          actionable: false,
+          action: null
         };
+    }
+  };
+
+  const handleEvaluationBadgeClick = (intern: Intern) => {
+    if (!intern.evaluationStatus) {
+      toast.info("Evaluation is not required for this intern at this time.");
+      return;
+    }
+    
+    if (intern.evaluationStatus === 'pending') {
+      // Open modal to create new evaluation (no existing data)
+      setInternToEvaluate(intern);
+      setExistingEvaluationData(null); // No existing evaluation
+      setEvaluationPopupOpen(true);
+    } else if (intern.evaluationStatus === 'submitted') {
+      // Open modal with existing evaluation data
+      setInternToEvaluate(intern);
+      
+      // Create mock evaluation data for interns with 'submitted' status
+      const mockExistingEvaluation: EvaluationData = {
+        id: intern.id,
+        internId: intern.id,
+        performance: 4,
+        attendance: 4,
+        initiative: 3,
+        communication: 4,
+        teamwork: 5,
+        technicalSkills: 3,
+        overallRating: 4,
+        strengths: "Strong problem-solving abilities. Quick learner who adapts well to new technologies and processes.",
+        improvements: "Could benefit from more proactive communication about project status and challenges.",
+        additionalComments: "Showed significant improvement throughout the internship period.",
+        recommendForHire: true,
+        evaluatorName: "John Manager",
+        evaluatorPosition: "Engineering Team Lead",
+        submittedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days ago
+      };
+      
+      setExistingEvaluationData(mockExistingEvaluation);
+      setEvaluationPopupOpen(true);
     }
   };
 
@@ -304,11 +352,25 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
                   </div>
                   
                   <div className="mt-3 flex items-center justify-between">
-                    <Badge variant="outline" className={`text-xs flex items-center ${evaluationStatus.color}`}>
-                      {evaluationStatus.icon}
-                      {evaluationStatus.label}
-                    </Badge>
-                    
+                    {evaluationStatus.actionable ? (
+                      <button
+                        onClick={() => handleEvaluationBadgeClick(intern)}
+                        className={`text-xs flex items-center rounded-full px-2.5 py-1 font-medium transition-colors ${evaluationStatus.color} border border-transparent`}
+                        title={evaluationStatus.action === 'create' ? "Click to create evaluation" : "Click to view evaluation"}
+                      >
+                        {evaluationStatus.icon}
+                        {evaluationStatus.label}
+                      </button>
+                    ) : (
+                      <Badge 
+                        variant="outline" 
+                        className={`text-xs flex items-center ${evaluationStatus.color}`}
+                        title="No evaluation is required at this time"
+                      >
+                        {evaluationStatus.icon}
+                        {evaluationStatus.label}
+                      </Badge>
+                    )}
                   </div>
                 </div>
                 
@@ -321,21 +383,13 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
                     View Details
                   </button>
                   
-                  {intern.status === 'active' ? (
+                  {intern.status === 'active' && (
                     <button 
                       onClick={() => handleEndInternship(intern.id)}
                       className="text-sm text-amber-600 hover:underline flex items-center bg-transparent border-0 p-0 cursor-pointer"
                     >
                       <Clock className="h-3.5 w-3.5 mr-1.5" />
                       End Internship
-                    </button>
-                  ) : intern.evaluationStatus === 'pending' && (
-                    <button 
-                      onClick={() => handleOpenEvaluation(intern.id)}
-                      className="text-sm text-blue-600 hover:underline flex items-center bg-transparent border-0 p-0 cursor-pointer"
-                    >
-                      <FileCheck className="h-3.5 w-3.5 mr-1.5" />
-                      Evaluate
                     </button>
                   )}
                 </div>
@@ -372,6 +426,7 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
         isOpen={evaluationPopupOpen}
         onClose={() => setEvaluationPopupOpen(false)}
         onSubmit={handleSubmitEvaluation}
+        existingEvaluation={existingEvaluationData}
       />
 
       <InternDetailsPopup

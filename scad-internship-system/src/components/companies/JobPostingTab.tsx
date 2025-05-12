@@ -5,27 +5,29 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import NewJobPostingModal, { JobPostingData } from './NewJobPostingPopup';
+import JobPostingPopup from './JobPostingPopup';
 
 interface JobPosting {
   id: number;
   position: string;
+  description: string;
+  requirements: string[];
+  responsibilities: string[];
+  status: 'active' | 'closed';
+  isPaid: boolean;
+  location: string;
+  duration: string;
   applicants: number;
-  status: string;
   createdAt: string;
-  description?: string;
-  location?: string;
-  deadline?: Date;
-  requirements?: string;
-  isPaid?: boolean;
-  duration?: string;
-  industry?: string;
+  deadline: string;
+  department: string;
 }
 
 interface JobPostingTabProps {
   jobPostings: JobPosting[];
   onDeletePosting?: (id: number) => void;
   onAddPosting?: (posting: JobPosting) => void;
-  onUpdatePosting?: (id: number, posting: JobPosting) => void;
+  onUpdatePosting?: (id: number, posting: Partial<JobPosting>) => void;
 }
 
 const JobPostingTab: React.FC<JobPostingTabProps> = ({ 
@@ -45,6 +47,8 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
   const [jobToEditId, setJobToEditId] = useState<number | null>(null);
   const [localJobPostings, setLocalJobPostings] = useState<JobPosting[]>(jobPostings);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedPosting, setSelectedPosting] = useState<JobPosting | null>(null);
+  const [detailsPopupOpen, setDetailsPopupOpen] = useState(false);
 
   useEffect(() => {
     setLocalJobPostings(jobPostings);
@@ -76,24 +80,30 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
     });
 
   const handleOpenEditModal = (id: number) => {
-    const jobToEdit = localJobPostings.find(job => job.id === id);
-    if (jobToEdit) {
-      setCurrentJobData({
-        position: jobToEdit.position,
-        description: jobToEdit.description || '',
-        location: jobToEdit.location || '',
-        deadline: jobToEdit.deadline,
-        status: jobToEdit.status as 'active' | 'closed',
-        requirements: jobToEdit.requirements || '',
-        isPaid: jobToEdit.isPaid !== undefined ? jobToEdit.isPaid : true,
-        duration: jobToEdit.duration || '3 months',
-        industry: jobToEdit.industry || ''
-      });
-      setJobToEditId(id);
-      setEditMode(true);
-      setJobModalOpen(true);
-    }
-  };
+  const jobToEdit = localJobPostings.find(job => job.id === id);
+  if (jobToEdit) {
+    setCurrentJobData({
+      position: jobToEdit.position,
+      description: jobToEdit.description || '',
+      location: jobToEdit.location || '',
+      deadline: jobToEdit.deadline,
+      status: jobToEdit.status as 'active' | 'closed',
+      requirements: Array.isArray(jobToEdit.requirements) 
+        ? jobToEdit.requirements 
+        : [],
+      responsibilities: Array.isArray(jobToEdit.responsibilities) 
+        ? jobToEdit.responsibilities 
+        : [],
+      isPaid: jobToEdit.isPaid !== undefined ? jobToEdit.isPaid : true,
+      duration: jobToEdit.duration || '3 months',
+      department: jobToEdit.department || ''
+      // industry removed as it's not in the interface
+    });
+    setJobToEditId(id);
+    setEditMode(true);
+    setJobModalOpen(true);
+  }
+};
 
   const handleOpenAddModal = () => {
     setCurrentJobData(null);
@@ -117,57 +127,96 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
   };
 
   const handleJobSubmit = (jobData: JobPostingData) => {
-    if (editMode && jobToEditId !== null) {
-      const updatedPosting: JobPosting = {
-        ...localJobPostings.find(job => job.id === jobToEditId)!,
-        position: jobData.position,
-        description: jobData.description,
-        location: jobData.location,
-        deadline: jobData.deadline,
-        status: jobData.status,
-        requirements: jobData.requirements,
-        isPaid: jobData.isPaid,
-        duration: jobData.duration,
-        industry: jobData.industry
-      };
-      
-      setLocalJobPostings(prev => 
-        prev.map(job => job.id === jobToEditId ? updatedPosting : job)
-      );
-      
-      if (onUpdatePosting) {
-        onUpdatePosting(jobToEditId, updatedPosting);
-      }
-    } else {
-      const newPosting: JobPosting = {
-        id: Date.now(),
-        position: jobData.position,
-        applicants: 0,
-        status: jobData.status,
-        createdAt: new Date().toISOString().split('T')[0],
-        description: jobData.description,
-        location: jobData.location,
-        deadline: jobData.deadline,
-        requirements: jobData.requirements,
-        isPaid: jobData.isPaid,
-        duration: jobData.duration,
-        industry: jobData.industry
-      };
-      
-      setLocalJobPostings(prev => [newPosting, ...prev]);
-      
-      if (onAddPosting) {
-        onAddPosting(newPosting);
-      }
-    }
+  if (editMode && jobToEditId !== null) {
+    const existingPosting = localJobPostings.find(job => job.id === jobToEditId);
+    if (!existingPosting) return;
+
+    const updatedPosting: JobPosting = {
+      ...existingPosting,
+      position: jobData.position,
+      description: jobData.description,
+      location: jobData.location,
+      // Handle the deadline properly
+      deadline: typeof jobData.deadline === 'string' 
+        ? jobData.deadline 
+        : jobData.deadline instanceof Date 
+          ? jobData.deadline.toISOString().split('T')[0] 
+          : existingPosting.deadline,
+      status: jobData.status,
+      requirements: Array.isArray(jobData.requirements) 
+        ? jobData.requirements 
+        : typeof jobData.requirements === 'string'
+          ? jobData.requirements.split(',').map(item => item.trim())
+          : [],
+      responsibilities: Array.isArray(jobData.responsibilities) 
+        ? jobData.responsibilities 
+        : typeof jobData.responsibilities === 'string'
+          ? jobData.responsibilities.split(',').map(item => item.trim())
+          : [],
+      isPaid: jobData.isPaid,
+      duration: jobData.duration,
+      department: jobData.department || existingPosting.department
+    };
     
-    setJobModalOpen(false);
-  };
+    setLocalJobPostings(prev => 
+      prev.map(job => job.id === jobToEditId ? updatedPosting : job)
+    );
+    
+    if (onUpdatePosting) {
+      onUpdatePosting(jobToEditId, updatedPosting);
+    }
+  } else {
+    const newPosting: JobPosting = {
+      id: Date.now(),
+      position: jobData.position,
+      applicants: 0,
+      status: jobData.status,
+      createdAt: new Date().toISOString().split('T')[0],
+      description: jobData.description,
+      location: jobData.location,
+      // Fix the deadline here - ensure it's a string
+      deadline: typeof jobData.deadline === 'string' 
+        ? jobData.deadline 
+        : jobData.deadline instanceof Date 
+          ? jobData.deadline.toISOString().split('T')[0] 
+          : new Date().toISOString().split('T')[0], // Default to today if undefined
+      requirements: Array.isArray(jobData.requirements) 
+        ? jobData.requirements 
+        : typeof jobData.requirements === 'string'
+          ? jobData.requirements.split(',').map(item => item.trim())
+          : [],
+      responsibilities: Array.isArray(jobData.responsibilities) 
+        ? jobData.responsibilities 
+        : typeof jobData.responsibilities === 'string'
+          ? jobData.responsibilities.split(',').map(item => item.trim())
+          : [],
+      isPaid: jobData.isPaid,
+      duration: jobData.duration,
+      department: jobData.department || 'General'
+    };
+    
+    setLocalJobPostings(prev => [newPosting, ...prev]);
+    
+    if (onAddPosting) {
+      onAddPosting(newPosting);
+    }
+  }
+  
+  setJobModalOpen(false);
+};
 
   const getPostingTitle = (id: number) => {
     const posting = localJobPostings.find(p => p.id === id);
     return posting ? posting.position : "this job posting";
   };
+
+  const handleViewPosting = (postingId: number) => {
+  const posting = localJobPostings.find(p => p.id === postingId);
+  if (posting) {
+    setSelectedPosting(posting);
+    setDetailsPopupOpen(true);
+  }
+};
 
   return (
     <div className="space-y-6">
@@ -326,23 +375,15 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex space-x-3">
-                        <Link to={`/job-posts/${post.id}`} className="text-gray-600 hover:text-scad-red flex items-center">
-                          <Eye className="h-4 w-4 mr-1" /> View
-                        </Link>
-                        <button
-                          onClick={() => handleOpenEditModal(post.id)}
-                          className="text-gray-600 hover:text-blue-600 flex items-center"
-                        >
-                          <Edit className="h-4 w-4 mr-1" /> Edit
-                        </button>
-                        <button 
-                          onClick={() => handleOpenDeleteDialog(post.id)}
-                          className="text-gray-600 hover:text-red-600 flex items-center"
-                        >
-                          <Trash2 className="h-4 w-4 mr-1" /> Delete
-                        </button>
-                      </div>
+                      <Button 
+                        variant="outline"
+                        size="sm"
+                        className="text-xs flex items-center text-scad-red hover:bg-red-50 hover:border-scad-red"
+                        onClick={() => handleViewPosting(post.id)}
+                      >
+                        <Eye className="h-3.5 w-3.5 mr-1.5" />
+                        Review
+                      </Button>
                     </td>
                   </tr>
                 ))}
@@ -367,27 +408,29 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
       )}
 
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <AlertCircle className="h-5 w-5 text-red-500" />
+        <DialogContent className="bg-white max-w-md p-0 overflow-hidden">
+          <DialogHeader className="p-4 pb-2 bg-white">
+            <DialogTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-scad-red" />
               Delete Job Posting
             </DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete <span className="font-medium">{postingToDelete !== null ? getPostingTitle(postingToDelete) : ""}</span>? 
+            <DialogDescription className="text-gray-600 mt-1">
+              Are you sure you want to delete <span className="font-medium text-gray-900">{postingToDelete !== null ? getPostingTitle(postingToDelete) : ""}</span>? 
               This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="sm:justify-between">
+          <DialogFooter className="flex justify-end gap-2 p-4 pt-2 border-t bg-white">
             <Button 
               variant="outline" 
               onClick={() => setDeleteDialogOpen(false)}
+              className="text-gray-700 border-gray-300"
             >
               Cancel
             </Button>
             <Button 
               variant="destructive"
               onClick={handleDeleteConfirm}
+              className="bg-red-600 hover:bg-red-700 text-white"
             >
               Delete Job Posting
             </Button>
@@ -400,6 +443,14 @@ const JobPostingTab: React.FC<JobPostingTabProps> = ({
         onClose={() => setJobModalOpen(false)}
         onSubmit={handleJobSubmit}
         editData={currentJobData || undefined}
+      />
+
+      <JobPostingPopup
+        jobPosting={selectedPosting}
+        isOpen={detailsPopupOpen}
+        onClose={() => setDetailsPopupOpen(false)}
+        onUpdate={onUpdatePosting}
+        onDelete={onDeletePosting}
       />
     </div>
   );
