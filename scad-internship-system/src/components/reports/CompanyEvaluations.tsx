@@ -17,12 +17,16 @@ interface CompanyEvaluationsProps {
   evaluations: CompanyEvaluation[];
   setEvaluations: (evaluations: CompanyEvaluation[]) => void;
   allCompanies: string[];
+  createButtonProps?: React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    'data-testid'?: string;
+  };
 }
 
 const CompanyEvaluations: React.FC<CompanyEvaluationsProps> = ({
   evaluations,
   setEvaluations,
-  allCompanies
+  allCompanies,
+  createButtonProps = {}
 }) => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -90,6 +94,7 @@ const CompanyEvaluations: React.FC<CompanyEvaluationsProps> = ({
           onClick={() => setIsCreateModalOpen(true)}
           className="bg-scad-red hover:bg-scad-red/90 text-white"
           disabled={availableCompanies.length === 0}
+          {...createButtonProps}
         >
           <Plus className="h-4 w-4 mr-2" />
           Create New Evaluation

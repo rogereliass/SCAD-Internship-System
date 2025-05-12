@@ -4,7 +4,7 @@ import TabsLayout from './../DashboardEssentials/TabsLayout';
 import { TabsContent } from '../ui/tabs';
 import ApplicationsTab from '../students/ApplicationsTab';
 import ApplicationDetails from '../students/ApplicationDetails';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, FileText, Users, GraduationCap, PlusCircle, ClipboardCheck, ChevronRight, Video, Upload, BriefcaseIcon } from 'lucide-react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
@@ -14,6 +14,7 @@ import CompanyCard from '../companies/CompanyCard';
 import MyInternshipsTab from '../students/MyInternshipsTab';
 import Reports from '../reports/Reports';
 import CompanyEvaluations from '../reports/CompanyEvaluations';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface Application {
   id: string;
@@ -229,6 +230,14 @@ const StudentDashboard = () => {
     // ...add more as needed
   ];
 
+  // Add new state for application status data
+  const applicationStatusData = [
+    { name: 'Accepted', value: 2, color: '#22c55e' },
+    { name: 'Rejected', value: 1, color: '#ef4444' },
+    { name: 'Pending', value: 3, color: '#eab308' },
+    { name: 'Finalized', value: 1, color: '#3b82f6' },
+  ];
+
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -313,6 +322,48 @@ const StudentDashboard = () => {
     });
   };
 
+  // Add handlers for quick actions
+  const handleCreateReport = () => {
+    setActiveTab('reports');
+    setReportsSubTab('reports');
+    setCreateReportData({ jobTitle: '', companyName: '' });
+  };
+
+  const handleEvaluateCompany = () => {
+    setActiveTab('reports');
+    setReportsSubTab('evaluations');
+    // Wait for the tab to change and then trigger the create evaluation button
+    setTimeout(() => {
+      const createEvaluationButton = document.querySelector('[data-testid="create-evaluation-button"]');
+      if (createEvaluationButton instanceof HTMLElement) {
+        createEvaluationButton.click();
+      }
+    }, 100);
+  };
+
+  const handleViewInternships = () => {
+    setActiveTab('internships');
+    // Scroll to available internships section
+    setTimeout(() => {
+      const element = document.getElementById('available-internships');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
+  const handleUploadDocument = () => {
+    setActiveTab('profile');
+    setProfileEditMode(true);
+    // Wait for the profile tab to open and then trigger the file input
+    setTimeout(() => {
+      const fileInput = document.querySelector('input[type="file"]');
+      if (fileInput instanceof HTMLElement) {
+        fileInput.click();
+      }
+    }, 100);
+  };
+
   return (
     <div className="p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
@@ -334,20 +385,112 @@ const StudentDashboard = () => {
         className="mb-6"
       >
         <TabsContent value="overview">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-xl font-semibold mb-4">Overview</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-medium text-gray-900">Completed Internships</h3>
-                <p className="text-2xl font-bold text-scad-dark">{student.completedInternships}</p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Quick Actions Card */}
+            <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-scad-dark mb-4 flex items-center">
+                <BriefcaseIcon className="h-5 w-5 mr-2 text-scad-red" />
+                Quick Actions
+              </h2>
+              <div className="space-y-3">
+                <button 
+                  onClick={handleCreateReport}
+                  className="flex items-center w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100"
+                >
+                  <div className="w-8 h-8 rounded-full bg-scad-red bg-opacity-10 flex items-center justify-center mr-3">
+                    <FileText className="h-4 w-4 text-scad-red" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-scad-dark">Create Report</p>
+                    <p className="text-sm text-gray-500">Submit your internship report</p>
+                  </div>
+                </button>
+
+                <button 
+                  onClick={handleEvaluateCompany}
+                  className="flex items-center w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100"
+                >
+                  <div className="w-8 h-8 rounded-full bg-blue-500 bg-opacity-10 flex items-center justify-center mr-3">
+                    <ClipboardCheck className="h-4 w-4 text-blue-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-scad-dark">Evaluate Company</p>
+                    <p className="text-sm text-gray-500">Share your internship experience</p>
+                  </div>
+                </button>
+
+                <button 
+                  onClick={handleViewInternships}
+                  className="flex items-center w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100"
+                >
+                  <div className="w-8 h-8 rounded-full bg-green-500 bg-opacity-10 flex items-center justify-center mr-3">
+                    <BriefcaseIcon className="h-4 w-4 text-green-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-scad-dark">View Available Internships</p>
+                    <p className="text-sm text-gray-500">Browse current opportunities</p>
+                  </div>
+                </button>
+
+                <button 
+                  onClick={handleUploadDocument}
+                  className="flex items-center w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100"
+                >
+                  <div className="w-8 h-8 rounded-full bg-purple-500 bg-opacity-10 flex items-center justify-center mr-3">
+                    <Upload className="h-4 w-4 text-purple-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-scad-dark">Upload Document</p>
+                    <p className="text-sm text-gray-500">Add files to your profile</p>
+                  </div>
+                </button>
               </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-medium text-gray-900">Current Semester</h3>
-                <p className="text-2xl font-bold text-scad-dark">{student.semester}</p>
+            </div>
+
+            {/* Video Card */}
+            <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-scad-dark mb-4 flex items-center">
+                <Video className="h-5 w-5 mr-2 text-scad-red" />
+                Internship Requirements
+              </h2>
+              <div className="aspect-video w-full bg-gray-100 rounded-lg overflow-hidden">
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube.com/embed/your-video-id"
+                  title="Internship Requirements Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
               </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-medium text-gray-900">PRO Status</h3>
-                <p className="text-2xl font-bold text-scad-dark">{student.isPRO ? 'Yes' : 'No'}</p>
+              <p className="mt-2 text-sm text-gray-600">
+                Learn about what kinds of internships count towards your {student.major} requirements
+              </p>
+            </div>
+
+            {/* Application Status Chart */}
+            <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-scad-dark mb-4">Application Status</h2>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={applicationStatusData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={80}
+                      paddingAngle={2}
+                      dataKey="value"
+                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      labelLine={false}
+                    >
+                      {applicationStatusData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
@@ -381,7 +524,11 @@ const StudentDashboard = () => {
             </div>
 
             {/* Available Internships Section */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div id="available-internships" className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-1 h-6 bg-scad-red rounded-full"></div>
+                <h2 className="text-xl font-semibold text-gray-900">Available Internships</h2>
+              </div>
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center gap-2">
                   <div className="w-1 h-6 bg-scad-red rounded-full"></div>
@@ -535,6 +682,7 @@ const StudentDashboard = () => {
                 evaluations={companyEvaluations}
                 setEvaluations={setCompanyEvaluations}
                 allCompanies={allCompanies}
+                createButtonProps={{ 'data-testid': 'create-evaluation-button' }}
               />
             </div>
           </div>
