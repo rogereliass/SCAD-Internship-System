@@ -157,16 +157,6 @@ const OverviewCards = ({ mockStatistics, reportStatusData, onTabChange }: Overvi
           </CardContent>
         </Card>
       </div>
-
-      <div className="flex justify-end">
-        <Button 
-          onClick={() => toast.success('Report generation started')}
-          className="flex items-center gap-2 bg-scad-dark hover:bg-scad-dark/90"
-        >
-          <Download size={16} />
-          <span>Generate Report</span>
-        </Button>
-      </div>
     </>
   );
 };

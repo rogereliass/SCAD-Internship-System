@@ -28,43 +28,46 @@ import Notifications from './pages/Notifications';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import CompaniesEvaluations from '@/pages/CompaniesEvaluations';
+import { ReportsProvider } from './contexts/ReportsContext';
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-         <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/dashboard/:id" element={<Dashboard />} />
-          <Route path="/companies" element={<Companies />} />
-          <Route path="/internship-cycles" element={<InternshipCycles />} />
-          <Route path="/company-applications" element={<CompanyApplications />} />
-          <Route path="/students" element={<Students />} />
-          <Route path="/internship-reports" element={<InternshipReports />} />
-          <Route path="/scad-dashboard" element={<ScadDashboard />} />
-          <Route path="/faculty-dashboard" element={<FacultyDashboard />} />
-          <Route path="/internships" element={<Internships />} />
-          <Route path="/internship" element={<Internships />} />
-          <Route path="/internships/:id" element={<Internships />} />
-          <Route path="/companies/:id" element={<ViewAllCompanies />} />
-          <Route path="/internships/:id/applicants" element={<ViewInternshipApplicants />} />
-          <Route path="/company-pending" element={<CompanyPeding />} />
-          <Route path="/appointments" element={<VideoAppointments />} />
-          <Route path="/workshops" element={<Workshops />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/notifications/:id" element={<Notifications />} />
-          <Route path="/companies-evaluations" element={<CompaniesEvaluations />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <ReportsProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard/:id" element={<Dashboard />} />
+            <Route path="/companies" element={<Companies />} />
+            <Route path="/internship-cycles" element={<InternshipCycles />} />
+            <Route path="/company-applications" element={<CompanyApplications />} />
+            <Route path="/students" element={<Students />} />
+            <Route path="/internship-reports" element={<InternshipReports />} />
+            <Route path="/scad-dashboard" element={<ScadDashboard />} />
+            <Route path="/faculty-dashboard" element={<FacultyDashboard />} />
+            <Route path="/internships" element={<Internships />} />
+            <Route path="/internship" element={<Internships />} />
+            <Route path="/internships/:id" element={<Internships />} />
+            <Route path="/companies/:id" element={<ViewAllCompanies />} />
+            <Route path="/internships/:id/applicants" element={<ViewInternshipApplicants />} />
+            <Route path="/company-pending" element={<CompanyPeding />} />
+            <Route path="/appointments" element={<VideoAppointments />} />
+            <Route path="/workshops" element={<Workshops />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/notifications/:id" element={<Notifications />} />
+            <Route path="/companies-evaluations" element={<CompaniesEvaluations />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </ReportsProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

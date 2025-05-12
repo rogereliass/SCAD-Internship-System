@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -22,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Badge } from "../ui/badge";
 import ScrollToTop from "../../hooks/ScrollToTop";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { useReports } from '@/contexts/ReportsContext';
 
 // Mock data for charts
 const reportStatusData = [
@@ -150,6 +150,7 @@ const mockCompanyApplications = [
 const ScadDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview'); 
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const { reports } = useReports();
 
   const handleExportStats = () => {
     toast.success('Statistics export started');
@@ -363,44 +364,37 @@ const ScadDashboard = () => {
                         <div className="p-2"></div>
                       </div>
                       
-                      <div className="grid grid-cols-8 items-center py-1.5 text-sm border-b">
-                        <div className="p-2 col-span-2">Ahmed Al-Farsi</div>
-                        <div className="p-2 col-span-2">TechSolutions Inc.</div>
-                        <div className="p-2">Nov 10</div>
-                        <div className="p-2">
-                          <Badge className="bg-yellow-100 hover:bg-yellow-100 text-yellow-800 border-none">Pending</Badge>
+                      {reports.slice(0, 3).map(report => (
+                        <div key={report.id} className="grid grid-cols-8 items-center py-1.5 text-sm border-b">
+                          <div className="p-2 col-span-2">{report.studentName}</div>
+                          <div className="p-2 col-span-2">{report.company}</div>
+                          <div className="p-2">{report.submissionDate}</div>
+                          <div className="p-2">
+                            <Badge className={`${
+                              report.status === 'accepted' ? 'bg-green-100 hover:bg-green-100 text-green-800' :
+                              report.status === 'pending' ? 'bg-yellow-100 hover:bg-yellow-100 text-yellow-800' :
+                              report.status === 'flagged' ? 'bg-orange-100 hover:bg-orange-100 text-orange-800' :
+                              'bg-red-100 hover:bg-red-100 text-red-800'
+                            } border-none`}>
+                              {report.status.charAt(0).toUpperCase() + report.status.slice(1)}
+                            </Badge>
+                          </div>
+                          <div className="p-2">{report.reviewedBy || "-"}</div>
+                          <div className="p-2 text-right">
+                            <Link to="/internship-reports">
+                              <Button variant="ghost" size="sm">
+                                {report.status === 'pending' ? 'Review' : 'View'}
+                              </Button>
+                            </Link>
+                          </div>
                         </div>
-                        <div className="p-2">-</div>
-                        <div className="p-2 text-right">
-                          <Button variant="ghost" size="sm">Review</Button>
-                        </div>
-                      </div>
+                      ))}
                       
-                      <div className="grid grid-cols-8 items-center py-1.5 text-sm border-b">
-                        <div className="p-2 col-span-2">Fatima Al-Balushi</div>
-                        <div className="p-2 col-span-2">MarketingPro Ltd.</div>
-                        <div className="p-2">Nov 8</div>
-                        <div className="p-2">
-                          <Badge className="bg-green-100 hover:bg-green-100 text-green-800 border-none">Accepted</Badge>
+                      {reports.length === 0 && (
+                        <div className="text-center py-4 text-gray-500">
+                          No reports available
                         </div>
-                        <div className="p-2">Dr. Mohammed</div>
-                        <div className="p-2 text-right">
-                          <Button variant="ghost" size="sm">View</Button>
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-8 items-center py-1.5 text-sm">
-                        <div className="p-2 col-span-2">Omar Al-Habsi</div>
-                        <div className="p-2 col-span-2">DesignHub Co.</div>
-                        <div className="p-2">Nov 5</div>
-                        <div className="p-2">
-                          <Badge className="bg-orange-100 hover:bg-orange-100 text-orange-800 border-none">Flagged</Badge>
-                        </div>
-                        <div className="p-2">Dr. Aisha</div>
-                        <div className="p-2 text-right">
-                          <Button variant="ghost" size="sm">View</Button>
-                        </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </CardContent>

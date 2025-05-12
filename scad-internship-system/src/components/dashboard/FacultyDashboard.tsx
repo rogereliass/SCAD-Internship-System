@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, FileText } from 'lucide-react';
+import { Bell, FileText, Download } from 'lucide-react';
 import { toast } from 'sonner';
 import { TabsContent } from '../ui/tabs';
 import NotificationsButton from './../DashboardEssentials/NotificationsButton';
@@ -11,6 +11,7 @@ import StatisticsGraphs from '../facultyMembers/StatisticsGraphs';
 import ReportDetailsModal from '../facultyMembers/ReportDetailsModal';
 import ReviewModal from '../facultyMembers/ReviewModal';
 import { Button } from '../ui/button';
+import { useReports } from '../../contexts/ReportsContext';
 
 // Mock Data (replace with actual data fetching)
 const mockNotifications = [
@@ -60,140 +61,15 @@ const reportStatusData = [
   { name: 'Rejected', value: 4, color: '#ef4444' },
 ];
 
-// Mock reports data
-const mockReports = [
-  {
-    id: 1,
-    studentName: "Ahmed Al-Farsi",
-    studentId: "S12345",
-    major: "Computer Science",
-    company: "TechSolutions Inc.",
-    position: "Frontend Developer Intern",
-    submissionDate: "2023-11-10",
-    reviewDate: null,
-    status: "pending",
-    reviewedBy: null,
-    comment: null,
-    skills: ["React", "JavaScript", "HTML/CSS"],
-    learningOutcomes: [
-      "Developed responsive web interfaces using React",
-      "Collaborated with a team using Git version control",
-      "Implemented REST API integration with backend services"
-    ]
-  },
-  {
-    id: 2,
-    studentName: "Fatima Al-Balushi",
-    studentId: "S12346",
-    major: "Marketing",
-    company: "MarketingPro Ltd.",
-    position: "Marketing Assistant",
-    submissionDate: "2023-11-08",
-    reviewDate: "2023-11-12",
-    status: "accepted",
-    reviewedBy: "Dr. Mohammed",
-    comment: "Excellent report with detailed learning outcomes and evidence of practical skills acquired.",
-    skills: ["Social Media", "Content Creation", "Analytics"],
-    learningOutcomes: [
-      "Managed social media campaigns for multiple clients",
-      "Created content calendars and marketing materials",
-      "Analyzed campaign performance metrics and prepared reports"
-    ]
-  },
-  {
-    id: 3,
-    studentName: "Omar Al-Habsi",
-    studentId: "S12349",
-    major: "Design",
-    company: "DesignHub Co.",
-    position: "UI/UX Design Intern",
-    submissionDate: "2023-11-05",
-    reviewDate: "2023-11-14",
-    status: "flagged",
-    reviewedBy: "Dr. Aisha",
-    comment: "The report is well-structured but lacks sufficient detail about the specific design methodologies used. Please elaborate on the design process and user research methodology.",
-    skills: ["Figma", "UI/UX", "User Research"],
-    learningOutcomes: [
-      "Designed user interfaces for mobile applications",
-      "Conducted user testing sessions",
-      "Created wireframes and prototypes"
-    ]
-  }
-];
-
-// Move mockReports outside the component to make it accessible globally
-const initialMockReports = [
-  {
-    id: 1,
-    studentName: "Ahmed Al-Farsi",
-    studentId: "S12345",
-    major: "Computer Science",
-    company: "TechSolutions Inc.",
-    position: "Frontend Developer Intern",
-    submissionDate: "2023-11-10",
-    reviewDate: null,
-    status: "pending",
-    reviewedBy: null,
-    comment: null,
-    skills: ["React", "JavaScript", "HTML/CSS"],
-    learningOutcomes: [
-      "Developed responsive web interfaces using React",
-      "Collaborated with a team using Git version control",
-      "Implemented REST API integration with backend services"
-    ]
-  },
-  {
-    id: 2,
-    studentName: "Fatima Al-Balushi",
-    studentId: "S12346",
-    major: "Marketing",
-    company: "MarketingPro Ltd.",
-    position: "Marketing Assistant",
-    submissionDate: "2023-11-08",
-    reviewDate: "2023-11-12",
-    status: "accepted",
-    reviewedBy: "Dr. Mohammed",
-    comment: "Excellent report with detailed learning outcomes and evidence of practical skills acquired.",
-    skills: ["Social Media", "Content Creation", "Analytics"],
-    learningOutcomes: [
-      "Managed social media campaigns for multiple clients",
-      "Created content calendars and marketing materials",
-      "Analyzed campaign performance metrics and prepared reports"
-    ]
-  },
-  {
-    id: 3,
-    studentName: "Omar Al-Habsi",
-    studentId: "S12349",
-    major: "Design",
-    company: "DesignHub Co.",
-    position: "UI/UX Design Intern",
-    submissionDate: "2023-11-05",
-    reviewDate: "2023-11-14",
-    status: "flagged",
-    reviewedBy: "Dr. Aisha",
-    comment: "The report is well-structured but lacks sufficient detail about the specific design methodologies used. Please elaborate on the design process and user research methodology.",
-    skills: ["Figma", "UI/UX", "User Research"],
-    learningOutcomes: [
-      "Designed user interfaces for mobile applications",
-      "Conducted user testing sessions",
-      "Created wireframes and prototypes"
-    ]
-  }
-];
-
-// Create a global state for reports
-let globalMockReports = [...initialMockReports];
-
 const FacultyDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [faculty, setFaculty] = useState({ name: 'Dr. Eleanor Reed' }); // Replace with actual faculty data
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [mockReports, setMockReports] = useState(globalMockReports);
   const [selectedReport, setSelectedReport] = useState(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { reports, updateReport } = useReports();
 
   const facultyTabs = [
     { value: "overview", label: "Overview" },
@@ -217,34 +93,14 @@ const FacultyDashboard = () => {
   };
 
   const handleReviewSubmit = (status, comment) => {
-    // Update the report in the mock data
-    const updatedReports = mockReports.map(report => {
-      if (report.id === selectedReport.id) {
-        return {
-          ...report,
-          status,
-          comment,
-          reviewDate: new Date().toISOString().split('T')[0],
-          reviewedBy: faculty.name
-        };
-      }
-      return report;
-    });
-
-    // Update both local and global state
-    setMockReports(updatedReports);
-    globalMockReports = updatedReports;
-    
-    // Update the selected report for the modal
-    setSelectedReport({
-      ...selectedReport,
-      status,
-      comment,
-      reviewDate: new Date().toISOString().split('T')[0],
-      reviewedBy: faculty.name
-    });
-    
-    toast.success(`Report review submitted successfully`);
+    if (selectedReport) {
+      updateReport(selectedReport.id, {
+        status,
+        comment,
+        reviewDate: new Date().toISOString().split('T')[0],
+        reviewedBy: faculty.name
+      });
+    }
     
     setIsReviewModalOpen(false);
     setIsReportModalOpen(false);
@@ -275,22 +131,38 @@ const FacultyDashboard = () => {
             reportStatusData={reportStatusData}
             onTabChange={setActiveTab}
           />
+          <div className="mt-6 flex justify-end">
+            <Button
+              onClick={() => toast.success('Report generation started')}
+              className="flex items-center gap-2 bg-scad-dark hover:bg-scad-dark/90"
+            >
+              <Download size={16} />
+              <span>Generate Report</span>
+            </Button>
+          </div>
         </TabsContent>
 
         <TabsContent value="reports">
           <ReportsTable 
-            reports={mockReports}
+            reports={reports}
             onViewReport={viewReportDetails}
             onReviewReport={handleOpenReviewModal}
           />
 
-          <div className="mt-6 flex justify-end">
+          <div className="mt-6 flex justify-end gap-4">
             <Button
               onClick={() => navigate('/internship-reports', { state: { from: 'faculty' } })}
               className="flex items-center gap-2"
             >
               <FileText size={16} />
               View All Reports
+            </Button>
+            <Button
+              onClick={() => toast.success('Report generation started')}
+              className="flex items-center gap-2 bg-scad-dark hover:bg-scad-dark/90"
+            >
+              <Download size={16} />
+              <span>Generate Report</span>
             </Button>
           </div>
 
@@ -310,11 +182,24 @@ const FacultyDashboard = () => {
         </TabsContent>
 
         <TabsContent value="statistics">
+          <div className="mb-0">
+            <h2 className="text-2xl font-bold text-scad-dark mb-2">Statistics Overview</h2>
+            <p className="text-gray-600">Comprehensive analysis of internship data and company performance</p>
+          </div>
           <StatisticsGraphs 
             courseInternshipData={courseInternshipData}
             companyRatingData={companyRatingData}
             companyInternshipData={companyInternshipData}
           />
+          <div className="mt-6 flex justify-end">
+            <Button
+              onClick={() => toast.success('Report generation started')}
+              className="flex items-center gap-2 bg-scad-dark hover:bg-scad-dark/90"
+            >
+              <Download size={16} />
+              <span>Generate Report</span>
+            </Button>
+          </div>
         </TabsContent>
       </TabsLayout>
     </div>
