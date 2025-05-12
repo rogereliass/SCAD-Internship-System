@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, FileText, Download } from 'lucide-react';
+import { Bell, FileText, Download, BriefcaseIcon, ClipboardCheck, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import NotificationsButton from './../DashboardEssentials/NotificationsButton';
 import TabsLayout from './../DashboardEssentials/TabsLayout';
@@ -21,7 +21,6 @@ import {
 import { BarChart as RechartBarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend, PieChart as RechartPieChart, Pie, Cell } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Badge } from "../ui/badge";
-
 import { useReports } from '../../contexts/ReportsContext';
 
 // Mock Data (replace with actual data fetching)
@@ -137,11 +136,145 @@ const FacultyDashboard = () => {
         className="mb-6"
       >
         <TabsContent value="overview">
-          <OverviewCards 
-            mockStatistics={mockStatistics}
-            reportStatusData={reportStatusData}
-            onTabChange={setActiveTab}
-          />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Quick Actions Card */}
+            <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+              <h2 className="text-lg font-semibold text-scad-dark mb-4 flex items-center">
+                <BriefcaseIcon className="h-5 w-5 mr-2 text-scad-red" />
+                Quick Actions
+              </h2>
+              <div className="space-y-3">
+                <button 
+                  onClick={() => setActiveTab('reports')}
+                  className="flex items-center w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100"
+                >
+                  <div className="w-8 h-8 rounded-full bg-scad-red bg-opacity-10 flex items-center justify-center mr-3">
+                    <FileText className="h-4 w-4 text-scad-red" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-scad-dark">Review Reports</p>
+                    <p className="text-sm text-gray-500">15 reports pending review</p>
+                  </div>
+                </button>
+
+                <button 
+                  onClick={() => navigate('/companies-evaluations', { state: { from: 'faculty' } })}
+                  className="flex items-center w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100"
+                >
+                  <div className="w-8 h-8 rounded-full bg-blue-500 bg-opacity-10 flex items-center justify-center mr-3">
+                    <ClipboardCheck className="h-4 w-4 text-blue-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-scad-dark">View Companies Evaluations</p>
+                    <p className="text-sm text-gray-500">Access company performance metrics</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Statistics Overview */}
+            <div className="lg:col-span-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Statistics Overview</CardTitle>
+                  <CardDescription>Key metrics and performance indicators</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500">Total Reports</h3>
+                        <p className="text-2xl font-bold">{mockStatistics.acceptedReports + mockStatistics.flaggedReports}</p>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500">Average Review Time</h3>
+                        <p className="text-2xl font-bold">{mockStatistics.averageReviewTime}</p>
+                      </div>
+                    </div>
+                    <div className="h-[200px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <RechartPieChart>
+                          <Pie
+                            data={reportStatusData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={60}
+                            outerRadius={80}
+                            paddingAngle={5}
+                            dataKey="value"
+                          >
+                            {reportStatusData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                          <Legend />
+                        </RechartPieChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* Top Companies and Courses Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            {/* Top Companies by Rating */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Top Rated Companies</CardTitle>
+                <CardDescription>Companies with highest student ratings</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {companyRatingData.slice(0, 3).map((company, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <span className="font-medium">{company.name}</span>
+                      <Badge variant="secondary">{company.rating.toFixed(1)}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Top Companies by Internship Count */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Top Companies</CardTitle>
+                <CardDescription>Companies with most internships</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {companyInternshipData.slice(0, 3).map((company, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <span className="font-medium">{company.name}</span>
+                      <Badge variant="secondary">{company.count} internships</Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Top Courses */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Top Courses</CardTitle>
+                <CardDescription>Courses with most internships</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {courseInternshipData.slice(0, 3).map((course, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <span className="font-medium">{course.name}</span>
+                      <Badge variant="secondary">{course.internships} internships</Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
           <div className="mt-6 flex justify-end">
             <Button
               onClick={() => toast.success('Report generation started')}
