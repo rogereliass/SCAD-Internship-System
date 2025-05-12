@@ -113,6 +113,7 @@ const StudentDashboard = () => {
   const [newActivity, setNewActivity] = useState('');
   const [newJob, setNewJob] = useState({ jobTitle: '', company: '', duration: '' });
   const [newDocument, setNewDocument] = useState<File | null>(null);
+  const [createReportData, setCreateReportData] = useState<{ jobTitle: string; companyName: string } | null>(null);
 
   const studentTabs = [
     { value: "overview", label: "Overview" },
@@ -279,6 +280,14 @@ const StudentDashboard = () => {
       setProfile(prev => ({ ...prev, documents: [...prev.documents, { name: newDocument.name, url }] }));
       setNewDocument(null);
     }
+  };
+
+  const handleCreateReportFromInternship = (internship) => {
+    setActiveTab('reports');
+    setCreateReportData({
+      jobTitle: internship.title,
+      companyName: internship.company,
+    });
   };
 
   return (
@@ -482,14 +491,19 @@ const StudentDashboard = () => {
                   </Select>
                 </div>
               </div>
-              <MyInternshipsTab onInternshipClick={handleInternshipClick} searchTerm={searchTerm} dateFilter={dateFilter} />
+              <MyInternshipsTab 
+                onInternshipClick={handleInternshipClick} 
+                onCreateReport={handleCreateReportFromInternship}
+                searchTerm={searchTerm} 
+                dateFilter={dateFilter} 
+              />
             </div>
           </div>
         </TabsContent>
         
         <TabsContent value="reports">
           <div className="bg-white rounded-lg shadow-sm p-6">
-            <Reports />
+            <Reports createReportData={createReportData} setCreateReportData={setCreateReportData} />
           </div>
         </TabsContent>
         

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Plus, MessageSquare, AlertCircle } from 'lucide-react';
 import ReportCard from './ReportCard';
@@ -29,7 +29,12 @@ export interface Report {
   };
 }
 
-const Reports: React.FC = () => {
+interface ReportsProps {
+  createReportData?: { jobTitle: string; companyName: string } | null;
+  setCreateReportData?: (data: null) => void;
+}
+
+const Reports: React.FC<ReportsProps> = ({ createReportData, setCreateReportData }) => {
   const [reports, setReports] = useState<Report[]>([
     {
       id: '1',
@@ -74,6 +79,13 @@ const Reports: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [isAppealModalOpen, setIsAppealModalOpen] = useState(false);
+
+  // Open modal if createReportData is set
+  useEffect(() => {
+    if (createReportData) {
+      setIsCreateModalOpen(true);
+    }
+  }, [createReportData]);
 
   const handleCreateReport = (newReport: Omit<Report, 'id' | 'submittedAt' | 'comments'>) => {
     const report: Report = {
@@ -151,8 +163,12 @@ const Reports: React.FC = () => {
 
       {isCreateModalOpen && (
         <CreateReportModal
-          onClose={() => setIsCreateModalOpen(false)}
+          onClose={() => {
+            setIsCreateModalOpen(false);
+            if (setCreateReportData) setCreateReportData(null);
+          }}
           onSubmit={handleCreateReport}
+          initialData={createReportData || undefined}
         />
       )}
 

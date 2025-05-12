@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Calendar, MapPin, Clock, Building2, DollarSign } from 'lucide-react';
 
 interface MyInternshipsTabProps {
   onInternshipClick: (id: string) => void;
+  onCreateReport: (internship: any) => void;
   searchTerm: string;
   dateFilter: string;
 }
@@ -60,9 +61,11 @@ const dummyInternships: Internship[] = [
 
 const MyInternshipsTab: React.FC<MyInternshipsTabProps> = ({
   onInternshipClick,
+  onCreateReport,
   searchTerm,
   dateFilter
 }) => {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const filteredInternships = dummyInternships.filter(internship => {
     const matchesSearch = 
       internship.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -78,51 +81,66 @@ const MyInternshipsTab: React.FC<MyInternshipsTabProps> = ({
 
   return (
     <div className="space-y-4">
-      {filteredInternships.map((internship) => (
-        <div 
-          key={internship.id}
-          className="border rounded-lg p-4 hover:border-scad-red transition-colors cursor-pointer bg-white"
-          onClick={() => onInternshipClick(internship.id)}
-        >
-          <div className="space-y-3">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="font-medium text-gray-900">{internship.title}</h3>
-                <div className="flex items-center text-gray-600 text-sm mt-1">
-                  <Building2 className="h-4 w-4 mr-1" />
-                  <span>{internship.company}</span>
+      {filteredInternships.map((internship) => {
+        const isSelected = selectedId === internship.id;
+        return (
+          <div 
+            key={internship.id}
+            className={`border rounded-lg p-4 transition-colors cursor-pointer bg-white ${isSelected ? 'border-scad-red ring-2 ring-scad-red' : 'hover:border-scad-red'}`}
+            onClick={() => setSelectedId(isSelected ? null : internship.id)}
+          >
+            <div className="space-y-3">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="font-medium text-gray-900">{internship.title}</h3>
+                  <div className="flex items-center text-gray-600 text-sm mt-1">
+                    <Building2 className="h-4 w-4 mr-1" />
+                    <span>{internship.company}</span>
+                  </div>
+                </div>
+                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  internship.status === 'current' 
+                    ? 'bg-green-100 text-green-800' 
+                    : 'bg-gray-100 text-gray-800'
+                }`}>
+                  {internship.status}
+                </span>
+              </div>
+
+              <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                <div className="flex items-center">
+                  <MapPin className="h-4 w-4 mr-1" />
+                  <span>{internship.location}</span>
+                </div>
+                <div className="flex items-center">
+                  <Clock className="h-4 w-4 mr-1" />
+                  <span>{internship.duration}</span>
+                </div>
+                <div className="flex items-center">
+                  <Calendar className="h-4 w-4 mr-1" />
+                  <span>{new Date(internship.startDate).toLocaleDateString()} - {new Date(internship.endDate).toLocaleDateString()}</span>
+                </div>
+                <div className="flex items-center">
+                  <DollarSign className="h-4 w-4 mr-1" />
+                  <span>{internship.isPaid ? internship.salary : 'Unpaid'}</span>
                 </div>
               </div>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                internship.status === 'current' 
-                  ? 'bg-green-100 text-green-800' 
-                  : 'bg-gray-100 text-gray-800'
-              }`}>
-                {internship.status}
-              </span>
-            </div>
 
-            <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-              <div className="flex items-center">
-                <MapPin className="h-4 w-4 mr-1" />
-                <span>{internship.location}</span>
-              </div>
-              <div className="flex items-center">
-                <Clock className="h-4 w-4 mr-1" />
-                <span>{internship.duration}</span>
-              </div>
-              <div className="flex items-center">
-                <Calendar className="h-4 w-4 mr-1" />
-                <span>{new Date(internship.startDate).toLocaleDateString()} - {new Date(internship.endDate).toLocaleDateString()}</span>
-              </div>
-              <div className="flex items-center">
-                <DollarSign className="h-4 w-4 mr-1" />
-                <span>{internship.isPaid ? internship.salary : 'Unpaid'}</span>
-              </div>
+              {internship.status === 'completed' && isSelected && (
+                <button
+                  className="mt-2 px-3 py-1 bg-scad-red text-white rounded hover:bg-scad-red/90"
+                  onClick={e => {
+                    e.stopPropagation();
+                    onCreateReport(internship);
+                  }}
+                >
+                  Create Report
+                </button>
+              )}
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       {filteredInternships.length === 0 && (
         <div className="text-center py-8 text-gray-500">

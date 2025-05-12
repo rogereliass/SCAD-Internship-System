@@ -9,6 +9,7 @@ import { Checkbox } from '../ui/checkbox';
 interface CreateReportModalProps {
   onClose: () => void;
   onSubmit: (report: Omit<Report, 'id' | 'submittedAt' | 'comments'>) => void;
+  initialData?: { jobTitle: string; companyName: string };
 }
 
 const courses = [
@@ -24,10 +25,10 @@ const courses = [
   'Cloud Computing'
 ];
 
-const CreateReportModal: React.FC<CreateReportModalProps> = ({ onClose, onSubmit }) => {
+const CreateReportModal: React.FC<CreateReportModalProps> = ({ onClose, onSubmit, initialData }) => {
   const [formData, setFormData] = useState({
-    jobTitle: '',
-    companyName: '',
+    jobTitle: initialData?.jobTitle || '',
+    companyName: initialData?.companyName || '',
     title: '',
     introduction: '',
     body: '',
