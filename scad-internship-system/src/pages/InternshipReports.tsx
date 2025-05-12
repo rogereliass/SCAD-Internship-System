@@ -31,129 +31,13 @@ import {
 import { Textarea } from '../components/ui/textarea';
 import { toast } from 'sonner';
 import { Badge } from '../components/ui/badge';
-
-// Mock reports data
-const mockReports = [
-  {
-    id: 1,
-    studentName: "Ahmed Al-Farsi",
-    studentId: "S12345",
-    major: "Computer Science",
-    company: "TechSolutions Inc.",
-    position: "Frontend Developer Intern",
-    submissionDate: "2023-11-10",
-    reviewDate: null,
-    status: "pending",
-    reviewedBy: null,
-    comment: null,
-    skills: ["React", "JavaScript", "HTML/CSS"],
-    learningOutcomes: [
-      "Developed responsive web interfaces using React",
-      "Collaborated with a team using Git version control",
-      "Implemented REST API integration with backend services"
-    ]
-  },
-  {
-    id: 2,
-    studentName: "Fatima Al-Balushi",
-    studentId: "S12346",
-    major: "Marketing",
-    company: "MarketingPro Ltd.",
-    position: "Marketing Assistant",
-    submissionDate: "2023-11-08",
-    reviewDate: "2023-11-12",
-    status: "accepted",
-    reviewedBy: "Dr. Mohammed",
-    comment: "Excellent report with detailed learning outcomes and evidence of practical skills acquired.",
-    skills: ["Social Media", "Content Creation", "Analytics"],
-    learningOutcomes: [
-      "Managed social media campaigns for multiple clients",
-      "Created content calendars and marketing materials",
-      "Analyzed campaign performance metrics and prepared reports"
-    ]
-  },
-  {
-    id: 3,
-    studentName: "Omar Al-Habsi",
-    studentId: "S12349",
-    major: "Design",
-    company: "DesignHub Co.",
-    position: "UI/UX Design Intern",
-    submissionDate: "2023-11-05",
-    reviewDate: "2023-11-14",
-    status: "flagged",
-    reviewedBy: "Dr. Aisha",
-    comment: "The report is well-structured but lacks sufficient detail about the specific design methodologies used. Please elaborate on the design process and user research methodology.",
-    skills: ["Figma", "UI/UX", "User Research"],
-    learningOutcomes: [
-      "Designed user interfaces for mobile applications",
-      "Conducted user testing sessions",
-      "Created wireframes and prototypes"
-    ]
-  },
-  {
-    id: 4,
-    studentName: "Sara Al-Kindi",
-    studentId: "S12350",
-    major: "Computer Science",
-    company: "DataTech Solutions",
-    position: "Data Science Intern",
-    submissionDate: "2023-08-20",
-    reviewDate: "2023-08-25",
-    status: "accepted",
-    reviewedBy: "Dr. Khalid",
-    comment: "Excellent technical report with strong evidence of data science skills application.",
-    skills: ["Python", "Machine Learning", "SQL"],
-    learningOutcomes: [
-      "Built predictive models using machine learning algorithms",
-      "Cleaned and prepared large datasets for analysis",
-      "Visualized data findings for stakeholders"
-    ]
-  },
-  {
-    id: 5,
-    studentName: "Yusuf Al-Siyabi",
-    studentId: "S12351",
-    major: "Marketing",
-    company: "GlobalMarketing Inc.",
-    position: "Content Creation Intern",
-    submissionDate: "2023-08-18",
-    reviewDate: "2023-08-26",
-    status: "rejected",
-    reviewedBy: "Dr. Laila",
-    comment: "The report does not meet the minimum requirements. Lacks evidence of activities performed and reflection on learning outcomes. Please revise and resubmit with more details about your daily tasks and experiences.",
-    skills: ["Copywriting", "Social Media", "Video Editing"],
-    learningOutcomes: [
-      "Created content for social media platforms",
-      "Assisted with email marketing campaigns",
-      "Edited promotional videos"
-    ]
-  },
-  {
-    id: 6,
-    studentName: "Zainab Al-Amri",
-    studentId: "S12352",
-    major: "Finance",
-    company: "FinTech Innovations",
-    position: "Financial Analysis Intern",
-    submissionDate: "2023-08-19",
-    reviewDate: "2023-08-28",
-    status: "flagged",
-    reviewedBy: "Dr. Hassan",
-    comment: "The financial analysis section needs clarification. Please provide more detailed explanation of the methodologies used and how they align with industry standards.",
-    skills: ["Financial Modeling", "Excel", "Data Analysis"],
-    learningOutcomes: [
-      "Analyzed financial statements and prepared reports",
-      "Assisted with budget forecasting",
-      "Researched market trends and competitor analysis"
-    ]
-  }
-];
+import { useReports } from '../contexts/ReportsContext';
 
 const InternshipReports = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isFromFaculty = location.pathname.includes('/faculty') || location.state?.from === 'faculty';
+  const { reports, updateReport } = useReports();
   
   const handleBack = () => {
     navigate(`/dashboard/${isFromFaculty ? '4' : '3'}`, { replace: true });
@@ -175,7 +59,7 @@ const InternshipReports = () => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   // Filter reports based on search query and filters
-  const filteredReports = mockReports.filter((report) => {
+  const filteredReports = reports.filter((report) => {
     // Search filter
     const searchMatch = 
       report.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -190,8 +74,8 @@ const InternshipReports = () => {
   });
 
   // Get unique values for filter dropdowns
-  const majors = [...new Set(mockReports.map(r => r.major))];
-  const statuses = [...new Set(mockReports.map(r => r.status))];
+  const majors = [...new Set(reports.map(r => r.major))];
+  const statuses = [...new Set(reports.map(r => r.status))];
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({
@@ -236,8 +120,15 @@ const InternshipReports = () => {
       return;
     }
     
-    // In a real app, this would update the report status in the database
-    toast.success(`Report review submitted successfully`);
+    // Update the report using the context
+    if (selectedReport) {
+      updateReport(selectedReport.id, {
+        status: reviewData.status,
+        comment: reviewData.comment,
+        reviewDate: new Date().toISOString().split('T')[0],
+        reviewedBy: isFromFaculty ? 'Dr. Eleanor Reed' : 'SCAD Office'
+      });
+    }
     
     setIsReviewModalOpen(false);
     setIsReportModalOpen(false);
@@ -290,7 +181,7 @@ const InternshipReports = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-2xl font-semibold">
-                    {mockReports.filter(r => r.status === 'pending').length}
+                    {reports.filter(r => r.status === 'pending').length}
                   </h3>
                   <p className="text-lg text-gray-500">Pending Review</p>
                 </div>
@@ -304,7 +195,7 @@ const InternshipReports = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-2xl font-semibold">
-                    {mockReports.filter(r => r.status === 'accepted').length}
+                    {reports.filter(r => r.status === 'accepted').length}
                   </h3>
                   <p className="text-lg text-gray-500">Accepted</p>
                 </div>
@@ -318,7 +209,7 @@ const InternshipReports = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-2xl font-semibold">
-                    {mockReports.filter(r => r.status === 'flagged').length}
+                    {reports.filter(r => r.status === 'flagged').length}
                   </h3>
                   <p className="text-lg text-gray-500">Flagged</p>
                 </div>
@@ -332,7 +223,7 @@ const InternshipReports = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-2xl font-semibold">
-                    {mockReports.filter(r => r.status === 'rejected').length}
+                    {reports.filter(r => r.status === 'rejected').length}
                   </h3>
                   <p className="text-lg text-gray-500">Rejected</p>
                 </div>
@@ -413,7 +304,7 @@ const InternshipReports = () => {
 
         {/* Results count */}
         <p className="text-sm text-gray-600 mb-4">
-          Showing {filteredReports.length} of {mockReports.length} reports
+          Showing {filteredReports.length} of {reports.length} reports
         </p>
 
         {/* Reports Table */}
