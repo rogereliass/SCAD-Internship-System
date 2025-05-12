@@ -4,7 +4,7 @@ import TabsLayout from './../DashboardEssentials/TabsLayout';
 import { TabsContent } from '../ui/tabs';
 import ApplicationsTab from '../students/ApplicationsTab';
 import ApplicationDetails from '../students/ApplicationDetails';
-import { Search, Filter, FileText, Users, GraduationCap, PlusCircle, ClipboardCheck, ChevronRight, Video, Upload, BriefcaseIcon, Calendar, BookOpen } from 'lucide-react';
+import { Search, Filter, FileText, Users, GraduationCap, PlusCircle, ClipboardCheck, ChevronRight, Video, Upload, BriefcaseIcon, Calendar, BookOpen, Star, MessageSquare, Play, Pause, Square, Download, ThumbsUp, MessageCircle, X, Send } from 'lucide-react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
@@ -19,6 +19,38 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Badge } from '../ui/badge';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
+import { Textarea } from '../ui/textarea';
+import { ScrollArea } from '../ui/scroll-area';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Progress } from '../ui/progress';
+
+// Mock notifications data
+const mockNotifications = [
+  {
+    id: 1,
+    title: 'New Workshop Available',
+    description: 'Advanced Interview Preparation Workshop is now open for registration.',
+    time: '2 hours ago',
+    type: 'workshop' as const,
+    read: false
+  },
+  {
+    id: 2,
+    title: 'Career Readiness Report',
+    description: 'Your Career Readiness Assessment report is now available.',
+    time: '1 day ago',
+    type: 'report' as const,
+    read: false
+  },
+  {
+    id: 3,
+    title: 'Appointment Confirmed',
+    description: 'Your career counseling session with Dr. Smith is confirmed for tomorrow.',
+    time: '2 days ago',
+    type: 'appointment' as const,
+    read: true
+  }
+];
 
 const majorsList = [
   'Computer Science 6th Semester',
@@ -83,6 +115,109 @@ const mockAppointments = [
   }
 ];
 
+// Mock workshops data with more examples
+const mockWorkshops = [
+  {
+    id: 1,
+    title: 'Advanced Interview Techniques',
+    description: 'Learn proven strategies for acing technical and behavioral interviews.',
+    date: '2024-03-25',
+    time: '10:00 AM',
+    duration: '2 hours',
+    type: 'live',
+    instructor: 'Dr. Sarah Johnson',
+    maxAttendees: 50,
+    currentAttendees: 35,
+    status: 'upcoming',
+    isRegistered: false,
+    category: 'Career Development',
+    level: 'Intermediate',
+    prerequisites: ['Basic Interview Skills'],
+    materials: ['Interview Preparation Guide', 'Sample Questions'],
+    recordingUrl: null,
+    rating: null,
+    feedback: null,
+    notes: '',
+    certificateUrl: null
+  },
+  {
+    id: 2,
+    title: 'Resume Writing Masterclass',
+    description: 'Create a compelling resume that stands out to employers.',
+    date: '2024-03-20',
+    time: '2:00 PM',
+    duration: '1.5 hours',
+    type: 'recorded',
+    instructor: 'Prof. Michael Chen',
+    maxAttendees: 100,
+    currentAttendees: 75,
+    status: 'completed',
+    isRegistered: true,
+    category: 'Career Development',
+    level: 'Beginner',
+    prerequisites: [],
+    materials: ['Resume Templates', 'Writing Guide'],
+    recordingUrl: 'https://example.com/workshop-recording',
+    rating: 4.5,
+    feedback: 'Great workshop with practical tips!',
+    notes: 'Focus on achievements and metrics',
+    certificateUrl: 'https://example.com/certificate.pdf'
+  },
+  {
+    id: 3,
+    title: 'Networking Strategies',
+    description: 'Build your professional network effectively.',
+    date: '2024-04-01',
+    time: '11:00 AM',
+    duration: '1 hour',
+    type: 'live',
+    instructor: 'Dr. Emily Brown',
+    maxAttendees: 40,
+    currentAttendees: 20,
+    status: 'upcoming',
+    isRegistered: false,
+    category: 'Career Development',
+    level: 'Beginner',
+    prerequisites: [],
+    materials: ['Networking Guide'],
+    recordingUrl: null,
+    rating: null,
+    feedback: null,
+    notes: '',
+    certificateUrl: null
+  },
+  {
+    id: 4,
+    title: 'AI in Software Development',
+    description: 'Explore how AI is transforming software development practices.',
+    date: '2024-03-28',
+    time: '3:00 PM',
+    duration: '2.5 hours',
+    type: 'live',
+    instructor: 'Dr. James Wilson',
+    maxAttendees: 60,
+    currentAttendees: 45,
+    status: 'upcoming',
+    isRegistered: false,
+    category: 'Technology',
+    level: 'Advanced',
+    prerequisites: ['Basic Programming Knowledge'],
+    materials: ['AI Tools Guide', 'Code Examples'],
+    recordingUrl: null,
+    rating: null,
+    feedback: null,
+    notes: '',
+    certificateUrl: null
+  }
+];
+
+// Mock chat messages for live workshops
+const mockChatMessages = [
+  { id: 1, user: 'Ahmed', message: 'Hello everyone!', timestamp: '10:00 AM' },
+  { id: 2, user: 'Fatima', message: 'Hi Ahmed, excited for this workshop!', timestamp: '10:01 AM' },
+  { id: 3, user: 'Omar', message: 'The instructor is great!', timestamp: '10:05 AM' }
+];
+
 const PROStudentDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
@@ -119,34 +254,36 @@ const PROStudentDashboard = () => {
     comments: string;
     submittedAt: string;
   }[]>([]);
-
-  // Placeholder data - to be replaced with actual data
-  const mockNotifications = [
-    {
-      id: 1,
-      title: 'New Workshop Available',
-      description: 'Advanced Interview Preparation Workshop is now open for registration.',
-      time: '2 hours ago',
-      type: 'workshop' as const,
-      read: false
-    },
-    {
-      id: 2,
-      title: 'Career Readiness Report',
-      description: 'Your Career Readiness Assessment report is now available.',
-      time: '1 day ago',
-      type: 'report' as const,
-      read: false
-    },
-    {
-      id: 3,
-      title: 'Appointment Confirmed',
-      description: 'Your career counseling session with Dr. Smith is confirmed for tomorrow.',
-      time: '2 days ago',
-      type: 'appointment' as const,
-      read: true
+  const [workshops, setWorkshops] = useState(mockWorkshops);
+  const [selectedWorkshop, setSelectedWorkshop] = useState<typeof mockWorkshops[0] | null>(null);
+  const [workshopNotes, setWorkshopNotes] = useState('');
+  const [chatMessage, setChatMessage] = useState('');
+  const [chatMessages, setChatMessages] = useState(mockChatMessages);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [workshopFilter, setWorkshopFilter] = useState('all');
+  const [workshopSearchTerm, setWorkshopSearchTerm] = useState('');
+  const [workshopRating, setWorkshopRating] = useState(0);
+  const [workshopFeedback, setWorkshopFeedback] = useState('');
+  const [isLiveWorkshopOpen, setIsLiveWorkshopOpen] = useState(false);
+  const [liveWorkshop, setLiveWorkshop] = useState<typeof mockWorkshops[0] | null>(null);
+  const [liveChatMessages, setLiveChatMessages] = useState<Array<{
+    id: number;
+    user: string;
+    message: string;
+    timestamp: string;
+  }>>([
+    { id: 1, user: 'Instructor', message: 'Welcome to the workshop!', timestamp: '10:00 AM' },
+    { id: 2, user: 'Ahmed', message: 'Hello everyone!', timestamp: '10:01 AM' },
+    { id: 3, user: 'Fatima', message: 'Excited to learn!', timestamp: '10:02 AM' }
+  ]);
+  const [liveChatMessage, setLiveChatMessage] = useState('');
+  const [workshopRatings, setWorkshopRatings] = useState<{
+    [key: number]: {
+      rating: number;
+      feedback: string;
+      timestamp: string;
     }
-  ];
+  }>({});
 
   const [student, setStudent] = useState({
     name: 'Alex Johnson',
@@ -389,6 +526,142 @@ const PROStudentDashboard = () => {
 
   const handleAppointmentAction = (id: number, action: 'accept' | 'reject') => {
     toast.success(`Appointment ${action === 'accept' ? 'accepted' : 'rejected'}`);
+  };
+
+  // Filter and search workshops
+  const filteredWorkshops = workshops.filter(workshop => {
+    const matchesSearch = workshop.title.toLowerCase().includes(workshopSearchTerm.toLowerCase()) ||
+                         workshop.description.toLowerCase().includes(workshopSearchTerm.toLowerCase());
+    
+    const matchesFilter = workshopFilter === 'all' ||
+                         (workshopFilter === 'upcoming' && workshop.status === 'upcoming') ||
+                         (workshopFilter === 'registered' && workshop.isRegistered) ||
+                         (workshopFilter === 'completed' && workshop.status === 'completed');
+
+    return matchesSearch && matchesFilter;
+  });
+
+  const handleWorkshopRegister = (workshopId: number) => {
+    setWorkshops(prevWorkshops => 
+      prevWorkshops.map(workshop => 
+        workshop.id === workshopId 
+          ? { ...workshop, isRegistered: true, currentAttendees: workshop.currentAttendees + 1 }
+          : workshop
+      )
+    );
+    toast.success(`Successfully registered for workshop`);
+  };
+
+  const handleWorkshopUnregister = (workshopId: number) => {
+    setWorkshops(prevWorkshops => 
+      prevWorkshops.map(workshop => 
+        workshop.id === workshopId 
+          ? { ...workshop, isRegistered: false, currentAttendees: workshop.currentAttendees - 1 }
+          : workshop
+      )
+    );
+    toast.success(`Successfully unregistered from workshop`);
+  };
+
+  const handleWorkshopRating = (workshopId: number, rating: number, feedback: string) => {
+    if (rating < 1 || rating > 5) {
+      toast.error('Please select a rating between 1 and 5 stars');
+      return;
+    }
+
+    if (!feedback.trim()) {
+      toast.error('Please provide feedback');
+      return;
+    }
+
+    const newRating = {
+      rating,
+      feedback: feedback.trim(),
+      timestamp: new Date().toISOString()
+    };
+
+    setWorkshopRatings(prev => ({
+      ...prev,
+      [workshopId]: newRating
+    }));
+
+    // Update the workshop in the workshops list
+    setWorkshops(prevWorkshops =>
+      prevWorkshops.map(workshop =>
+        workshop.id === workshopId
+          ? {
+              ...workshop,
+              rating: newRating.rating,
+              feedback: newRating.feedback,
+              status: 'completed'
+            }
+          : workshop
+      )
+    );
+
+    // Reset the form
+    setWorkshopRating(0);
+    setWorkshopFeedback('');
+    toast.success('Thank you for your feedback!');
+  };
+
+  const handleSendChatMessage = (message: string) => {
+    if (message.trim()) {
+      const newMessage = {
+        id: chatMessages.length + 1,
+        user: 'You',
+        message: message.trim(),
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      setChatMessages(prev => [...prev, newMessage]);
+      setChatMessage('');
+    }
+  };
+
+  const handleDownloadCertificate = (workshopId: number) => {
+    const workshop = mockWorkshops.find(w => w.id === workshopId);
+    if (workshop?.certificateUrl) {
+      window.open(workshop.certificateUrl, '_blank');
+    }
+  };
+
+  const handleJoinLiveWorkshop = (workshop: typeof mockWorkshops[0]) => {
+    setLiveWorkshop(workshop);
+    setIsLiveWorkshopOpen(true);
+  };
+
+  const handleSendLiveChatMessage = (message: string) => {
+    if (message.trim()) {
+      const newMessage = {
+        id: liveChatMessages.length + 1,
+        user: 'You',
+        message: message.trim(),
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      setLiveChatMessages(prev => [...prev, newMessage]);
+      setLiveChatMessage('');
+
+      // Simulate receiving a message after 1-3 seconds
+      setTimeout(() => {
+        const responses = [
+          'Great question!',
+          'That\'s a good point!',
+          'Let me explain that...',
+          'Thanks for sharing!',
+          'I agree with you!'
+        ];
+        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        const randomUser = ['Ahmed', 'Fatima', 'Omar', 'Sarah'][Math.floor(Math.random() * 4)];
+        
+        const responseMessage = {
+          id: liveChatMessages.length + 2,
+          user: randomUser,
+          message: randomResponse,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        };
+        setLiveChatMessages(prev => [...prev, responseMessage]);
+      }, Math.random() * 2000 + 1000);
+    }
   };
 
   return (
@@ -769,8 +1042,358 @@ const PROStudentDashboard = () => {
         </TabsContent>
 
         <TabsContent value="workshops">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <p className="text-gray-500">Workshops & Assessments content coming soon...</p>
+          <div className="space-y-6">
+            {/* Workshop Filters and Search */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-6 bg-scad-red rounded-full"></div>
+                  <h2 className="text-xl font-semibold text-gray-900">Workshops & Assessments</h2>
+                </div>
+                <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+                  <div className="relative w-full md:w-64">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                    <Input
+                      type="text"
+                      placeholder="Search workshops..."
+                      className="pl-9 text-gray-900"
+                      value={workshopSearchTerm}
+                      onChange={(e) => setWorkshopSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <Select value={workshopFilter} onValueChange={setWorkshopFilter}>
+                    <SelectTrigger className="w-full md:w-[180px]">
+                      <SelectValue placeholder="Filter workshops" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Workshops</SelectItem>
+                      <SelectItem value="upcoming">Upcoming</SelectItem>
+                      <SelectItem value="registered">My Registrations</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Workshops Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredWorkshops.map(workshop => (
+                  <Card key={workshop.id} className="hover:shadow-md transition-shadow">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle className="text-lg">{workshop.title}</CardTitle>
+                          <CardDescription>{workshop.category} • {workshop.level}</CardDescription>
+                        </div>
+                        <Badge className={workshop.type === 'live' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'}>
+                          {workshop.type === 'live' ? 'Live' : 'Recorded'}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <p className="text-sm text-gray-600">{workshop.description}</p>
+                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                          <Calendar size={14} />
+                          <span>{workshop.date} at {workshop.time}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                          <Users size={14} />
+                          <span>{workshop.currentAttendees}/{workshop.maxAttendees} registered</span>
+                        </div>
+                        {workshop.prerequisites.length > 0 && (
+                          <div className="text-sm">
+                            <span className="font-medium">Prerequisites: </span>
+                            {workshop.prerequisites.join(', ')}
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex flex-col gap-2">
+                      {workshop.status === 'upcoming' ? (
+                        workshop.isRegistered ? (
+                          <>
+                            <Button 
+                              variant="outline" 
+                              className="w-full"
+                              onClick={() => handleWorkshopUnregister(workshop.id)}
+                            >
+                              Unregister
+                            </Button>
+                            {workshop.type === 'live' && (
+                              <Button 
+                                className="w-full bg-green-600 hover:bg-green-700"
+                                onClick={() => handleJoinLiveWorkshop(workshop)}
+                              >
+                                <Video className="mr-2 h-4 w-4" />
+                                Join Live
+                              </Button>
+                            )}
+                          </>
+                        ) : (
+                          <Button 
+                            className="w-full bg-scad-red hover:bg-scad-red/90 text-white"
+                            onClick={() => handleWorkshopRegister(workshop.id)}
+                          >
+                            Register Now
+                          </Button>
+                        )
+                      ) : (
+                        <>
+                          {workshop.recordingUrl && (
+                            <Button 
+                              className="w-full bg-scad-red hover:bg-scad-red/90 text-white"
+                              onClick={() => setSelectedWorkshop(workshop)}
+                            >
+                              <Play className="mr-2 h-4 w-4" />
+                              Watch Recording
+                            </Button>
+                          )}
+                          {workshop.certificateUrl && (
+                            <Button 
+                              variant="outline" 
+                              className="w-full"
+                              onClick={() => handleDownloadCertificate(workshop.id)}
+                            >
+                              <Download className="mr-2 h-4 w-4" />
+                              Download Certificate
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Workshop Details Modal (Watch Recording) */}
+            {selectedWorkshop && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                <Card className="w-full max-w-4xl max-h-[90vh] overflow-hidden">
+                  <CardHeader className="flex flex-row items-center justify-between border-b">
+                    <div>
+                      <CardTitle className="text-gray-900">{selectedWorkshop.title}</CardTitle>
+                      <CardDescription className="text-gray-500">
+                        {selectedWorkshop.instructor} • {selectedWorkshop.duration}
+                      </CardDescription>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      className="text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                      onClick={() => setSelectedWorkshop(null)}
+                    >
+                      <X className="h-6 w-6" />
+                    </Button>
+                  </CardHeader>
+                  <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Workshop Video/Content */}
+                    <div className="md:col-span-2 space-y-4">
+                      <div className="aspect-video bg-black rounded-lg flex items-center justify-center">
+                        {selectedWorkshop.type === 'live' ? (
+                          <div className="text-white text-center">
+                            <Video className="mx-auto h-12 w-12 mb-2" />
+                            <p>Live Workshop</p>
+                          </div>
+                        ) : (
+                          <div className="relative w-full h-full">
+                            {/* Video player would go here */}
+                            <div className="absolute bottom-4 left-4 flex gap-2">
+                              <Button 
+                                size="icon" 
+                                variant="secondary"
+                                onClick={() => setIsPlaying(!isPlaying)}
+                              >
+                                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                              </Button>
+                              <Button size="icon" variant="secondary">
+                                <Square className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Workshop Notes */}
+                      <div className="space-y-2">
+                        <h3 className="font-medium">Notes</h3>
+                        <Textarea
+                          placeholder="Take notes during the workshop..."
+                          value={workshopNotes}
+                          onChange={(e) => setWorkshopNotes(e.target.value)}
+                          className="min-h-[100px]"
+                        />
+                      </div>
+
+                      {/* Workshop Materials */}
+                      <div className="space-y-2">
+                        <h3 className="font-medium">Materials</h3>
+                        <div className="space-y-2">
+                          {selectedWorkshop.materials.map((material, index) => (
+                            <div key={index} className="flex items-center gap-2 text-sm">
+                              <FileText className="h-4 w-4 text-gray-500" />
+                              <span>{material}</span>
+                              <Button variant="ghost" size="sm">Download</Button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Workshop Chat/Sidebar */}
+                    <div className="space-y-4">
+                      {/* Chat Section */}
+                      {selectedWorkshop.type === 'live' && (
+                        <div className="space-y-2">
+                          <h3 className="font-medium">Live Chat</h3>
+                          <ScrollArea className="h-[300px] border rounded-lg p-4">
+                            <div className="space-y-4">
+                              {chatMessages.map(msg => (
+                                <div key={msg.id} className="flex gap-2">
+                                  <Avatar className="h-6 w-6">
+                                    <AvatarFallback>{msg.user[0]}</AvatarFallback>
+                                  </Avatar>
+                                  <div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-medium text-sm">{msg.user}</span>
+                                      <span className="text-xs text-gray-500">{msg.timestamp}</span>
+                                    </div>
+                                    <p className="text-sm">{msg.message}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </ScrollArea>
+                          <div className="flex gap-2">
+                            <Input
+                              placeholder="Type a message..."
+                              value={chatMessage}
+                              onChange={(e) => setChatMessage(e.target.value)}
+                              onKeyPress={(e) => e.key === 'Enter' && handleSendChatMessage(chatMessage)}
+                            />
+                            <Button onClick={() => handleSendChatMessage(chatMessage)}>
+                              <MessageCircle className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Workshop Rating */}
+                      {selectedWorkshop.status === 'completed' && (
+                        <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
+                          <h3 className="font-medium text-lg">Workshop Feedback</h3>
+                          {workshopRatings[selectedWorkshop.id] ? (
+                            <div className="space-y-3">
+                              <div className="flex items-center gap-2">
+                                <div className="flex items-center">
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <Star
+                                      key={star}
+                                      className={`h-5 w-5 ${
+                                        star <= workshopRatings[selectedWorkshop.id].rating
+                                          ? 'text-yellow-400 fill-yellow-400'
+                                          : 'text-gray-300'
+                                      }`}
+                                    />
+                                  ))}
+                                </div>
+                                <span className="text-sm text-gray-600">
+                                  {workshopRatings[selectedWorkshop.id].rating}/5
+                                </span>
+                                <span className="text-xs text-gray-500">
+                                  {new Date(workshopRatings[selectedWorkshop.id].timestamp).toLocaleDateString()}
+                                </span>
+                              </div>
+                              <div className="bg-white p-3 rounded-md border">
+                                <p className="text-sm text-gray-700">
+                                  {workshopRatings[selectedWorkshop.id].feedback}
+                                </p>
+                              </div>
+                              <Button 
+                                variant="outline" 
+                                className="w-full"
+                                onClick={() => {
+                                  setWorkshopRating(workshopRatings[selectedWorkshop.id].rating);
+                                  setWorkshopFeedback(workshopRatings[selectedWorkshop.id].feedback);
+                                  // Remove the rating to show the form again
+                                  setWorkshopRatings(prev => {
+                                    const newRatings = { ...prev };
+                                    delete newRatings[selectedWorkshop.id];
+                                    return newRatings;
+                                  });
+                                }}
+                              >
+                                Edit Feedback
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="space-y-4">
+                              <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700">Rate this workshop</label>
+                                <div className="flex gap-1">
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <Button
+                                      key={star}
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => setWorkshopRating(star)}
+                                      className={`hover:bg-yellow-50 ${
+                                        star <= workshopRating ? 'text-yellow-400' : 'text-gray-300'
+                                      }`}
+                                    >
+                                      <Star
+                                        className="h-6 w-6"
+                                        fill={star <= workshopRating ? 'currentColor' : 'none'}
+                                      />
+                                    </Button>
+                                  ))}
+                                </div>
+                                {workshopRating > 0 && (
+                                  <p className="text-sm text-gray-600">
+                                    {workshopRating === 1 && 'Poor'}
+                                    {workshopRating === 2 && 'Fair'}
+                                    {workshopRating === 3 && 'Good'}
+                                    {workshopRating === 4 && 'Very Good'}
+                                    {workshopRating === 5 && 'Excellent'}
+                                  </p>
+                                )}
+                              </div>
+                              <div className="space-y-2">
+                                <label className="text-sm font-medium text-gray-700">Your Feedback</label>
+                                <Textarea
+                                  placeholder="Share your experience with this workshop..."
+                                  value={workshopFeedback}
+                                  onChange={(e) => setWorkshopFeedback(e.target.value)}
+                                  className="min-h-[100px] resize-none"
+                                />
+                              </div>
+                              <Button 
+                                className="w-full bg-scad-red hover:bg-scad-red/90"
+                                onClick={() => handleWorkshopRating(selectedWorkshop.id, workshopRating, workshopFeedback)}
+                                disabled={workshopRating === 0 || !workshopFeedback.trim()}
+                              >
+                                Submit Feedback
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Workshop Progress */}
+                      {selectedWorkshop.isRegistered && (
+                        <div className="space-y-2">
+                          <h3 className="font-medium">Your Progress</h3>
+                          <Progress value={selectedWorkshop.status === 'completed' ? 100 : 0} />
+                          <p className="text-sm text-gray-500">
+                            {selectedWorkshop.status === 'completed' ? 'Completed' : 'Not started'}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </div>
         </TabsContent>
         
@@ -914,6 +1537,110 @@ const PROStudentDashboard = () => {
           </div>
         </TabsContent>
       </TabsLayout>
+
+      {/* Live Workshop Popup */}
+      {isLiveWorkshopOpen && liveWorkshop && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <Card className="w-full max-w-4xl max-h-[90vh] overflow-hidden">
+            <CardHeader className="flex flex-row items-center justify-between border-b">
+              <div>
+                <CardTitle className="text-gray-900">{liveWorkshop.title}</CardTitle>
+                <CardDescription className="text-gray-500">
+                  {liveWorkshop.instructor} • {liveWorkshop.duration}
+                </CardDescription>
+              </div>
+              <Button 
+                variant="ghost" 
+                className="text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                onClick={() => setIsLiveWorkshopOpen(false)}
+              >
+                <X className="h-6 w-6" />
+              </Button>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6 p-0">
+              {/* Video Section */}
+              <div className="md:col-span-2 space-y-4 p-6">
+                <div className="aspect-video bg-black rounded-lg flex items-center justify-center">
+                  <div className="text-center text-white">
+                    <Video className="h-16 w-16 mx-auto mb-4" />
+                    <p className="text-lg">Live Workshop in Progress</p>
+                    <p className="text-sm text-gray-400 mt-2">
+                      {liveWorkshop.date} at {liveWorkshop.time}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Workshop Materials */}
+                <div className="space-y-2">
+                  <h3 className="font-medium">Materials</h3>
+                  <div className="space-y-2">
+                    {liveWorkshop.materials.map((material, index) => (
+                      <div key={index} className="flex items-center gap-2 text-sm">
+                        <FileText className="h-4 w-4 text-gray-500" />
+                        <span>{material}</span>
+                        <Button variant="ghost" size="sm">Download</Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Chat Section */}
+              <div className="bg-gray-50 p-6 space-y-4">
+                <div className="space-y-2">
+                  <h3 className="font-medium">Live Chat</h3>
+                  <p className="text-sm text-gray-500">{liveWorkshop.currentAttendees} participants</p>
+                </div>
+
+                {/* Chat Messages */}
+                <ScrollArea className="h-[400px] border rounded-lg p-4 bg-white">
+                  <div className="space-y-4">
+                    {liveChatMessages.map(msg => (
+                      <div key={msg.id} className="flex gap-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarFallback className="bg-gray-100 text-gray-700">
+                            {msg.user[0]}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-sm">
+                              {msg.user}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {msg.timestamp}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600 mt-1">
+                            {msg.message}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+
+                {/* Chat Input */}
+                <div className="flex gap-2">
+                  <Input
+                    placeholder="Type a message..."
+                    value={liveChatMessage}
+                    onChange={(e) => setLiveChatMessage(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendLiveChatMessage(liveChatMessage)}
+                    className="bg-white"
+                  />
+                  <Button
+                    onClick={() => handleSendLiveChatMessage(liveChatMessage)}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
