@@ -13,6 +13,7 @@ import AvailableInternships from '../internships/AvailableInternships';
 import CompanyCard from '../companies/CompanyCard';
 import MyInternshipsTab from '../students/MyInternshipsTab';
 import Reports from '../reports/Reports';
+import CompanyEvaluations from '../reports/CompanyEvaluations';
 
 interface Application {
   id: string;
@@ -114,11 +115,19 @@ const StudentDashboard = () => {
   const [newJob, setNewJob] = useState({ jobTitle: '', company: '', duration: '' });
   const [newDocument, setNewDocument] = useState<File | null>(null);
   const [createReportData, setCreateReportData] = useState<{ jobTitle: string; companyName: string } | null>(null);
+  const [reportsSubTab, setReportsSubTab] = useState<'reports' | 'evaluations'>('reports');
+  const [companyEvaluations, setCompanyEvaluations] = useState<{
+    id: string;
+    companyName: string;
+    recommended: boolean;
+    comments: string;
+    submittedAt: string;
+  }[]>([]);
 
   const studentTabs = [
     { value: "overview", label: "Overview" },
     { value: "internships", label: "Internships" },
-    { value: "reports", label: "Reports" },
+    { value: "reports", label: "Reports & Evaluations" },
     { value: "profile", label: "Profile" }
   ];
 
@@ -204,6 +213,20 @@ const StudentDashboard = () => {
   const myInternships = [
     { id: '1', company: 'TechCorp', title: 'Frontend Developer', status: 'current', startDate: '2024-01-01', endDate: '2024-04-01' },
     { id: '2', company: 'DesignHub', title: 'UX Designer', status: 'completed', startDate: '2023-06-01', endDate: '2023-09-01' }
+  ];
+
+  // List of all companies for evaluation
+  const allCompanies = [
+    'TechCorp',
+    'DesignHub',
+    'DataSystems',
+    'MarketingPro',
+    'FinanceFirst',
+    'HealthTech',
+    'EduTech',
+    'GreenEnergy',
+    'E-finance',
+    // ...add more as needed
   ];
 
   const handleTabChange = (tab: string) => {
@@ -502,8 +525,18 @@ const StudentDashboard = () => {
         </TabsContent>
         
         <TabsContent value="reports">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <Reports createReportData={createReportData} setCreateReportData={setCreateReportData} />
+          <div className="space-y-8">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <Reports createReportData={createReportData} setCreateReportData={setCreateReportData} />
+            </div>
+
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <CompanyEvaluations
+                evaluations={companyEvaluations}
+                setEvaluations={setCompanyEvaluations}
+                allCompanies={allCompanies}
+              />
+            </div>
           </div>
         </TabsContent>
         
