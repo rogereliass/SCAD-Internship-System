@@ -67,6 +67,25 @@ const mockNotifications = [
   }
 ];
 
+const majors = [
+  'CSE',
+  'DMET',
+  'Mechatronics',
+  'BI',
+  'Civil',
+  'Architecture',
+  'Materials',
+  'Design and Production',
+  'Networks',
+  'Communication',
+  'Pharmacy',
+  'Applied Arts',
+  'Law',
+  'Management'
+];
+const semesters = [3,4,5,6,7,8];
+const majorsList = majors.flatMap(major => semesters.map(sem => `${major} ${sem}${sem === 1 ? 'st' : sem === 2 ? 'nd' : sem === 3 ? 'rd' : 'th'} Semester`));
+
 const StudentDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
@@ -77,6 +96,23 @@ const StudentDashboard = () => {
   const [industryFilter, setIndustryFilter] = useState('all');
   const [durationFilter, setDurationFilter] = useState('all');
   const [paymentFilter, setPaymentFilter] = useState('all');
+  const [profileEditMode, setProfileEditMode] = useState(false);
+  const [profile, setProfile] = useState({
+    name: 'Alex Johnson',
+    email: 'alex.johnson@email.com',
+    phone: '+1 (555) 987-6543',
+    major: 'Computer Science 6th Semester',
+    jobInterests: ['Frontend Development', 'UI/UX Design'],
+    previousJobs: [
+      { jobTitle: 'Part-time Web Developer', company: 'Webify', duration: '6 months' }
+    ],
+    collegeActivities: ['Coding Club', 'Student Council'],
+    documents: [] as { name: string; url: string }[],
+  });
+  const [newJobInterest, setNewJobInterest] = useState('');
+  const [newActivity, setNewActivity] = useState('');
+  const [newJob, setNewJob] = useState({ jobTitle: '', company: '', duration: '' });
+  const [newDocument, setNewDocument] = useState<File | null>(null);
 
   const studentTabs = [
     { value: "overview", label: "Overview" },
@@ -190,6 +226,59 @@ const StudentDashboard = () => {
 
   const handleBack = () => {
     setSelectedApplication(null);
+  };
+
+  const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setProfile(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddJobInterest = () => {
+    if (newJobInterest.trim()) {
+      setProfile(prev => ({ ...prev, jobInterests: [...prev.jobInterests, newJobInterest.trim()] }));
+      setNewJobInterest('');
+    }
+  };
+
+  const handleRemoveJobInterest = (index: number) => {
+    setProfile(prev => ({ ...prev, jobInterests: prev.jobInterests.filter((_, i) => i !== index) }));
+  };
+
+  const handleAddActivity = () => {
+    if (newActivity.trim()) {
+      setProfile(prev => ({ ...prev, collegeActivities: [...prev.collegeActivities, newActivity.trim()] }));
+      setNewActivity('');
+    }
+  };
+
+  const handleRemoveActivity = (index: number) => {
+    setProfile(prev => ({ ...prev, collegeActivities: prev.collegeActivities.filter((_, i) => i !== index) }));
+  };
+
+  const handleAddJob = () => {
+    if (newJob.jobTitle && newJob.company && newJob.duration) {
+      setProfile(prev => ({ ...prev, previousJobs: [...prev.previousJobs, newJob] }));
+      setNewJob({ jobTitle: '', company: '', duration: '' });
+    }
+  };
+
+  const handleRemoveJob = (index: number) => {
+    setProfile(prev => ({ ...prev, previousJobs: prev.previousJobs.filter((_, i) => i !== index) }));
+  };
+
+  const handleDocumentUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setNewDocument(file);
+    }
+  };
+
+  const handleAddDocument = () => {
+    if (newDocument) {
+      const url = URL.createObjectURL(newDocument);
+      setProfile(prev => ({ ...prev, documents: [...prev.documents, { name: newDocument.name, url }] }));
+      setNewDocument(null);
+    }
   };
 
   return (
@@ -407,7 +496,140 @@ const StudentDashboard = () => {
         <TabsContent value="profile">
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-semibold mb-4">Profile</h2>
-            <p className="text-gray-600">Profile management features coming soon...</p>
+            {!profileEditMode ? (
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">{profile.name}</h3>
+                    <p className="text-gray-600">{profile.email} | {profile.phone}</p>
+                    <p className="text-gray-600">Major: {profile.major}</p>
+                  </div>
+                  <Button onClick={() => setProfileEditMode(true)} className="bg-scad-red text-white">Edit Profile</Button>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-1">Job Interests</h4>
+                  <ul className="list-disc ml-6 text-gray-700">
+                    {profile.jobInterests.map((interest, idx) => (
+                      <li key={idx}>{interest}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-1">Previous Internships / Part-time Jobs</h4>
+                  <ul className="list-disc ml-6 text-gray-700">
+                    {profile.previousJobs.map((job, idx) => (
+                      <li key={idx}>{job.jobTitle} at {job.company} ({job.duration})</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-1">College Activities</h4>
+                  <ul className="list-disc ml-6 text-gray-700">
+                    {profile.collegeActivities.map((act, idx) => (
+                      <li key={idx}>{act}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-1">Documents</h4>
+                  <ul className="list-disc ml-6 text-gray-700">
+                    {profile.documents.map((doc, idx) => (
+                      <li key={idx}><a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-scad-red underline">{doc.name}</a></li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <form className="space-y-6" onSubmit={e => { e.preventDefault(); setProfileEditMode(false); }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                    <input type="text" name="name" value={profile.name} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input type="email" name="email" value={profile.email} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                    <input type="text" name="phone" value={profile.phone} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Major & Semester</label>
+                    <select name="major" value={profile.major} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900">
+                      {majorsList.map((major, idx) => (
+                        <option key={idx} value={major}>{major}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Job Interests</label>
+                  <div className="flex gap-2 mb-2">
+                    <input type="text" value={newJobInterest} onChange={e => setNewJobInterest(e.target.value)} className="border rounded px-3 py-2 flex-1 text-gray-900" placeholder="Add job interest" />
+                    <Button type="button" onClick={handleAddJobInterest}>Add</Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.jobInterests.map((interest, idx) => (
+                      <span key={idx} className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-1">
+                        {interest}
+                        <button type="button" onClick={() => handleRemoveJobInterest(idx)} className="text-red-500 ml-1">&times;</button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Previous Internships / Part-time Jobs</label>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
+                    <input type="text" placeholder="Job Title" value={newJob.jobTitle} onChange={e => setNewJob(j => ({ ...j, jobTitle: e.target.value }))} className="border rounded px-3 py-2 text-gray-900" />
+                    <input type="text" placeholder="Company Name" value={newJob.company} onChange={e => setNewJob(j => ({ ...j, company: e.target.value }))} className="border rounded px-3 py-2 text-gray-900" />
+                    <input type="text" placeholder="Duration" value={newJob.duration} onChange={e => setNewJob(j => ({ ...j, duration: e.target.value }))} className="border rounded px-3 py-2 text-gray-900" />
+                  </div>
+                  <Button type="button" onClick={handleAddJob}>Add</Button>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {profile.previousJobs.map((job, idx) => (
+                      <span key={idx} className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-1">
+                        {job.jobTitle} at {job.company} ({job.duration})
+                        <button type="button" onClick={() => handleRemoveJob(idx)} className="text-red-500 ml-1">&times;</button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">College Activities</label>
+                  <div className="flex gap-2 mb-2">
+                    <input type="text" value={newActivity} onChange={e => setNewActivity(e.target.value)} className="border rounded px-3 py-2 flex-1 text-gray-900" placeholder="Add activity" />
+                    <Button type="button" onClick={handleAddActivity}>Add</Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.collegeActivities.map((act, idx) => (
+                      <span key={idx} className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-1">
+                        {act}
+                        <button type="button" onClick={() => handleRemoveActivity(idx)} className="text-red-500 ml-1">&times;</button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Upload Documents (CV, Cover Letter, Certificates)</label>
+                  <div className="flex gap-2 mb-2">
+                    <input type="file" onChange={handleDocumentUpload} />
+                    <Button type="button" onClick={handleAddDocument} disabled={!newDocument}>Add</Button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.documents.map((doc, idx) => (
+                      <span key={idx} className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-1">
+                        <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-scad-red underline">{doc.name}</a>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <Button type="submit" className="bg-scad-red text-white">Save</Button>
+                  <Button type="button" variant="outline" onClick={() => setProfileEditMode(false)}>Cancel</Button>
+                </div>
+              </form>
+            )}
           </div>
         </TabsContent>
       </TabsLayout>
