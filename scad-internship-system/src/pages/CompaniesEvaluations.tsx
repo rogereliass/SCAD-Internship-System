@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Search, Filter, Building2, Calendar, User, Download } from 'lucide-react';
+import { Search, Filter, Building2, Calendar, User, Download, Eye } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
 import { Input } from '../components/ui/input';
 import {
@@ -331,7 +331,7 @@ const CompaniesEvaluations = () => {
                       className="bg-white text-blue-600 hover:bg-blue-100 hover:text-blue-800 py-2 px-4 rounded-md transition-all duration-300"
                       onClick={() => viewEvaluationDetails(evaluation)}
                     >
-                      View Details
+                      <Eye className="h-4 w-4 mr-1" />View Details
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -350,7 +350,7 @@ const CompaniesEvaluations = () => {
 
         {/* Evaluation Details Modal */}
         <Dialog open={isEvaluationModalOpen} onOpenChange={setIsEvaluationModalOpen}>
-          <DialogContent className="max-w-4xl">
+          <DialogContent className="max-w-4xl bg-white max-h-[90vh] overflow-y-auto">
             {selectedEvaluation && (
               <>
                 <DialogHeader>

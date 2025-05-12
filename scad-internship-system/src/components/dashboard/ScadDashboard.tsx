@@ -238,9 +238,9 @@ const ScadDashboard = () => {
           
           <TabsContent value="overview">
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div className="flex flex-nowrap gap-4 overflow-x-auto mb-8 items-stretch">
               <Link to="/workshops">
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
                   <CardContent className="pt-6 flex items-center justify-between">
                     <div>
                       <FileText size={24} className="text-primary mb-2" />
@@ -252,7 +252,7 @@ const ScadDashboard = () => {
                 </Card>
               </Link>
               <Link to="/company-applications">
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
                   <CardContent className="pt-6 flex items-center justify-between">
                     <div>
                       <Building size={24} className="text-primary mb-2" />
@@ -265,7 +265,7 @@ const ScadDashboard = () => {
               </Link>
               
               <Link to="/students">
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <Card className="h-full w-full hover:shadow-md transition-shadow cursor-pointer">
                   <CardContent className="pt-6 flex items-center justify-between">
                     <div>
                       <Users size={24} className="text-primary mb-2" />
@@ -278,7 +278,7 @@ const ScadDashboard = () => {
               </Link>
               
               <Link to="/internship-reports">
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
                   <CardContent className="pt-6 flex items-center justify-between">
                     <div>
                       <FileText size={24} className="text-primary mb-2" />
@@ -289,7 +289,18 @@ const ScadDashboard = () => {
                   </CardContent>
                 </Card>
               </Link>
-
+              <Link to="/companies-evaluations">
+                <Card className="h-full hover:shadow-md transition-shadow cursor-pointer">
+                  <CardContent className="pt-6 flex items-center justify-between">
+                    <div>
+                      <FileText size={24} className="text-primary mb-2" />
+                      <h3 className="font-medium">Companies' Evaluations</h3>
+                      <p className="text-sm text-gray-500">Access company performance metrics</p>
+                    </div>
+                    <ChevronRight size={20} className="text-gray-400" />
+                  </CardContent>
+                </Card>
+              </Link>
               
             </div>
             
@@ -844,7 +855,7 @@ const ScadDashboard = () => {
                 </CardFooter>
               </Card>
               
-              <Card>
+              <Card className='max-h-[450px] '>
                 <CardHeader>
                   <CardTitle className="text-lg">Call Statistics</CardTitle>
                   <CardDescription>Recent video call activity</CardDescription>
@@ -882,11 +893,6 @@ const ScadDashboard = () => {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter>
-                  <Link to="/appointments" className="w-full">
-                    
-                  </Link>
-                </CardFooter>
               </Card>
             </div>
           </TabsContent>
