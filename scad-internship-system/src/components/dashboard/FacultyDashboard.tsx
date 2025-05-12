@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, FileText, Download } from 'lucide-react';
 import { toast } from 'sonner';
-import { TabsContent } from '../ui/tabs';
 import NotificationsButton from './../DashboardEssentials/NotificationsButton';
 import TabsLayout from './../DashboardEssentials/TabsLayout';
 import OverviewCards from '../facultyMembers/OverviewCards';
@@ -19,11 +18,9 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { toast } from 'sonner';
 import { BarChart as RechartBarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend, PieChart as RechartPieChart, Pie, Cell } from 'recharts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Badge } from "../ui/badge";
-import NotificationsButton from '../DashboardEssentials/NotificationsButton';
 
 import { useReports } from '../../contexts/ReportsContext';
 
