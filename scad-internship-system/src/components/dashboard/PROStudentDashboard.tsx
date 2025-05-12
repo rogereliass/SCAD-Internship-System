@@ -4,7 +4,7 @@ import TabsLayout from './../DashboardEssentials/TabsLayout';
 import { TabsContent } from '../ui/tabs';
 import ApplicationsTab from '../students/ApplicationsTab';
 import ApplicationDetails from '../students/ApplicationDetails';
-import { Search, Filter, FileText, Users, GraduationCap, PlusCircle, ClipboardCheck, ChevronRight, Video, Upload, BriefcaseIcon, Calendar, BookOpen, Star, MessageSquare, Play, Pause, Square, Download, ThumbsUp, MessageCircle, X, Send } from 'lucide-react';
+import { Search, Filter, FileText, Users, GraduationCap, PlusCircle, ClipboardCheck, ChevronRight, Video, Upload, BriefcaseIcon, Calendar, BookOpen, Star, MessageSquare, Play, Pause, Square, Download, ThumbsUp, MessageCircle, X, Send, CheckCircle2, Clock, BarChart2, Share2, Lock, AlertCircle } from 'lucide-react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
@@ -23,6 +23,9 @@ import { Textarea } from '../ui/textarea';
 import { ScrollArea } from '../ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Progress } from '../ui/progress';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../ui/dialog';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Label } from '../ui/label';
 
 // Mock notifications data
 const mockNotifications = [
@@ -218,6 +221,110 @@ const mockChatMessages = [
   { id: 3, user: 'Omar', message: 'The instructor is great!', timestamp: '10:05 AM' }
 ];
 
+interface AssessmentQuestion {
+  id: number;
+  question: string;
+  options: string[];
+  correctAnswer: number;
+}
+
+interface Assessment {
+  id: number;
+  title: string;
+  description: string;
+  duration: string;
+  totalQuestions: number;
+  category: string;
+  difficulty: string;
+  status: 'available' | 'in-progress' | 'completed';
+  score: number | null;
+  completedAt: string | null;
+  isPublic: boolean;
+  assessmentQuestions: AssessmentQuestion[];
+}
+
+// Mock data
+const mockAssessments: Assessment[] = [
+  {
+    id: 1,
+    title: 'Technical Skills Assessment',
+    description: 'Evaluate your programming and technical problem-solving abilities.',
+    duration: '60 minutes',
+    totalQuestions: 30,
+    category: 'Technical',
+    difficulty: 'Intermediate',
+    status: 'available',
+    score: null,
+    completedAt: null,
+    isPublic: false,
+    assessmentQuestions: [
+      {
+        id: 1,
+        question: 'What is the time complexity of binary search?',
+        options: [
+          'O(1)',
+          'O(log n)',
+          'O(n)',
+          'O(n log n)'
+        ],
+        correctAnswer: 1
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: 'Soft Skills Evaluation',
+    description: 'Assess your communication, teamwork, and problem-solving skills.',
+    duration: '45 minutes',
+    totalQuestions: 25,
+    category: 'Soft Skills',
+    difficulty: 'Beginner',
+    status: 'completed',
+    score: 85,
+    completedAt: '2024-03-15',
+    isPublic: true,
+    assessmentQuestions: [
+      {
+        id: 1,
+        question: 'How do you handle conflicts in a team setting?',
+        options: [
+          'Avoid the conflict',
+          'Address it directly and professionally',
+          'Complain to management',
+          'Ignore it and focus on work'
+        ],
+        correctAnswer: 1
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: 'Career Readiness Assessment',
+    description: 'Evaluate your career preparation and professional development.',
+    duration: '90 minutes',
+    totalQuestions: 40,
+    category: 'Career Development',
+    difficulty: 'Advanced',
+    status: 'in-progress',
+    score: null,
+    completedAt: null,
+    isPublic: false,
+    assessmentQuestions: [
+      {
+        id: 1,
+        question: 'What is the most important aspect of a professional resume?',
+        options: [
+          'Length',
+          'Design',
+          'Relevance and achievements',
+          'References'
+        ],
+        correctAnswer: 2
+      }
+    ]
+  }
+];
+
 const PROStudentDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
@@ -284,7 +391,14 @@ const PROStudentDashboard = () => {
       timestamp: string;
     }
   }>({});
-
+  const [assessments, setAssessments] = useState<Assessment[]>(mockAssessments);
+  const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null);
+  const [isAssessmentModalOpen, setIsAssessmentModalOpen] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
+  const [assessmentTimeLeft, setAssessmentTimeLeft] = useState<number | null>(null);
+  const [assessmentFilter, setAssessmentFilter] = useState('all');
+  const [assessmentSearchTerm, setAssessmentSearchTerm] = useState('');
   const [student, setStudent] = useState({
     name: 'Alex Johnson',
     major: 'Computer Science',
@@ -303,7 +417,8 @@ const PROStudentDashboard = () => {
     { value: "internships", label: "Internships" },
     { value: "reports", label: "Reports & Evaluations" },
     { value: "appointments", label: "Appointments" },
-    { value: "workshops", label: "Workshops & Assessments" },
+    { value: "workshops", label: "Workshops" },
+    { value: "assessments", label: "Assessments" },
     { value: "profile", label: "Profile" }
   ];
 
@@ -663,6 +778,82 @@ const PROStudentDashboard = () => {
       }, Math.random() * 2000 + 1000);
     }
   };
+
+  const handleStartAssessment = (assessment: Assessment) => {
+    setSelectedAssessment(assessment);
+    setCurrentQuestion(0);
+    setSelectedAnswers(new Array(assessment.assessmentQuestions.length).fill(-1));
+    setAssessmentTimeLeft(parseInt(assessment.duration));
+    setIsAssessmentModalOpen(true);
+  };
+
+  const handleAnswerSelect = (answerIndex: number) => {
+    const newAnswers = [...selectedAnswers];
+    newAnswers[currentQuestion] = answerIndex;
+    setSelectedAnswers(newAnswers);
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestion < selectedAssessment!.assessmentQuestions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    }
+  };
+
+  const handlePreviousQuestion = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  };
+
+  const handleSubmitAssessment = () => {
+    if (!selectedAssessment) return;
+
+    const score = selectedAnswers.reduce((acc, answer, index) => {
+      return acc + (answer === selectedAssessment.assessmentQuestions[index].correctAnswer ? 1 : 0);
+    }, 0);
+
+    const percentage = Math.round((score / selectedAssessment.assessmentQuestions.length) * 100);
+
+    setAssessments(prevAssessments =>
+      prevAssessments.map(assessment =>
+        assessment.id === selectedAssessment.id
+          ? {
+              ...assessment,
+              status: 'completed',
+              score: percentage,
+              completedAt: new Date().toISOString(),
+              isPublic: false
+            }
+          : assessment
+      )
+    );
+
+    setIsAssessmentModalOpen(false);
+    toast.success(`Assessment completed! Your score: ${percentage}%`);
+  };
+
+  const handleTogglePublicScore = (assessmentId: number) => {
+    setAssessments(prevAssessments =>
+      prevAssessments.map(assessment =>
+        assessment.id === assessmentId
+          ? { ...assessment, isPublic: !assessment.isPublic }
+          : assessment
+      )
+    );
+    toast.success('Score visibility updated');
+  };
+
+  const filteredAssessments = assessments.filter(assessment => {
+    const matchesSearch = assessment.title.toLowerCase().includes(assessmentSearchTerm.toLowerCase()) ||
+                         assessment.description.toLowerCase().includes(assessmentSearchTerm.toLowerCase());
+    
+    const matchesFilter = assessmentFilter === 'all' ||
+                         (assessmentFilter === 'available' && assessment.status === 'available') ||
+                         (assessmentFilter === 'in-progress' && assessment.status === 'in-progress') ||
+                         (assessmentFilter === 'completed' && assessment.status === 'completed');
+
+    return matchesSearch && matchesFilter;
+  });
 
   return (
     <div className="p-6">
@@ -1395,6 +1586,199 @@ const PROStudentDashboard = () => {
               </div>
             )}
           </div>
+        </TabsContent>
+        
+        <TabsContent value="assessments">
+          <div className="space-y-6">
+            {/* Assessments Header */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-6 bg-scad-red rounded-full"></div>
+                  <h2 className="text-xl font-semibold text-gray-900">Online Assessments</h2>
+                </div>
+                <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
+                  <div className="relative w-full md:w-64">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                    <Input
+                      type="text"
+                      placeholder="Search assessments..."
+                      className="pl-9 text-gray-900"
+                      value={assessmentSearchTerm}
+                      onChange={(e) => setAssessmentSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <Select value={assessmentFilter} onValueChange={setAssessmentFilter}>
+                    <SelectTrigger className="w-full md:w-[180px]">
+                      <SelectValue placeholder="Filter assessments" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Assessments</SelectItem>
+                      <SelectItem value="available">Available</SelectItem>
+                      <SelectItem value="in-progress">In Progress</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Assessments Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredAssessments.map(assessment => (
+                  <Card key={assessment.id} className="hover:shadow-md transition-shadow">
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle className="text-lg">{assessment.title}</CardTitle>
+                          <CardDescription>{assessment.category} • {assessment.difficulty}</CardDescription>
+                        </div>
+                        <Badge className={
+                          assessment.status === 'completed' ? 'bg-green-100 text-green-800' :
+                          assessment.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-blue-100 text-blue-800'
+                        }>
+                          {assessment.status === 'completed' ? 'Completed' :
+                           assessment.status === 'in-progress' ? 'In Progress' :
+                           'Available'}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <p className="text-sm text-gray-600">{assessment.description}</p>
+                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                          <Clock size={14} />
+                          <span>{assessment.duration}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                          <BarChart2 size={14} />
+                          <span>{assessment.totalQuestions} questions</span>
+                        </div>
+                        {assessment.status === 'completed' && (
+                          <div className="flex items-center justify-between pt-2 border-t">
+                            <div className="flex items-center gap-2">
+                              <CheckCircle2 className="h-5 w-5 text-green-500" />
+                              <span className="font-medium">Score: {assessment.score}%</span>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleTogglePublicScore(assessment.id)}
+                              className={assessment.isPublic ? 'text-green-600' : 'text-gray-500'}
+                            >
+                              <Share2 className="h-4 w-4 mr-1" />
+                              {assessment.isPublic ? 'Public' : 'Private'}
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      {assessment.status === 'available' && (
+                        <Button 
+                          className="w-full bg-scad-red hover:bg-scad-red/90 text-white"
+                          onClick={() => handleStartAssessment(assessment)}
+                        >
+                          Start Assessment
+                        </Button>
+                      )}
+                      {assessment.status === 'in-progress' && (
+                        <Button 
+                          className="w-full bg-scad-red hover:bg-scad-red/90 text-white"
+                          onClick={() => handleStartAssessment(assessment)}
+                        >
+                          Continue Assessment
+                        </Button>
+                      )}
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Assessment Modal */}
+          <Dialog open={isAssessmentModalOpen} onOpenChange={setIsAssessmentModalOpen}>
+            <DialogContent className="max-w-3xl">
+              <DialogHeader>
+                <DialogTitle>{selectedAssessment?.title}</DialogTitle>
+                <DialogDescription>
+                  {selectedAssessment?.description}
+                </DialogDescription>
+              </DialogHeader>
+
+              {selectedAssessment && (
+                <div className="space-y-6">
+                  {/* Progress and Timer */}
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <Progress 
+                        value={(currentQuestion + 1) / selectedAssessment.assessmentQuestions.length * 100} 
+                        className="w-48"
+                      />
+                      <span className="text-sm text-gray-500">
+                        Question {currentQuestion + 1} of {selectedAssessment.assessmentQuestions.length}
+                      </span>
+                    </div>
+                    {assessmentTimeLeft !== null && (
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <Clock className="h-4 w-4" />
+                        <span>{Math.floor(assessmentTimeLeft / 60)}:{(assessmentTimeLeft % 60).toString().padStart(2, '0')}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Current Question */}
+                  <div className="space-y-4">
+                    <h3 className="font-medium">
+                      {selectedAssessment.assessmentQuestions[currentQuestion].question}
+                    </h3>
+                    <RadioGroup
+                      value={selectedAnswers[currentQuestion].toString()}
+                      onValueChange={(value) => handleAnswerSelect(parseInt(value))}
+                      className="space-y-3"
+                    >
+                      {selectedAssessment.assessmentQuestions[currentQuestion].options.map((option, index) => (
+                        <div key={index} className="flex items-center space-x-2">
+                          <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+                          <Label htmlFor={`option-${index}`} className="text-sm">
+                            {option}
+                          </Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+                  </div>
+
+                  {/* Navigation Buttons */}
+                  <div className="flex justify-between pt-4">
+                    <Button
+                      variant="outline"
+                      onClick={handlePreviousQuestion}
+                      disabled={currentQuestion === 0}
+                    >
+                      Previous
+                    </Button>
+                    {currentQuestion === selectedAssessment.assessmentQuestions.length - 1 ? (
+                      <Button
+                        className="bg-scad-red hover:bg-scad-red/90 text-white"
+                        onClick={handleSubmitAssessment}
+                        disabled={selectedAnswers.includes(-1)}
+                      >
+                        Submit Assessment
+                      </Button>
+                    ) : (
+                      <Button
+                        className="bg-scad-red hover:bg-scad-red/90 text-white"
+                        onClick={handleNextQuestion}
+                      >
+                        Next
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </DialogContent>
+          </Dialog>
         </TabsContent>
         
         <TabsContent value="profile">
