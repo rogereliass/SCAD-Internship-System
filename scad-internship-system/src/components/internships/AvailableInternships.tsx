@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, MapPin, Clock, Building2, DollarSign, Briefcase, X } from 'lucide-react';
 import { Button } from '../ui/button';
+import { toast } from 'sonner';
 
 interface AvailableInternshipsProps {
   searchTerm: string;
@@ -169,6 +170,22 @@ const AvailableInternships: React.FC<AvailableInternshipsProps> = ({
     return matchesSearch && matchesDate && matchesIndustry && matchesDuration && matchesPayment;
   });
 
+  const handleApply = (internshipId: string) => {
+    onInternshipClick(internshipId);
+    setSelectedInternship(null);
+    toast.success('Application submitted successfully!', {
+      description: 'Your application has been sent to the company.',
+      duration: 3000,
+      position: 'top-center',
+      style: {
+        background: '#ef4444', // SCAD red
+        color: 'white',
+        border: 'none',
+      },
+      className: 'border-none',
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
@@ -323,7 +340,7 @@ const AvailableInternships: React.FC<AvailableInternshipsProps> = ({
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-2 pt-4 border-t">
+                <div className="flex justify-end gap-3 mt-6">
                   <Button 
                     variant="outline"
                     onClick={() => setSelectedInternship(null)}
@@ -332,10 +349,7 @@ const AvailableInternships: React.FC<AvailableInternshipsProps> = ({
                   </Button>
                   <Button 
                     className="bg-scad-red hover:bg-scad-red/90 text-white"
-                    onClick={() => {
-                      onInternshipClick(selectedInternship.id);
-                      setSelectedInternship(null);
-                    }}
+                    onClick={() => handleApply(selectedInternship.id)}
                   >
                     Apply
                   </Button>
