@@ -123,7 +123,7 @@ const InternshipReports = () => {
     // Update the report using the context
     if (selectedReport) {
       updateReport(selectedReport.id, {
-        status: reviewData.status,
+        status: reviewData.status as "pending" | "accepted" | "rejected" | "flagged",
         comment: reviewData.comment,
         reviewDate: new Date().toISOString().split('T')[0],
         reviewedBy: isFromFaculty ? 'Dr. Eleanor Reed' : 'SCAD Office'

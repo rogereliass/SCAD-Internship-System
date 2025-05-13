@@ -11,7 +11,7 @@ interface Applicant {
   jobPostingId: string;
   email: string;
   appliedDate: string;
-  status: 'accepted' | 'rejected' | 'finalized';
+  status: 'Accepted' | 'Rejected' | 'Finalized';
 }
 
 interface OverviewTabProps {
@@ -152,9 +152,9 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
                   <p className="text-sm text-gray-600 mt-1">{recentApplications[0].position}</p>
                   <div className="flex items-center justify-between mt-2">
                     <span className={`px-2 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      recentApplications[0].status === 'accepted' ? 'bg-green-100 text-green-800' :
-                      recentApplications[0].status === 'rejected' ? 'bg-red-100 text-red-800' :
-                      recentApplications[0].status === 'finalized' ? 'bg-blue-100 text-blue-800' :
+                      recentApplications[0].status === 'Accepted' ? 'bg-green-100 text-green-800' :
+                      recentApplications[0].status === 'Rejected' ? 'bg-red-100 text-red-800' :
+                      recentApplications[0].status === 'Finalized' ? 'bg-blue-100 text-blue-800' :
                       'bg-yellow-100 text-yellow-800'
                     }`}>
                       {recentApplications[0].status}
@@ -263,9 +263,9 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
                       <div className="flex justify-between">
                         <p className="font-medium text-scad-dark">{app.name}</p>
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          app.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                          app.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                          app.status === 'finalized' ? 'bg-blue-100 text-blue-800' :
+                          app.status === 'Accepted' ? 'bg-green-100 text-green-800' :
+                          app.status === 'Rejected' ? 'bg-red-100 text-red-800' :
+                          app.status === 'Finalized' ? 'bg-blue-100 text-blue-800' :
                           'bg-yellow-100 text-yellow-800'
                         }`}>
                           {app.status}

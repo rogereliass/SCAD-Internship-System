@@ -43,7 +43,7 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
               <>
                 <Link to="/about" className="text-scad-dark hover:text-scad-red transition-colors font-bold">About</Link>
                 <Link to="/companies" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Companies</Link>
-                <Link to="/internships" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Internships</Link>
+                
                 <Link to="/login" className="bg-black text-white hover:bg-gray-800 py-2 px-4 rounded font-bold">Login</Link>
                 <Link to="/register" className="btn btn-primary font-bold">Register</Link>
               </>
