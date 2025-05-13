@@ -1,5 +1,5 @@
 # Softies
-# GUC Internship System – Frontend Prototype
+# GUC SCAD Internship Managment System – Frontend Prototype
 
 A React-based front-end prototype for managing GUC student internship workflows including application submission, enrollment tracking, and report evaluation.
 
