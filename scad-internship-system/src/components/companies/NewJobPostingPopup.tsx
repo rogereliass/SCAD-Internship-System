@@ -9,23 +9,42 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
+// Use the same JobPosting interface from JobPostingTab.tsx
+interface JobPosting {
+  id: number;
+  position: string;
+  description: string;
+  requirements: string[];
+  responsibilities: string[];
+  status: 'active' | 'closed';
+  isPaid: boolean;
+  location: string;
+  duration: string;
+  applicants: number;
+  createdAt: string;
+  deadline: string;
+  department: string;
+}
+
+// Update JobPostingData to match the JobPosting interface
+export interface JobPostingData {
+  position: string;
+  description: string;
+  requirements: string[] | string;
+  responsibilities: string[] | string;
+  status: 'active' | 'closed';
+  isPaid: boolean;
+  location: string;
+  duration: string;
+  deadline: string | Date;
+  department?: string;
+}
+
 interface NewJobPostingModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (jobData: JobPostingData) => void;
-  editData?: JobPostingData; // Optional data for editing mode
-}
-
-export interface JobPostingData {
-  position: string;
-  description: string;
-  location: string;
-  deadline: Date | undefined;
-  status: 'active' | 'closed';
-  requirements?: string;
-  isPaid?: boolean;
-  duration?: string;
-  industry?: string;
+  editData?: JobPostingData;
 }
 
 const NewJobPostingModal: React.FC<NewJobPostingModalProps> = ({ 
@@ -38,12 +57,13 @@ const NewJobPostingModal: React.FC<NewJobPostingModalProps> = ({
     position: '',
     description: '',
     location: '',
-    deadline: undefined,
+    deadline: '',
     status: 'active',
     requirements: '',
+    responsibilities: '',
     isPaid: true,
     duration: '3 months',
-    industry: ''
+    department: ''
   });
   
   // Initialize with edit data or reset when the modal opens/closes or edit data changes
@@ -56,12 +76,13 @@ const NewJobPostingModal: React.FC<NewJobPostingModalProps> = ({
         position: '',
         description: '',
         location: '',
-        deadline: undefined,
+        deadline: '',
         status: 'active',
         requirements: '',
+        responsibilities: '',
         isPaid: true,
         duration: '3 months',
-        industry: ''
+        department: ''
       });
     }
   }, [isOpen, editData]);
@@ -87,7 +108,7 @@ const NewJobPostingModal: React.FC<NewJobPostingModalProps> = ({
   const handleDateChange = (date: Date | undefined) => {
     setFormData(prev => ({
       ...prev,
-      deadline: date
+      deadline: date || ''
     }));
   };
 
@@ -147,13 +168,17 @@ const NewJobPostingModal: React.FC<NewJobPostingModalProps> = ({
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {formData.deadline ? format(formData.deadline, "PPP") : <span>Select a date</span>}
+                      {formData.deadline ? 
+                        (formData.deadline instanceof Date 
+                          ? format(formData.deadline, "PPP") 
+                          : formData.deadline) 
+                        : <span>Select a date</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0">
                     <Calendar
                       mode="single"
-                      selected={formData.deadline}
+                      selected={formData.deadline instanceof Date ? formData.deadline : undefined}
                       onSelect={handleDateChange}
                       initialFocus
                     />
@@ -181,12 +206,12 @@ const NewJobPostingModal: React.FC<NewJobPostingModalProps> = ({
               </div>
               
               <div className="space-y-1">
-                <Label htmlFor="industry">Industry</Label>
+                <Label htmlFor="department">Department</Label>
                 <Input
-                  id="industry"
-                  name="industry"
-                  placeholder="e.g. Technology, Finance"
-                  value={formData.industry}
+                  id="department"
+                  name="department"
+                  placeholder="e.g. Engineering, Design"
+                  value={formData.department || ''}
                   onChange={handleChange}
                   className="bg-white text-gray-900"
                 />
@@ -214,11 +239,28 @@ const NewJobPostingModal: React.FC<NewJobPostingModalProps> = ({
                 id="requirements"
                 name="requirements"
                 placeholder="List the skills and qualifications required"
-                value={formData.requirements}
+                value={typeof formData.requirements === 'string' ? formData.requirements : formData.requirements.join(', ')}
                 onChange={handleChange}
                 className="flex w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-gray-700 disabled:cursor-not-allowed disabled:opacity-50 min-h-[60px] text-gray-900"
               />
+              <p className="text-xs text-gray-500 mt-1">Separate requirements with commas</p>
             </div>
+
+            <div className="space-y-1">
+              <div className="flex justify-between items-center">
+                <Label htmlFor="responsibilities">Responsibilities</Label>
+              </div>
+              <textarea
+                id="responsibilities"
+                name="responsibilities"
+                placeholder="List the job responsibilities"
+                value={typeof formData.responsibilities === 'string' ? formData.responsibilities : formData.responsibilities.join(', ')}
+                onChange={handleChange}
+                className="flex w-full rounded-md border border-input bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-gray-700 disabled:cursor-not-allowed disabled:opacity-50 min-h-[60px] text-gray-900"
+              />
+              <p className="text-xs text-gray-500 mt-1">Separate responsibilities with commas</p>
+            </div>
+            
             <div className="space-y-1">
               <Label htmlFor="isPaid">Compensation</Label>
               <div className="flex items-center h-9 px-1 rounded-md ">

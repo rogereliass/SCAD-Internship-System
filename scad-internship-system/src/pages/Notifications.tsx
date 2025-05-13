@@ -1,7 +1,7 @@
 // src/pages/Notifications.tsx
 
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom'; // Add Link import
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import DemoControls from '@/components/Developing Controls/DemoControls';
@@ -133,7 +133,17 @@ const Notifications = () => {
       <Navbar userType={userType} />
       <div className="container mx-auto py-6 px-4">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">Notifications</h1>
+          {/* Add flex container with justification for title and back button */}
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-bold text-gray-900">Notifications</h1>
+            <Link 
+              to={`/dashboard/${id}`} 
+              className="text-gray-600 hover:text-gray-900"
+            >
+              Back to Dashboard
+            </Link>
+          </div>
+
           <div className="space-y-4">
             {notifications.length > 0 ? (
               notifications.map((notification, index) => (

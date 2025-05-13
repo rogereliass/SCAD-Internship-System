@@ -1363,7 +1363,7 @@ const PROStudentDashboard = () => {
             {/* Workshop Details Modal (Watch Recording) */}
             {selectedWorkshop && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                <Card className="w-full max-w-4xl max-h-[90vh] overflow-hidden">
+                <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
                   <CardHeader className="flex flex-row items-center justify-between border-b">
                     <div>
                       <CardTitle className="text-gray-900">{selectedWorkshop.title}</CardTitle>
@@ -1927,7 +1927,7 @@ const PROStudentDashboard = () => {
       {/* Live Workshop Popup */}
       {isLiveWorkshopOpen && liveWorkshop && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <Card className="w-full max-w-4xl max-h-[90vh] overflow-hidden">
+          <Card className="w-full max-w-4xl max-h-[100vh] overflow-hidden">
             <CardHeader className="flex flex-row items-center justify-between border-b">
               <div>
                 <CardTitle className="text-gray-900">{liveWorkshop.title}</CardTitle>
@@ -1964,7 +1964,7 @@ const PROStudentDashboard = () => {
                       <div key={index} className="flex items-center gap-2 text-sm">
                         <FileText className="h-4 w-4 text-gray-500" />
                         <span>{material}</span>
-                        <Button variant="ghost" size="sm">Download</Button>
+                        <Button variant="ghost" size="sm" onClick={() => toast.success('Download Started!')}>Download</Button>
                       </div>
                     ))}
                   </div>
