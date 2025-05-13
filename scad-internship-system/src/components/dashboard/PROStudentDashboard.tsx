@@ -460,6 +460,133 @@ const PROStudentDashboard = () => {
     upcomingAppointments: 1
   });
 
+  // Update quickActions state
+  const [quickActions] = useState([
+    {
+      id: 1,
+      title: 'Apply for Internship',
+      description: 'Browse and apply for available internships',
+      icon: <BriefcaseIcon className="h-5 w-5 text-scad-red" />,
+      action: () => {
+        setActiveTab('internships');
+        setTimeout(() => {
+          const element = document.getElementById('available-internships');
+          if (element) element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    },
+    {
+      id: 2,
+      title: 'Create Report',
+      description: 'Submit your internship report',
+      icon: <FileText className="h-5 w-5 text-blue-500" />,
+      action: () => {
+        setActiveTab('reports');
+        setReportsSubTab('reports');
+        setCreateReportData({ jobTitle: '', companyName: '' });
+      }
+    },
+    {
+      id: 3,
+      title: 'Book Appointment',
+      description: 'Schedule a meeting with SCAD Office',
+      icon: <Calendar className="h-5 w-5 text-green-500" />,
+      action: () => {
+        setActiveTab('appointments');
+        // Simulate clicking the "Manage Appointments" button
+        setTimeout(() => {
+          const manageAppointmentsButton = document.querySelector('[data-testid="manage-appointments-button"]');
+          if (manageAppointmentsButton instanceof HTMLElement) {
+            manageAppointmentsButton.click();
+          }
+        }, 100);
+      }
+    },
+    {
+      id: 4,
+      title: 'Upload Document',
+      description: 'Upload your CV, cover letter, or certificates',
+      icon: <Upload className="h-5 w-5 text-purple-500" />,
+      action: () => {
+        setActiveTab('profile');
+        setProfileEditMode(true);
+        // Scroll to the documents section and trigger file input
+        setTimeout(() => {
+          const documentsSection = document.querySelector('[data-testid="documents-section"]');
+          if (documentsSection instanceof HTMLElement) {
+            documentsSection.scrollIntoView({ behavior: 'smooth' });
+          }
+          // Trigger the file input click
+          const fileInput = document.querySelector('[data-testid="document-upload-input"]');
+          if (fileInput instanceof HTMLElement) {
+            fileInput.click();
+          }
+        }, 100);
+      }
+    },
+    {
+      id: 5,
+      title: 'Evaluate Company',
+      description: 'Submit company evaluation',
+      icon: <Star className="h-5 w-5 text-yellow-500" />,
+      action: () => {
+        setActiveTab('reports');
+        setReportsSubTab('evaluations');
+        // Simulate clicking the create evaluation button
+        setTimeout(() => {
+          const createEvaluationButton = document.querySelector('[data-testid="create-evaluation-button"]');
+          if (createEvaluationButton instanceof HTMLElement) {
+            createEvaluationButton.click();
+          }
+        }, 100);
+      }
+    },
+    {
+      id: 6,
+      title: 'Join Workshop',
+      description: 'Register for upcoming workshops',
+      icon: <GraduationCap className="h-5 w-5 text-blue-500" />,
+      action: () => {
+        setActiveTab('workshops');
+        // Scroll to the workshops section after a short delay to ensure the tab content is rendered
+        setTimeout(() => {
+          const workshopsSection = document.querySelector('[data-testid="workshops-grid"]');
+          if (workshopsSection instanceof HTMLElement) {
+            workshopsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 150); // Increased delay to ensure content is rendered
+      }
+    }
+  ]);
+
+  // Add PRO benefits data
+  const proBenefits = [
+    {
+      id: 1,
+      title: 'Priority Internship Access',
+      description: 'Get early access to new internship opportunities',
+      icon: <Star className="h-5 w-5 text-yellow-500" />
+    },
+    {
+      id: 2,
+      title: 'Exclusive Workshops',
+      description: 'Access to premium workshops and training sessions',
+      icon: <GraduationCap className="h-5 w-5 text-purple-500" />
+    },
+    {
+      id: 3,
+      title: 'Career Guidance',
+      description: 'Priority scheduling for career counseling sessions',
+      icon: <MessageSquare className="h-5 w-5 text-blue-500" />
+    },
+    {
+      id: 4,
+      title: 'Assessment Tools',
+      description: 'Access to advanced career assessment tools',
+      icon: <BarChart2 className="h-5 w-5 text-green-500" />
+    }
+  ];
+
   const proTabs = [
     { value: "overview", label: "Overview" },
     { value: "internships", label: "Internships" },
@@ -558,12 +685,13 @@ const PROStudentDashboard = () => {
     'E-finance',
   ];
 
-  const applicationStatusData = [
+  // Add new state for application status data
+  const [applicationStatusData] = useState([
     { name: 'Accepted', value: 2, color: '#22c55e' },
     { name: 'Rejected', value: 1, color: '#ef4444' },
     { name: 'Pending', value: 3, color: '#eab308' },
     { name: 'Finalized', value: 1, color: '#3b82f6' },
-  ];
+  ]);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -928,40 +1056,210 @@ const PROStudentDashboard = () => {
         className="mb-6"
       >
         <TabsContent value="overview">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Quick Actions Card */}
-            <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-scad-dark mb-4 flex items-center">
-                <BriefcaseIcon className="h-5 w-5 mr-2 text-scad-red" />
-                Quick Actions
-              </h2>
-              <div className="space-y-3">
-                {/* Quick actions will be added here */}
-                <p className="text-gray-500 text-sm">Quick actions coming soon...</p>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Left Column - Quick Actions */}
+            <div className="lg:col-span-4">
+              <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+                <h2 className="text-lg font-semibold text-scad-dark mb-4 flex items-center">
+                  <BriefcaseIcon className="h-5 w-5 mr-2 text-scad-red" />
+                  Quick Actions
+                </h2>
+                <div className="space-y-4">
+                  {quickActions.map((action) => (
+                    <button
+                      key={action.id}
+                      onClick={action.action}
+                      className="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-scad-red hover:bg-red-50 transition-colors group"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 bg-gray-50 rounded-lg group-hover:bg-white">
+                          {action.icon}
+                        </div>
+                        <div>
+                          <h3 className="font-medium text-gray-900 group-hover:text-scad-red">
+                            {action.title}
+                          </h3>
+                          <p className="text-sm text-gray-500">{action.description}</p>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* PRO Benefits Card */}
-            <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-scad-dark mb-4 flex items-center">
-                <GraduationCap className="h-5 w-5 mr-2 text-scad-red" />
-                PRO Benefits
-              </h2>
-              <div className="space-y-3">
-                {/* PRO benefits will be added here */}
-                <p className="text-gray-500 text-sm">PRO benefits coming soon...</p>
+            {/* Middle Column - Video and Chart */}
+            <div className="lg:col-span-4">
+              <div className="space-y-4">
+                {/* Welcome Video Card */}
+                <div className="bg-white rounded-md shadow-sm border border-gray-200 p-4">
+                  <h2 className="text-lg font-semibold text-scad-dark mb-3 flex items-center">
+                    <Video className="h-5 w-5 mr-2 text-scad-red" />
+                    Welcome Video
+                  </h2>
+                  <div className="flex justify-center items-center">
+                    <div className="aspect-[16/9] bg-black rounded-lg flex items-center justify-center relative w-full max-w-[280px] max-h-[160px]">
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Button 
+                          className="rounded-full w-12 h-12 bg-scad-red hover:bg-scad-red/90"
+                          onClick={() => toast.info('Video player coming soon!')}
+                        >
+                          <Play className="h-6 w-6 text-white" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2 text-center">
+                    Watch our welcome video to learn more about the SCAD Internship System
+                  </p>
+                </div>
+
+                {/* Application Status Card */}
+                <div className="bg-white rounded-md shadow-sm border border-gray-200 p-4">
+                  <h2 className="text-lg font-semibold text-scad-dark mb-3 flex items-center">
+                    <BarChart2 className="h-5 w-5 mr-2 text-scad-red" />
+                    Application Status
+                  </h2>
+                  <div className="h-[160px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={applicationStatusData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={45}
+                          outerRadius={60}
+                          paddingAngle={5}
+                          dataKey="value"
+                        >
+                          {applicationStatusData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 mt-3">
+                    {applicationStatusData.map((status, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <div 
+                          className="w-2 h-2 rounded-full" 
+                          style={{ backgroundColor: status.color }}
+                        />
+                        <span className="text-xs text-gray-600">{status.name}</span>
+                        <span className="text-xs font-medium ml-auto">{status.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Progress Overview Card */}
-            <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
-              <h2 className="text-lg font-semibold text-scad-dark mb-4 flex items-center">
-                <ClipboardCheck className="h-5 w-5 mr-2 text-scad-red" />
-                Progress Overview
-              </h2>
-              <div className="space-y-3">
-                {/* Progress overview will be added here */}
-                <p className="text-gray-500 text-sm">Progress overview coming soon...</p>
+            {/* Right Column - Profile Views */}
+            <div className="lg:col-span-4">
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex items-center mb-6">
+                  <div className="w-1 h-6 bg-scad-red rounded-full"></div>
+                  <h2 className="text-xl font-semibold text-gray-900 ml-2">Profile Views</h2>
+                </div>
+                <div className="space-y-4">
+                  {recommendedCompanies.slice(0, 3).map((company, index) => (
+                    <CompanyCard
+                      key={index}
+                      name={company.name}
+                      industry={company.industry}
+                      email={company.email}
+                      size={company.size}
+                      contactPerson={company.contactPerson}
+                      phone={company.phone}
+                      website={company.website}
+                      location={company.location}
+                      joinDate={company.joinDate}
+                      about={company.about}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Full Width - Upcoming Appointments */}
+            <div className="lg:col-span-12">
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-6 bg-scad-red rounded-full"></div>
+                    <h2 className="text-xl font-semibold text-gray-900">Upcoming Appointments</h2>
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="text-scad-red border-scad-red hover:bg-scad-red hover:text-white"
+                    onClick={() => setActiveTab('appointments')}
+                  >
+                    View All
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {mockAppointments.slice(0, 3).map((appointment) => (
+                    <Card key={appointment.id} className="hover:shadow-md transition-shadow">
+                      <CardHeader className="pb-2">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <CardTitle className="text-base">{appointment.reason}</CardTitle>
+                            <CardDescription>{appointment.studentName}</CardDescription>
+                          </div>
+                          <Badge
+                            className={appointment.status === 'confirmed' 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-yellow-100 text-yellow-800'
+                            }
+                          >
+                            {appointment.status}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <Calendar className="h-4 w-4" />
+                            <span>{appointment.date}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <Clock className="h-4 w-4" />
+                            <span>{appointment.time}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                      <CardFooter>
+                        {appointment.status === 'confirmed' ? (
+                          <Button 
+                            className="w-full bg-blue-600 hover:bg-blue-700"
+                            onClick={() => setActiveTab('appointments')}
+                          >
+                            <Video className="mr-2 h-4 w-4" />
+                            Join Call
+                          </Button>
+                        ) : (
+                          <div className="flex gap-2 w-full">
+                            <Button 
+                              variant="outline" 
+                              className="flex-1"
+                              onClick={() => handleAppointmentAction(appointment.id, 'reject')}
+                            >
+                              Reject
+                            </Button>
+                            <Button 
+                              className="flex-1 bg-green-600 hover:bg-green-700"
+                              onClick={() => handleAppointmentAction(appointment.id, 'accept')}
+                            >
+                              Accept
+                            </Button>
+                          </div>
+                        )}
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -1233,7 +1531,12 @@ const PROStudentDashboard = () => {
               </CardContent>
               <CardFooter>
                 <Link to="/appointments" className="w-full">
-                  <Button variant="default" size="sm" className="w-full">
+                  <Button 
+                    variant="default" 
+                    size="sm" 
+                    className="w-full"
+                    data-testid="manage-appointments-button"
+                  >
                     Manage Your Appointments
                   </Button>
                 </Link>
@@ -1289,7 +1592,7 @@ const PROStudentDashboard = () => {
               <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-6">
                 <div className="flex items-center gap-2">
                   <div className="w-1 h-6 bg-scad-red rounded-full"></div>
-                  <h2 className="text-xl font-semibold text-gray-900">Workshops & Assessments</h2>
+                  <h2 className="text-xl font-semibold text-gray-900">Workshops</h2>
                 </div>
                 <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
                   <div className="relative w-full md:w-64">
@@ -1317,7 +1620,10 @@ const PROStudentDashboard = () => {
               </div>
 
               {/* Workshops Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div 
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" 
+                data-testid="workshops-grid"
+              >
                 {filteredWorkshops.map(workshop => (
                   <Card key={workshop.id} className="hover:shadow-md transition-shadow">
                     <CardHeader>
@@ -1868,7 +2174,7 @@ const PROStudentDashboard = () => {
                     ))}
                   </ul>
                 </div>
-                <div>
+                <div data-testid="documents-section">
                   <h4 className="font-medium text-gray-900 mb-1">Documents</h4>
                   <ul className="list-disc ml-6 text-gray-700">
                     {profile.documents.map((doc, idx) => (
@@ -1948,11 +2254,35 @@ const PROStudentDashboard = () => {
                     ))}
                   </div>
                 </div>
-                <div>
+                <div data-testid="documents-section">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Upload Documents (CV, Cover Letter, Certificates)</label>
                   <div className="flex gap-2 mb-2">
-                    <input type="file" onChange={handleDocumentUpload} />
-                    <Button type="button" onClick={handleAddDocument} disabled={!newDocument}>Add</Button>
+                    <input 
+                      type="file" 
+                      onChange={handleDocumentUpload} 
+                      data-testid="document-upload-input"
+                      className="hidden" // Hide the actual input
+                    />
+                    <Button 
+                      type="button" 
+                      onClick={() => {
+                        const fileInput = document.querySelector('[data-testid="document-upload-input"]');
+                        if (fileInput instanceof HTMLElement) {
+                          fileInput.click();
+                        }
+                      }}
+                      className="flex items-center gap-2"
+                    >
+                      <Upload className="h-4 w-4" />
+                      Choose File
+                    </Button>
+                    <Button 
+                      type="button" 
+                      onClick={handleAddDocument} 
+                      disabled={!newDocument}
+                    >
+                      Add
+                    </Button>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {profile.documents.map((doc, idx) => (
