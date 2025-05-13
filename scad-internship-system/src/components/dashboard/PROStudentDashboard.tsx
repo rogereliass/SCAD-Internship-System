@@ -948,29 +948,31 @@ const PROStudentDashboard = () => {
 
             {/* Available Internships Section */}
             <div id="available-internships" className="bg-white rounded-lg shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-1 h-6 bg-scad-red rounded-full"></div>
-                <h2 className="text-xl font-semibold text-gray-900">Available Internships</h2>
-              </div>
-              <div className="flex justify-end items-center mb-6">
-                <div className="relative w-64">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
-                  <Input
-                    type="text"
-                    placeholder="Search internships..."
-                    className="pl-9 bg-white text-gray-900 border-gray-200 focus:border-scad-red focus:ring-scad-red/20"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-6 bg-scad-red rounded-full"></div>
+                  <h2 className="text-xl font-semibold text-gray-900">Available Internships</h2>
                 </div>
-                <Button
-                  variant="outline"
-                  className="flex items-center gap-2 bg-white text-gray-500 border-gray-200 hover:bg-gray-50 hover:text-gray-500 ml-2"
-                  onClick={() => setShowFilters(!showFilters)}
-                >
-                  <Filter className="h-4 w-4" />
-                  Filters
-                </Button>
+                <div className="flex items-center gap-2">
+                  <div className="relative w-64">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={16} />
+                    <Input
+                      type="text"
+                      placeholder="Search internships..."
+                      className="pl-9 bg-white text-gray-900 border-gray-200 focus:border-scad-red focus:ring-scad-red/20"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <Button
+                    variant="outline"
+                    className="flex items-center gap-2 bg-white text-gray-500 border-gray-200 hover:bg-gray-50 hover:text-gray-500"
+                    onClick={() => setShowFilters(!showFilters)}
+                  >
+                    <Filter className="h-4 w-4" />
+                    Filters
+                  </Button>
+                </div>
               </div>
 
               {showFilters && (
