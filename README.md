@@ -27,8 +27,16 @@ This web application was built as part of a university project to simulate an in
 
 - **React**
 - **JavaScript**
-- **CSS / Styled Components**
+- **CSS / TailwindCSS + ShadCN UI**
 - **Git & GitHub**
+
+## 📌 Notes
+
+- This project is a **frontend-only implementation** — no backend or database connection is included.
+- All data displayed is **mocked or hard-coded** for demonstration purposes.
+- Form submissions, navigation, and dialogs are designed to simulate real interactions using only client-side state.
+- Developed as part of a university Software Engineering course at GUC 🎓.
+
 
 ## 🚀 Getting Started
 
