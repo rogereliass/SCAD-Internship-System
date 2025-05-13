@@ -4,7 +4,7 @@ import TabsLayout from './../DashboardEssentials/TabsLayout';
 import { TabsContent } from '../ui/tabs';
 import ApplicationsTab from '../students/ApplicationsTab';
 import ApplicationDetails from '../students/ApplicationDetails';
-import { Search, Filter, FileText, Users, GraduationCap, PlusCircle, ClipboardCheck, ChevronRight, Video, Upload, BriefcaseIcon, Calendar, BookOpen, Star, MessageSquare, Play, Pause, Square, Download, ThumbsUp, MessageCircle, X, Send, CheckCircle2, Clock, BarChart2, Share2, Lock, AlertCircle } from 'lucide-react';
+import { Search, Filter, FileText, Users, GraduationCap, PlusCircle, ClipboardCheck, ChevronRight, Video, Upload, BriefcaseIcon, Calendar, BookOpen, Star, MessageSquare, Play, Pause, Square, Download, ThumbsUp, MessageCircle, X, Send, CheckCircle2, Clock, BarChart2, Share2, Lock, AlertCircle, PhoneOff } from 'lucide-react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
@@ -31,27 +31,75 @@ import { Label } from '../ui/label';
 const mockNotifications = [
   {
     id: 1,
-    title: 'New Workshop Available',
-    description: 'Advanced Interview Preparation Workshop is now open for registration.',
+    title: 'New Internship Cycle',
+    description: 'The Summer 2024 internship cycle is now open! Start applying for positions.',
     time: '2 hours ago',
-    type: 'workshop' as const,
-    read: false
+    type: 'company' as const,
+    read: false,
+    icon: <BriefcaseIcon className="h-5 w-5 text-scad-red" />
   },
   {
     id: 2,
-    title: 'Career Readiness Report',
-    description: 'Your Career Readiness Assessment report is now available.',
+    title: 'Upcoming Internship Cycle',
+    description: 'The Fall 2024 internship cycle will begin in 2 weeks. Prepare your applications!',
     time: '1 day ago',
-    type: 'report' as const,
-    read: false
+    type: 'company' as const,
+    read: false,
+    icon: <Calendar className="h-5 w-5 text-blue-500" />
   },
   {
     id: 3,
-    title: 'Appointment Confirmed',
-    description: 'Your career counseling session with Dr. Smith is confirmed for tomorrow.',
+    title: 'Internship Report Status Update',
+    description: 'Your internship report for TechCorp has been reviewed and approved by the SCAD Office.',
     time: '2 days ago',
+    type: 'report' as const,
+    read: false,
+    icon: <FileText className="h-5 w-5 text-green-500" />
+  },
+  {
+    id: 4,
+    title: 'Appointment Accepted',
+    description: 'Your appointment with Dr. Sarah Johnson has been accepted for tomorrow at 10:00 AM.',
+    time: '3 hours ago',
     type: 'appointment' as const,
-    read: true
+    read: false,
+    icon: <CheckCircle2 className="h-5 w-5 text-green-500" />
+  },
+  {
+    id: 5,
+    title: 'Call Ended',
+    description: 'Dr. Sarah Johnson has left the call.',
+    time: '5 minutes ago',
+    type: 'appointment' as const,
+    read: true,
+    icon: <PhoneOff className="h-5 w-5 text-gray-500" />
+  },
+  {
+    id: 6,
+    title: 'Upcoming Workshop Reminder',
+    description: 'Your registered workshop "Advanced Interview Techniques" starts in 30 minutes.',
+    time: '30 minutes ago',
+    type: 'workshop' as const,
+    read: false,
+    icon: <GraduationCap className="h-5 w-5 text-purple-500" />
+  },
+  {
+    id: 7,
+    title: 'New Workshop Message',
+    description: 'Ahmed: "Great question about the interview process!"',
+    time: '15 minutes ago',
+    type: 'workshop' as const,
+    read: false,
+    icon: <MessageSquare className="h-5 w-5 text-blue-500" />
+  },
+  {
+    id: 8,
+    title: 'Workshop Registration Confirmed',
+    description: 'You have successfully registered for "Resume Writing Masterclass" on March 20.',
+    time: '1 day ago',
+    type: 'workshop' as const,
+    read: true,
+    icon: <ClipboardCheck className="h-5 w-5 text-green-500" />
   }
 ];
 
