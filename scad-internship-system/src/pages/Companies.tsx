@@ -86,7 +86,7 @@ const companies = [
 ];
 
 const industries = ['All Industries', 'Information Technology', 'Design', 'Finance', 'Environmental', 'Media'];
-const companySizes = ['All Sizes', 'Small (10-49)', 'Medium (50-250)', 'Large (250+)'];
+const companySizes = ['All Sizes', 'Small (1-50)', 'Medium (51-250)', 'Large (250+)'];
 
 const Companies = () => {
   const [searchTerm, setSearchTerm] = useState('');

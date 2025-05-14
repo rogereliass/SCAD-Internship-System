@@ -54,22 +54,34 @@ const Notifications = () => {
       ],
       company: [
         {
-          title: 'New Application',
-          message: 'Jessica Lee applied for Frontend Developer position',
+          title: 'Interview Scheduling Required',
+          message: 'New applicant Jessica Lee has been shortlisted for the Frontend Developer position. Please schedule an interview.',
           timestamp: '2 hours ago',
           type: 'info'
         },
         {
-          title: 'Report Submitted',
-          message: 'Alex Martinez submitted their monthly report',
+          title: 'New Application Received',
+          message: 'Mohammed Al-Harthy has applied for the UX/UI Designer position. Review their application in the Applicants tab.',
           timestamp: '1 day ago',
+          type: 'info'
+        },
+        {
+          title: 'Evaluation Required',
+          message: 'Alex Martinez is approaching the end of their internship period. Please complete their performance evaluation by November 30.',
+          timestamp: '2 days ago',
           type: 'warning'
         },
         {
-          title: 'Meeting Scheduled',
-          message: 'SCAD Office requested a meeting on Nov 25',
-          timestamp: '2 days ago',
-          type: 'info'
+          title: 'Internship Cycle Reminder',
+          message: 'The Winter 2024 internship cycle begins next week. Update your job postings accordingly.',
+          timestamp: '4 days ago',
+          type: 'success'
+        },
+        {
+          title: 'Company Application Approved',
+          message: 'SCAD has officially approved your company registration. You can now post internship opportunities.',
+          timestamp: '3 weeks ago',
+          type: 'success'
         }
       ],
       scadOffice: [
