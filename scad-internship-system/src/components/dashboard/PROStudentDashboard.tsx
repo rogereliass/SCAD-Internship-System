@@ -26,6 +26,7 @@ import { Progress } from '../ui/progress';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../ui/dialog';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Label } from '../ui/label';
+import StudentProfilePicture from '../assets/StudentProfilePicture.jpg';
 
 // Mock notifications data
 const mockNotifications = [
@@ -2201,13 +2202,21 @@ const PROStudentDashboard = () => {
             <h2 className="text-xl font-semibold mb-4">Profile</h2>
             {!profileEditMode ? (
               <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900">{profile.name}</h3>
-                    <p className="text-gray-600">{profile.email} | {profile.phone}</p>
-                    <p className="text-gray-600">Major: {profile.major}</p>
+                <div className="flex items-start gap-8">
+                  <img 
+                    src={StudentProfilePicture}
+                    alt={profile.name}
+                    className="max-h-60 border-2 border-gray-200"
+                  />
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{profile.name}</h3>
+                    <p className="text-gray-600 text-lg mb-1">{profile.email}</p>
+                    <p className="text-gray-600 text-lg mb-1">{profile.phone}</p>
+                    <p className="text-gray-600 text-lg">Major: {profile.major}</p>
                   </div>
-                  <Button onClick={handleEditProfile} className="bg-scad-red text-white">Edit Profile</Button>
+                  <div className="ml-auto">
+                    <Button onClick={handleEditProfile} className="bg-scad-red text-white">Edit Profile</Button>
+                  </div>
                 </div>
                 <div>
                   <h4 className="font-medium text-gray-900 mb-1">Job Interests</h4>
