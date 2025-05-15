@@ -459,6 +459,7 @@ const PROStudentDashboard = () => {
     assessmentsCompleted: 2,
     upcomingAppointments: 1
   });
+  const [tempProfile, setTempProfile] = useState(profile); // Add temporary profile state
 
   // Update quickActions state
   const [quickActions] = useState([
@@ -718,40 +719,52 @@ const PROStudentDashboard = () => {
 
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setProfile(prev => ({ ...prev, [name]: value }));
+    setTempProfile(prev => ({ ...prev, [name]: value }));
+    
+    // Update student state when major changes
+    if (name === 'major') {
+      const majorParts = value.split(' ');
+      const major = majorParts.slice(0, -2).join(' '); // Get all parts except last two (semester and "Semester")
+      const semesterNumber = parseInt(majorParts[majorParts.length - 2]); // Get the number before "Semester"
+      setStudent(prev => ({ 
+        ...prev, 
+        major: major,
+        semester: semesterNumber
+      }));
+    }
   };
 
   const handleAddJobInterest = () => {
     if (newJobInterest.trim()) {
-      setProfile(prev => ({ ...prev, jobInterests: [...prev.jobInterests, newJobInterest.trim()] }));
+      setTempProfile(prev => ({ ...prev, jobInterests: [...prev.jobInterests, newJobInterest.trim()] }));
       setNewJobInterest('');
     }
   };
 
   const handleRemoveJobInterest = (index: number) => {
-    setProfile(prev => ({ ...prev, jobInterests: prev.jobInterests.filter((_, i) => i !== index) }));
+    setTempProfile(prev => ({ ...prev, jobInterests: prev.jobInterests.filter((_, i) => i !== index) }));
   };
 
   const handleAddActivity = () => {
     if (newActivity.trim()) {
-      setProfile(prev => ({ ...prev, collegeActivities: [...prev.collegeActivities, newActivity.trim()] }));
+      setTempProfile(prev => ({ ...prev, collegeActivities: [...prev.collegeActivities, newActivity.trim()] }));
       setNewActivity('');
     }
   };
 
   const handleRemoveActivity = (index: number) => {
-    setProfile(prev => ({ ...prev, collegeActivities: prev.collegeActivities.filter((_, i) => i !== index) }));
+    setTempProfile(prev => ({ ...prev, collegeActivities: prev.collegeActivities.filter((_, i) => i !== index) }));
   };
 
   const handleAddJob = () => {
     if (newJob.jobTitle && newJob.company && newJob.duration) {
-      setProfile(prev => ({ ...prev, previousJobs: [...prev.previousJobs, newJob] }));
+      setTempProfile(prev => ({ ...prev, previousJobs: [...prev.previousJobs, newJob] }));
       setNewJob({ jobTitle: '', company: '', duration: '' });
     }
   };
 
   const handleRemoveJob = (index: number) => {
-    setProfile(prev => ({ ...prev, previousJobs: prev.previousJobs.filter((_, i) => i !== index) }));
+    setTempProfile(prev => ({ ...prev, previousJobs: prev.previousJobs.filter((_, i) => i !== index) }));
   };
 
   const handleDocumentUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -764,7 +777,7 @@ const PROStudentDashboard = () => {
   const handleAddDocument = () => {
     if (newDocument) {
       const url = URL.createObjectURL(newDocument);
-      setProfile(prev => ({ ...prev, documents: [...prev.documents, { name: newDocument.name, url }] }));
+      setTempProfile(prev => ({ ...prev, documents: [...prev.documents, { name: newDocument.name, url }] }));
       setNewDocument(null);
     }
   };
@@ -1030,6 +1043,52 @@ const PROStudentDashboard = () => {
 
     return matchesSearch && matchesFilter;
   });
+
+  const handleEditProfile = () => {
+    setTempProfile(profile); // Initialize tempProfile with current profile
+    setProfileEditMode(true);
+  };
+
+  const handleCancelEdit = () => {
+    setTempProfile(profile); // Reset tempProfile to original profile
+    // Reset student state to match original profile
+    const majorParts = profile.major.split(' ');
+    const major = majorParts.slice(0, -2).join(' '); // Get all parts except last two (semester and "Semester")
+    const semesterNumber = parseInt(majorParts[majorParts.length - 2]); // Get the number before "Semester"
+    setStudent(prev => ({
+      ...prev,
+      name: profile.name,
+      major: major,
+      semester: semesterNumber
+    }));
+    setProfileEditMode(false);
+    setNewJobInterest('');
+    setNewActivity('');
+    setNewJob({ jobTitle: '', company: '', duration: '' });
+    setNewDocument(null);
+  };
+
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    setProfile(tempProfile); // Save tempProfile to actual profile
+    
+    // Update student state to match the new profile
+    const majorParts = tempProfile.major.split(' ');
+    const major = majorParts.slice(0, -2).join(' '); // Get all parts except last two (semester and "Semester")
+    const semesterNumber = parseInt(majorParts[majorParts.length - 2]); // Get the number before "Semester"
+    setStudent(prev => ({
+      ...prev,
+      name: tempProfile.name,
+      major: major,
+      semester: semesterNumber
+    }));
+    
+    setProfileEditMode(false);
+    setNewJobInterest('');
+    setNewActivity('');
+    setNewJob({ jobTitle: '', company: '', duration: '' });
+    setNewDocument(null);
+  };
 
   return (
     <div className="p-6">
@@ -2148,7 +2207,7 @@ const PROStudentDashboard = () => {
                     <p className="text-gray-600">{profile.email} | {profile.phone}</p>
                     <p className="text-gray-600">Major: {profile.major}</p>
                   </div>
-                  <Button onClick={() => setProfileEditMode(true)} className="bg-scad-red text-white">Edit Profile</Button>
+                  <Button onClick={handleEditProfile} className="bg-scad-red text-white">Edit Profile</Button>
                 </div>
                 <div>
                   <h4 className="font-medium text-gray-900 mb-1">Job Interests</h4>
@@ -2184,23 +2243,23 @@ const PROStudentDashboard = () => {
                 </div>
               </div>
             ) : (
-              <form className="space-y-6" onSubmit={e => { e.preventDefault(); setProfileEditMode(false); }}>
+              <form className="space-y-6" onSubmit={handleSaveProfile}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                    <input type="text" name="name" value={profile.name} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900" />
+                    <input type="text" name="name" value={tempProfile.name} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input type="email" name="email" value={profile.email} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900" />
+                    <input type="email" name="email" value={tempProfile.email} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                    <input type="text" name="phone" value={profile.phone} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900" />
+                    <input type="text" name="phone" value={tempProfile.phone} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Major & Semester</label>
-                    <select name="major" value={profile.major} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900">
+                    <select name="major" value={tempProfile.major} onChange={handleProfileChange} className="w-full border rounded px-3 py-2 text-gray-900">
                       {majorsList.map((major, idx) => (
                         <option key={idx} value={major}>{major}</option>
                       ))}
@@ -2214,7 +2273,7 @@ const PROStudentDashboard = () => {
                     <Button type="button" onClick={handleAddJobInterest}>Add</Button>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {profile.jobInterests.map((interest, idx) => (
+                    {tempProfile.jobInterests.map((interest, idx) => (
                       <span key={idx} className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-1">
                         {interest}
                         <button type="button" onClick={() => handleRemoveJobInterest(idx)} className="text-red-500 ml-1">&times;</button>
@@ -2231,7 +2290,7 @@ const PROStudentDashboard = () => {
                   </div>
                   <Button type="button" onClick={handleAddJob}>Add</Button>
                   <div className="flex flex-wrap gap-2 mt-2">
-                    {profile.previousJobs.map((job, idx) => (
+                    {tempProfile.previousJobs.map((job, idx) => (
                       <span key={idx} className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-1">
                         {job.jobTitle} at {job.company} ({job.duration})
                         <button type="button" onClick={() => handleRemoveJob(idx)} className="text-red-500 ml-1">&times;</button>
@@ -2246,7 +2305,7 @@ const PROStudentDashboard = () => {
                     <Button type="button" onClick={handleAddActivity}>Add</Button>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {profile.collegeActivities.map((act, idx) => (
+                    {tempProfile.collegeActivities.map((act, idx) => (
                       <span key={idx} className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-1">
                         {act}
                         <button type="button" onClick={() => handleRemoveActivity(idx)} className="text-red-500 ml-1">&times;</button>
@@ -2285,7 +2344,7 @@ const PROStudentDashboard = () => {
                     </Button>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {profile.documents.map((doc, idx) => (
+                    {tempProfile.documents.map((doc, idx) => (
                       <span key={idx} className="bg-gray-200 px-3 py-1 rounded-full flex items-center gap-1">
                         <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-scad-red underline">{doc.name}</a>
                       </span>
@@ -2294,7 +2353,7 @@ const PROStudentDashboard = () => {
                 </div>
                 <div className="flex gap-2 mt-4">
                   <Button type="submit" className="bg-scad-red text-white">Save</Button>
-                  <Button type="button" variant="outline" onClick={() => setProfileEditMode(false)}>Cancel</Button>
+                  <Button type="button" variant="outline" onClick={handleCancelEdit}>Cancel</Button>
                 </div>
               </form>
             )}
