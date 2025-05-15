@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { Building2, Mail, Briefcase, Phone, Globe, MapPin, Calendar, X, User, Users } from 'lucide-react';
+import { Building2, Mail, Briefcase, Phone, Globe, MapPin, Calendar, X, User } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent } from '../ui/dialog';
 import { Badge } from '../ui/badge';
+
+// Import company logos
+import TechCorpLogo from '../assets/TechCorpLogo.png';
+import DesignHubLogo from '../assets/DesignHubLogo.jpg';
+import DataSystemsLogo from '../assets/DataSystemsLogo.png';
 
 interface CompanyCardProps {
   name: string;
@@ -31,6 +36,20 @@ const CompanyCard: React.FC<CompanyCardProps> = ({
 }) => {
   const [showDetails, setShowDetails] = useState(false);
 
+  // Function to get the appropriate logo based on company name
+  const getCompanyLogo = (companyName: string) => {
+    switch (companyName.toLowerCase()) {
+      case 'techcorp':
+        return TechCorpLogo;
+      case 'designhub':
+        return DesignHubLogo;
+      case 'datasystems':
+        return DataSystemsLogo;
+      default:
+        return null;
+    }
+  };
+
   const getCompanySizeText = (size: string): string => {
     switch (size) {
       case 'small': return 'Small (≤ 50 employees)';
@@ -41,33 +60,55 @@ const CompanyCard: React.FC<CompanyCardProps> = ({
     }
   };
 
+  const companyLogo = getCompanyLogo(name);
+
   return (
     <>
-      <div className="border rounded-lg p-4 hover:border-scad-red transition-colors bg-gradient-to-br from-white to-gray-50 group">
-        <div className="space-y-3">
-          <div className="flex items-start justify-between">
+      <div className="border rounded-lg p-3 hover:border-scad-red transition-colors bg-white group">
+        <div className="space-y-2">
+          <div className="flex items-start">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-scad-red/10 rounded-lg group-hover:bg-scad-red/20 transition-colors">
-                <Building2 className="h-5 w-5 text-scad-red" />
+              <div className="p-1.5 bg-white rounded-lg group-hover:bg-gray-50 transition-colors">
+                {companyLogo ? (
+                  <img 
+                    src={companyLogo} 
+                    alt={`${name} logo`} 
+                    className="h-7 w-7 object-contain"
+                  />
+                ) : (
+                  <Building2 className="h-7 w-7 text-scad-red" />
+                )}
               </div>
-              <div>
-                <h3 className="font-medium text-gray-900 group-hover:text-scad-red transition-colors">{name}</h3>
-                <div className="flex items-center text-gray-600 text-sm mt-1">
-                  <Briefcase className="h-3 w-3 mr-1" />
-                  <span>{industry}</span>
+              <div className="space-y-1.5">
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900 group-hover:text-scad-red transition-colors">{name}</h3>
+                  <div className="flex items-center text-gray-500 text-xs mt-0.5 gap-1.5">
+                    <div className="flex items-center">
+                      <Briefcase className="h-3 w-3 mr-1" />
+                      <span>{industry}</span>
+                    </div>
+                    {location && (
+                      <>
+                        <span className="text-gray-200">•</span>
+                        <div className="flex items-center">
+                          <MapPin className="h-3 w-3 mr-1" />
+                          <span>{location}</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center text-gray-500 text-xs">
+                  <Mail className="h-3 w-3 mr-1" />
+                  <span className="truncate">{email}</span>
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="flex items-center text-gray-500 text-sm">
-            <Mail className="h-3 w-3 mr-1" />
-            <span className="truncate">{email}</span>
-          </div>
-
           <Button 
             variant="ghost" 
-            className="w-full text-scad-red hover:text-scad-red/80 hover:bg-scad-red/5"
+            className="w-full text-xs text-scad-red hover:text-scad-red/80 hover:bg-scad-red/5 h-7"
             onClick={() => setShowDetails(true)}
           >
             View Details
