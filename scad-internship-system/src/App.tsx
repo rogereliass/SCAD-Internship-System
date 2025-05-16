@@ -28,6 +28,11 @@ import Notifications from './pages/Notifications';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import CompaniesEvaluations from '@/pages/CompaniesEvaluations';
+import Resources from './pages/Resources';
+import FAQs from './pages/FAQs';
+import PostInternship from './pages/PostInternship';
+import FindTalent from './pages/FindTalent';
+import Partnerships from './pages/Partnerships';
 import { ReportsProvider } from './contexts/ReportsContext';
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -66,6 +71,11 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/notifications/:id" element={<Notifications />} />
             <Route path="/companies-evaluations" element={<CompaniesEvaluations />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/faqs" element={<FAQs />} />
+            <Route path="/post-internship" element={<PostInternship />} />
+            <Route path="/find-talent" element={<FindTalent />} />
+            <Route path="/partnerships" element={<Partnerships />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
