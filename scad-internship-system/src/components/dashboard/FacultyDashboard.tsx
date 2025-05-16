@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, FileText, Download, BriefcaseIcon, ClipboardCheck, ChevronRight } from 'lucide-react';
+import { Bell, FileText, Download, BriefcaseIcon, ClipboardCheck, ChevronRight, BarChart2 } from 'lucide-react';
 import { toast } from 'sonner';
 import NotificationsButton from './../DashboardEssentials/NotificationsButton';
 import TabsLayout from './../DashboardEssentials/TabsLayout';
@@ -138,7 +138,7 @@ const FacultyDashboard = () => {
         <TabsContent value="overview">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Quick Actions Card */}
-            <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-md shadow-sm border border-gray-200 p-6 min-h-100">
               <h2 className="text-lg font-semibold text-scad-dark mb-4 flex items-center">
                 <BriefcaseIcon className="h-5 w-5 mr-2 text-scad-red" />
                 Quick Actions
@@ -169,12 +169,24 @@ const FacultyDashboard = () => {
                     <p className="text-sm text-gray-500">Access company performance metrics</p>
                   </div>
                 </button>
+                <button 
+                  onClick={() => setActiveTab('statistics')}
+                  className="flex items-center w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-md transition-colors border border-gray-100"
+                >
+                  <div className="w-8 h-8 rounded-full bg-green-500 bg-opacity-10 flex items-center justify-center mr-3">
+                    <BarChart2 className="h-4 w-4 text-green-500" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-scad-dark">View Statistics</p>
+                    <p className="text-sm text-gray-500">Analyze internship and company data</p>
+                  </div>
+                </button>
               </div>
             </div>
 
             {/* Statistics Overview */}
             <div className="lg:col-span-2">
-              <Card>
+              <Card className="min-h-80">                
                 <CardHeader>
                   <CardTitle>Statistics Overview</CardTitle>
                   <CardDescription>Key metrics and performance indicators</CardDescription>
@@ -191,7 +203,7 @@ const FacultyDashboard = () => {
                         <p className="text-2xl font-bold">{mockStatistics.averageReviewTime}</p>
                       </div>
                     </div>
-                    <div className="h-[200px]">
+                    <div className="h-[215px]">
                       <ResponsiveContainer width="100%" height="100%">
                         <RechartPieChart>
                           <Pie
