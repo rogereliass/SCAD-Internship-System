@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 
 interface LoginFormProps {
   redirected?: string | null;
+  redirectTo?: string | null;
 }
 
-const LoginForm = ({ redirected }: LoginFormProps) => {
+const LoginForm = ({ redirected, redirectTo }: LoginFormProps) => {
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -24,17 +26,17 @@ const LoginForm = ({ redirected }: LoginFormProps) => {
       
       // Demo credentials for different user types
       if ( email === 'student@example.com' && password === 'password') {
-        navigate('/dashboard/1');
+        navigate(redirectTo || '/dashboard/1');
       } else if ( email === 'company@example.com' && password === 'password') {
-        navigate('/dashboard/2');
+        navigate(redirectTo || '/dashboard/2');
       } else if ( email === 'scad@example.com' && password === 'password') {
-        navigate('/dashboard/3');
+        navigate(redirectTo || '/dashboard/3');
       } else if (email === 'faculty@example.com' && password === 'password') {
-        navigate('/dashboard/4');
+        navigate(redirectTo || '/dashboard/4');
       } else if (email === 'companypending@example.com' && password === 'password') {
         navigate('/company-pending');
       } else if (email === 'prostudent@example.com' && password === 'password') {
-        navigate('/dashboard/5');
+        navigate(redirectTo || '/dashboard/5');
       } 
       else {
         setError('Invalid credentials. Please try again.');

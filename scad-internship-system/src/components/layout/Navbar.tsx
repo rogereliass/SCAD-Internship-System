@@ -74,6 +74,11 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
                     <Link to="/internship-reports" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Reports</Link>
                   </>
                 )}
+                {userType === 'faculty' && (
+                  <>
+                    <Link to="/dashboard/4" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Dashboard</Link>
+                  </>
+                )}
                 <Link to="/" className="btn btn-primary font-bold">Logout</Link>
               </>
             )}
