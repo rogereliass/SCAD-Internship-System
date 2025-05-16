@@ -180,9 +180,7 @@ const Internships = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Available Internships</h1>
-          <Link to={`/dashboard/${id}`} className="text-gray-600 hover:text-gray-900">
-            Back to Dashboard
-          </Link>
+          
         </div>
 
         {/* Search and Filter Bar */}

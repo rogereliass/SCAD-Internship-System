@@ -109,10 +109,7 @@ const Companies = () => {
       
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl text-black font-bold">Registered Companies</h1>
-        <Button>
-          <Plus size={16} className="mr-2" />
-          Add Company
-        </Button>
+        
       </div>
 
       <Card className="mb-6">
