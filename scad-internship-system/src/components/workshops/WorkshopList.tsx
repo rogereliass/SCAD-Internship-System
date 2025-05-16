@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Calendar, Clock, User, Search } from 'lucide-react';
 import { format } from 'date-fns';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 
 // Mock workshop data
 const mockWorkshops = [
@@ -68,6 +68,8 @@ const mockWorkshops = [
 const WorkshopList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [workshops, setWorkshops] = useState(mockWorkshops);
+  const [selectedWorkshop, setSelectedWorkshop] = useState<typeof mockWorkshops[0] | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   const filteredWorkshops = workshops.filter(workshop => 
     workshop.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -78,6 +80,12 @@ const WorkshopList = () => {
   const handleRegister = (workshopId: string) => {
     console.log(`Registered for workshop: ${workshopId}`);
     // In a real app, we would call an API to register the user
+    setIsDialogOpen(false);
+  };
+  
+  const handleViewDetails = (workshop: typeof mockWorkshops[0]) => {
+    setSelectedWorkshop(workshop);
+    setIsDialogOpen(true);
   };
   
   return (
@@ -133,7 +141,7 @@ const WorkshopList = () => {
                 <Button 
                   variant="default" 
                   className='mt-3'
-                  onClick={() => handleRegister(workshop.id)}
+                  onClick={() => handleViewDetails(workshop)}
                 >
                   View Details & Register
                 </Button>
@@ -142,6 +150,79 @@ const WorkshopList = () => {
           ))}
         </div>
       )}
+
+      {/* Workshop Details Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-3xl">
+          {selectedWorkshop && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold">{selectedWorkshop.title}</DialogTitle>
+                <DialogDescription className="text-base mt-2">
+                  {selectedWorkshop.shortDescription}
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="py-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">Workshop Details</h3>
+                    <div className="space-y-3">
+                      <div className="flex items-center">
+                        <Calendar size={18} className="mr-2 text-gray-600" />
+                        <span className="text-gray-700">
+                          {format(selectedWorkshop.startDate, 'PPP')}
+                        </span>
+                      </div>
+                      <div className="flex items-center">
+                        <Clock size={18} className="mr-2 text-gray-600" />
+                        <span className="text-gray-700">
+                          {format(selectedWorkshop.startDate, 'p')} - {format(selectedWorkshop.endDate, 'p')}
+                        </span>
+                      </div>
+                      <div className="mt-4">
+                        <h4 className="font-medium mb-2">Agenda:</h4>
+                        <ul className="list-disc list-inside space-y-1">
+                          {selectedWorkshop.agenda.map((item, index) => (
+                            <li key={index} className="text-gray-700">{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">Speaker</h3>
+                    <div className="flex items-start">
+                      <div className="bg-gray-200 w-12 h-12 rounded-full mr-3 flex-shrink-0"></div>
+                      <div>
+                        <h4 className="font-medium">{selectedWorkshop.speaker.name}</h4>
+                        <p className="text-sm text-gray-600 mt-1">{selectedWorkshop.speaker.bio}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDialogOpen(false)}
+                  className="mr-2"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  variant="default"
+                  onClick={() => handleRegister(selectedWorkshop.id)}
+                >
+                  Register for Workshop
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
