@@ -355,7 +355,7 @@ const InternTab: React.FC<InternTabProps> = ({ interns = [], onTabChange }) => {
                     {evaluationStatus.actionable ? (
                       <button
                         onClick={() => handleEvaluationBadgeClick(intern)}
-                        className={`text-xs flex items-center rounded-full px-2.5 py-1 font-medium transition-colors ${evaluationStatus.color} border border-transparent`}
+                        className={`text-xs flex items-center rounded-full px-2.5 py-1 font-medium transition-colors ${evaluationStatus.color} border border-transparent underline`}
                         title={evaluationStatus.action === 'create' ? "Click to create evaluation" : "Click to view evaluation"}
                       >
                         {evaluationStatus.icon}
