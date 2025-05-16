@@ -9,7 +9,7 @@ const DemoControls: React.FC<DemoControlsProps> = ({ currentId }) => {
   
   return (
     <div className="mt-10 border-t pt-6">
-      <div className="max-w-md mx-auto">
+      {/* <div className="max-w-md mx-auto">
         <h3 className="text-sm font-medium text-gray-500 mb-3">Demo Controls - Switch Dashboard</h3>
         <div className="flex space-x-4">
           <button 
@@ -43,7 +43,7 @@ const DemoControls: React.FC<DemoControlsProps> = ({ currentId }) => {
             PRO Student
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -128,7 +128,7 @@ const LoginForm = ({ redirected }: LoginFormProps) => {
         </p>
       </div>
 
-      <div className="mt-8 border-t pt-6">
+      {/* <div className="mt-8 border-t pt-6">
         <p className="text-sm text-gray-500 text-center mb-4">Demo Accounts:</p>
         <div className="grid grid-cols-1 gap-3 text-xs text-gray-600">
           <div className="p-2 bg-gray-50 rounded">
@@ -150,7 +150,7 @@ const LoginForm = ({ redirected }: LoginFormProps) => {
             <p><strong>Faculty:</strong> faculty@example.com / password</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
