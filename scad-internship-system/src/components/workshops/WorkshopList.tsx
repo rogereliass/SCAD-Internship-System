@@ -143,7 +143,7 @@ const WorkshopList = () => {
                   className='mt-3'
                   onClick={() => handleViewDetails(workshop)}
                 >
-                  View Details & Register
+                  View Details
                 </Button>
               </CardFooter>
             </Card>
@@ -210,14 +210,9 @@ const WorkshopList = () => {
                   onClick={() => setIsDialogOpen(false)}
                   className="mr-2"
                 >
-                  Cancel
+                  Close
                 </Button>
-                <Button 
-                  variant="default"
-                  onClick={() => handleRegister(selectedWorkshop.id)}
-                >
-                  Register for Workshop
-                </Button>
+                
               </DialogFooter>
             </>
           )}

@@ -245,11 +245,8 @@ const Students = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Students Management</h1>
           <div className="flex items-center gap-3">
-            <Link
-              to="/dashboard/3"
-              className="inline-block px-4 py-2 rounded-md border border-gray-500 bg-white text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors duration-200"
-            >
-              Back to Dashboard
+            <Link to="/students/add">
+              <Button variant="default">Add Student</Button>
             </Link>
             <Button 
               variant="outline" 
@@ -264,7 +261,7 @@ const Students = () => {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <Card>
+          <Card className='border-l-4 border-l-blue-400'>
             <CardContent className="pt-6">
               <div className="flex justify-between items-center">
                 <p className="text-lg font-medium text-gray-500">Total Students</p>
@@ -273,7 +270,7 @@ const Students = () => {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card  className='border-l-4 border-l-orange-400'>
             <CardContent className="pt-6">
               <div className="flex justify-between items-center">
                 <p className="text-lg font-medium text-gray-500">Active Internships</p>
@@ -284,7 +281,7 @@ const Students = () => {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card  className='border-l-4 border-l-green-400'>
             <CardContent className="pt-6">
               <div className="flex justify-between items-center">
                 <p className="text-lg font-medium text-gray-500">Completed</p>
@@ -295,7 +292,7 @@ const Students = () => {
             </CardContent>
           </Card>
           
-          <Card>
+          <Card  className='border-l-4 border-l-red-400'>
             <CardContent className="pt-6">
               <div className="flex justify-between items-center">
                 <p className="text-lg font-medium text-gray-500">Still Searching</p>

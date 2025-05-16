@@ -176,12 +176,7 @@ const CompanyApplications = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Company Applications</h1>
-          <Link
-            to="/dashboard/3"
-            className="inline-block px-4 py-2 rounded-md border border-gray-500 bg-white text-gray-600 hover:bg-gray-100 hover:text-gray-800 transition-colors duration-200"
-          >
-            Back to Dashboard
-          </Link>
+          
         </div>
 
         {/* Search and Filter Bar */}

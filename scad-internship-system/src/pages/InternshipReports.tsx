@@ -166,12 +166,7 @@ const InternshipReports = () => {
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Internship Reports</h1>
-          <Button 
-            onClick={handleBack}
-            variant="outline"
-          >
-            Back to Dashboard
-          </Button>
+          
         </div>
 
         {/* Summary Cards */}
