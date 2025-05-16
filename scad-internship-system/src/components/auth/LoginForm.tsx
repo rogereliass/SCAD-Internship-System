@@ -1,8 +1,11 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
+interface LoginFormProps {
+  redirected?: string | null;
+}
+
+const LoginForm = ({ redirected }: LoginFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -43,6 +46,13 @@ const LoginForm = () => {
     <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold text-center text-scad-dark mb-6">Login to SCAD Intern Compass</h2>
       
+      {/* Show redirect message */}
+      {redirected && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 text-sm">
+          <strong>Authentication required:</strong> You must log in before performing this action.
+        </div>
+      )}
+      
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4 text-sm">
           {error}
@@ -50,33 +60,31 @@ const LoginForm = () => {
       )}
       
       <form onSubmit={handleSubmit} className="space-y-6">
-       
-        
-      <div>
-  <label htmlFor="email" className="text-black block mb-1 font-medium">Email</label>
-  <input
-    type="email"
-    id="email"
-    value={email}
-    onChange={(e) => setEmail(e.target.value)}
-    className="input-field w-full bg-gray-50 text-black"
-    placeholder="your@email.com"
-    required
-  />
-</div>
+        <div>
+          <label htmlFor="email" className="text-black block mb-1 font-medium">Email</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="input-field w-full bg-gray-50 text-black"
+            placeholder="your@email.com"
+            required
+          />
+        </div>
 
-<div>
-  <label htmlFor="password" className="text-black block mb-1 font-medium ">Password</label>
-  <input
-    type="password"
-    id="password"
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    className="input-field w-full bg-gray-50 text-black"
-    placeholder="••••••••"
-    required
-  />
-</div>
+        <div>
+          <label htmlFor="password" className="text-black block mb-1 font-medium ">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="input-field w-full bg-gray-50 text-black"
+            placeholder="••••••••"
+            required
+          />
+        </div>
         
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -139,7 +147,6 @@ const LoginForm = () => {
           <div className="p-2 bg-gray-50 rounded">
             <p><strong>Faculty:</strong> faculty@example.com / password</p>
           </div>
-          
         </div>
       </div>
     </div>
