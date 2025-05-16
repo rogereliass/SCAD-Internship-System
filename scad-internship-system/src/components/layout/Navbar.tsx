@@ -53,8 +53,7 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
                 {userType === 'student' && (
                   <>
                     <Link to="/dashboard/1" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Dashboard</Link>
-                    <Link to="/internships" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Find Internships</Link>
-                    <Link to="/applications" className="text-scad-dark hover:text-scad-red transition-colors font-bold">My Applications</Link>
+                    <Link to="/companies" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Companies</Link>
                   </>
                 )}
                 {userType === 'company' && (
@@ -77,6 +76,12 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
                 {userType === 'faculty' && (
                   <>
                     <Link to="/dashboard/4" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Dashboard</Link>
+                  </>
+                )}
+                {userType === 'proStudent' && (
+                  <>
+                    <Link to="/dashboard/5" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Dashboard</Link>
+                    <Link to="/companies" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Companies</Link>
                   </>
                 )}
                 <Link to="/" className="btn btn-primary font-bold">Logout</Link>

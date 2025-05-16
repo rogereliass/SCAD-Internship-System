@@ -75,7 +75,7 @@ const InternshipCard: React.FC<InternshipProps> = ({
             </div>
             
             <Link 
-              to={`/internships/${id}`} 
+              to={`/login?redirected=true`} 
               className="text-sm font-medium text-scad-red hover:underline"
             >
               Apply Now
