@@ -449,11 +449,7 @@ const Internships = () => {
                   >
                     Close
                   </Button>
-                  <Button 
-                    className="bg-scad-red hover:bg-scad-red/90 text-white"
-                  >
-                    Apply
-                  </Button>
+                  
                 </CardFooter>
               </Card>
             </div>

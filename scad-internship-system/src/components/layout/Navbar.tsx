@@ -3,9 +3,11 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, ArrowLeft } from 'lucide-react';
 import logo from '@/components/assets/logo.jpeg';
+import { useAuth } from '@/contexts/AuthContext';
 
 
-const Navbar = ({ userType = null }: { userType?: string | null }) => {
+//{ userType = null }: { userType?: string | null }
+const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const toggleMenu = () => {
@@ -13,6 +15,11 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
   };
   const handleBack = () => {
     navigate(-1);
+  };
+  const { userType, setUserType} = useAuth();
+  const handleLogout = () => {
+    setUserType(null);
+    navigate('/');
   };
 
   return (
@@ -59,6 +66,7 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
                 {userType === 'company' && (
                   <>
                     <Link to="/dashboard/2" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Dashboard</Link>
+                    <Link to="/companies" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Companies</Link>
                     {/* <Link to="/job-posts" className="text-scad-dark hover:text-scad-red transition-colors">Job Posts</Link>
                     <Link to="/applicants" className="text-scad-dark hover:text-scad-red transition-colors">Applicants</Link>
                     <Link to="/interns" className="text-scad-dark hover:text-scad-red transition-colors">Interns</Link> */}
@@ -76,6 +84,8 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
                 {userType === 'faculty' && (
                   <>
                     <Link to="/dashboard/4" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Dashboard</Link>
+                    <Link to="/companies" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Companies</Link>
+                    <Link to="/internships" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Internships</Link>
                   </>
                 )}
                 {userType === 'proStudent' && (
@@ -84,7 +94,9 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
                     <Link to="/companies" className="text-scad-dark hover:text-scad-red transition-colors font-bold">Companies</Link>
                   </>
                 )}
-                <Link to="/" className="btn btn-primary font-bold">Logout</Link>
+                <button onClick={handleLogout} className="btn btn-primary font-bold">
+                  Logout
+                </button>                
               </>
             )}
           </div>
@@ -133,7 +145,15 @@ const Navbar = ({ userType = null }: { userType?: string | null }) => {
                     <Link to="/reports" className="text-scad-dark hover:text-scad-red transition-colors py-2">Reports</Link>
                   </>
                 )}
-                <Link to="/" className="text-scad-red hover:text-opacity-80 transition-colors py-2">Logout</Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false); // optionally close mobile menu
+                  }}
+                  className="text-scad-red hover:text-opacity-80 transition-colors py-2 text-left"
+                >
+                  Logout
+                </button>
               </div>
             )}
           </div>

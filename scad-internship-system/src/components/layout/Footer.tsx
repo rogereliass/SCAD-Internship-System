@@ -17,7 +17,7 @@ const Footer = () => {
             <div>
               <h4 className="text-md font-bold mb-4">For Students</h4>
               <ul className="space-y-2">
-                <li><Link to="/internships" className="text-gray-400 hover:text-white">Find Internships</Link></li>
+                <li><Link to={"/login?redirected=true"} className="text-gray-400 hover:text-white">Find Internships</Link></li>
                 <li><Link to="/register" className="text-gray-400 hover:text-white">Create Account</Link></li>
                 <li><Link to="/resources" className="text-gray-400 hover:text-white">Resources</Link></li>
                 <li><Link to="/faqs" className="text-gray-400 hover:text-white">FAQs</Link></li>

@@ -29,6 +29,7 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import CompaniesEvaluations from '@/pages/CompaniesEvaluations';
 import { ReportsProvider } from './contexts/ReportsContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <ReportsProvider>
+        <AuthProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
@@ -67,6 +69,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        </AuthProvider>
       </ReportsProvider>
     </TooltipProvider>
   </QueryClientProvider>

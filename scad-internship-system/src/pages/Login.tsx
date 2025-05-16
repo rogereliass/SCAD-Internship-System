@@ -5,7 +5,7 @@ import Navbar from '../components/layout/Navbar';
 const Login = () => {
   const [searchParams] = useSearchParams();
   const redirected = searchParams.get('redirected');
-  const redirectTo = searchParams.get('redirectTo');
+
   
   return (
     <div className="min-h-screen bg-gray-50">
@@ -14,7 +14,7 @@ const Login = () => {
         <div className="flex flex-col items-center">
           <div className="max-w-md w-full">
             
-            <LoginForm redirected={redirected} redirectTo={redirectTo} />
+            <LoginForm redirected={redirected}/>
           </div>
         </div>
       </div>

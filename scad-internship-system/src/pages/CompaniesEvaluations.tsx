@@ -157,7 +157,7 @@ const CompaniesEvaluations = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar userType="scadOffice" />
+      <Navbar />
       
       <div className="container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">

@@ -102,7 +102,7 @@ const Index = () => {
                 <Link to="/register" className="btn bg-scad-red hover:bg-opacity-90 text-white px-6 py-3 rounded-md font-medium">
                   Get Started
                 </Link>
-                <Link to={"/login?redirected=true&redirectTo=/internships"} className="btn bg-scad-yellow hover:bg-opacity-90 text-scad-dark px-6 py-3 rounded-md font-medium">
+                <Link to={"/login?redirected=true"} className="btn bg-scad-yellow hover:bg-opacity-90 text-scad-dark px-6 py-3 rounded-md font-medium">
                   Browse Internships
                 </Link>
               </div>
@@ -173,7 +173,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold text-scad-dark">Featured Internships</h2>
-            <Link to= {"/login?redirected=true&redirectTo=/internships"} className="text-scad-red hover:underline font-medium">
+            <Link to= {"/login?redirected=true"} className="text-scad-red hover:underline font-medium">
               View All Internships
             </Link>
           </div>
@@ -191,7 +191,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold text-scad-dark">Featured Companies</h2>
-            <Link to="/login?redirected=true&redirectTo=/companies" className="text-scad-red hover:underline font-medium">
+            <Link to="/login?redirected=true" className="text-scad-red hover:underline font-medium">
               View All Companies
             </Link>
           </div>
