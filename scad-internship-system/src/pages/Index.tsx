@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import InternshipCard from '../components/internships/InternshipCard';
@@ -42,24 +41,46 @@ const featuredInternships = [
   }
 ];
 
+// Replace with the recommended companies
 const featuredCompanies = [
-  {
+  { 
     id: 1,
-    name: 'TechCorp',
-    industry: 'Technology',
-    size: 'large',
+    name: 'TechCorp', 
+    industry: 'Information Technology', 
+    email: 'careers@techcorp.com',
+    contactPerson: 'John Smith',
+    phone: '+1 (555) 123-4567',
+    website: 'https://techcorp.com',
     location: 'San Francisco, CA',
-    openPositions: 5,
-    rating: 4.5
+    joinDate: '2023-01-15',
+    about: 'TechCorp is a leading technology company specializing in innovative software solutions. We focus on creating cutting-edge products that help businesses transform their digital presence.',
+    size: 'large' as const
   },
-  {
+  { 
     id: 2,
-    name: 'DesignHub',
-    industry: 'Design',
-    size: 'medium',
-    location: 'Remote',
-    openPositions: 3,
-    rating: 4.2
+    name: 'DesignHub', 
+    industry: 'Design', 
+    email: 'jobs@designhub.com',
+    contactPerson: 'Sarah Johnson',
+    phone: '+1 (555) 234-5678',
+    website: 'https://designhub.com',
+    location: 'New York, NY',
+    joinDate: '2023-03-20',
+    about: 'DesignHub is a creative design agency that helps brands establish their visual identity. Our team of expert designers creates stunning, user-centered designs that make an impact.',
+    size: 'medium' as const
+  },
+  { 
+    id: 3,
+    name: 'DataSystems', 
+    industry: 'Data Analytics', 
+    email: 'recruiting@datasystems.com',
+    contactPerson: 'Michael Chen',
+    phone: '+1 (555) 345-6789',
+    website: 'https://datasystems.com',
+    location: 'Boston, MA',
+    joinDate: '2023-06-10',
+    about: 'DataSystems is a data analytics company that helps organizations make data-driven decisions. We provide advanced analytics solutions and consulting services to businesses of all sizes.',
+    size: 'corporate' as const
   }
 ];
 
@@ -175,9 +196,21 @@ const Index = () => {
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {featuredCompanies.map(company => (
-              <CompanyCard email={''} key={company.id} {...company} />
+              <CompanyCard 
+                key={company.id}
+                name={company.name}
+                industry={company.industry}
+                size={company.size as 'small' | 'medium' | 'large' | 'corporate'}
+                location={company.location}
+                email={company.email}
+                contactPerson={company.contactPerson}
+                phone={company.phone}
+                website={company.website}
+                joinDate={company.joinDate}
+                about={company.about}
+              />
             ))}
           </div>
         </div>

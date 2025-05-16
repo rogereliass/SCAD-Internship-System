@@ -148,12 +148,6 @@ const Notifications = () => {
           {/* Add flex container with justification for title and back button */}
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold text-gray-900">Notifications</h1>
-            <Link 
-              to={`/dashboard/${id}`} 
-              className="text-gray-600 hover:text-gray-900"
-            >
-              Back to Dashboard
-            </Link>
           </div>
 
           <div className="space-y-4">
