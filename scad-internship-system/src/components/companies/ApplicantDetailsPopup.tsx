@@ -26,7 +26,7 @@ interface Applicant {
   jobPostingId: string;
   email: string;
   appliedDate: string;
-  status: 'accepted' | 'rejected' | 'finalized';
+  status: 'Accepted' | 'Rejected' | 'Finalized';
   education?: string;
   experiences?: Experience[];
   skills?: string[];

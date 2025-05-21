@@ -18,7 +18,7 @@ const recentApplications = [
     appliedDate: '2023-11-15', 
     email: 'emily.johnson@example.com',
     jobPostingId: '1',
-    status: 'accepted' as 'accepted' | 'rejected' | 'finalized',
+    status: 'Accepted' as 'Accepted' | 'Rejected' | 'Finalized',
     education: 'B.S. Computer Science, University of Washington, 2023',
     experiences: [
       {
@@ -43,7 +43,7 @@ const recentApplications = [
     appliedDate: '2023-11-14',
     email: 'michael.brown@example.com',
     jobPostingId: '2', 
-    status: 'finalized' as 'accepted' | 'rejected' | 'finalized',
+    status: 'Finalized' as 'Accepted' | 'Rejected' | 'Finalized',
     education: 'B.F.A. Graphic Design, Rhode Island School of Design, 2023',
     experiences: [
       {
@@ -62,7 +62,7 @@ const recentApplications = [
     appliedDate: '2023-11-12',
     email: 'sarah.wilson@example.com',
     jobPostingId: '1', 
-    status: 'accepted' as 'accepted' | 'rejected' | 'finalized',
+    status: 'Accepted' as 'Accepted' | 'Rejected' | 'Finalized',
     education: 'M.S. Software Engineering, Boston University, 2022',
     experiences: [
       {
@@ -87,7 +87,7 @@ const recentApplications = [
     appliedDate: '2023-11-10',
     email: 'david.garcia@example.com',
     jobPostingId: '2', 
-    status: 'rejected' as 'accepted' | 'rejected' | 'finalized',
+    status: 'Rejected' as 'Accepted' | 'Rejected' | 'Finalized',
     education: 'B.A. Interactive Media Design, California Institute of Arts, 2023',
     experiences: [
       {
@@ -314,7 +314,7 @@ const CompanyDashboard = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleStatusChange = (applicantId: string, newStatus: 'accepted' | 'rejected' | 'finalized') => {
+  const handleStatusChange = (applicantId: string, newStatus: 'Accepted' | 'Rejected' | 'Finalized') => {
     setApplications(prevApplications => 
       prevApplications.map(app => 
         app.id === applicantId ? { ...app, status: newStatus } : app
@@ -345,7 +345,7 @@ const CompanyDashboard = () => {
           <OverviewTab 
             company={company} 
             jobPostings={jobPostings} 
-            recentApplications={applications} 
+            recentApplications={applications}
             onTabChange={handleTabChange}
           />
         </TabsContent>

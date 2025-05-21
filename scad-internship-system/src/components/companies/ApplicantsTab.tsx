@@ -21,7 +21,7 @@ interface Applicant {
   jobPostingId: string;
   email: string;
   appliedDate: string;
-  status: 'accepted' | 'rejected' | 'finalized';
+  status: 'Accepted' | 'Rejected' | 'Finalized';
 }
 
 interface JobPosting {
@@ -32,7 +32,7 @@ interface JobPosting {
 interface ApplicantsTabProps {
   applicants: Applicant[];
   jobPostings: JobPosting[];
-  onStatusChange?: (applicantId: string, newStatus: 'accepted' | 'rejected' | 'finalized') => void;
+  onStatusChange?: (applicantId: string, newStatus: 'Accepted' | 'Rejected' | 'Finalized') => void;
 }
 
 const ApplicantsTab: React.FC<ApplicantsTabProps> = ({ 
@@ -130,19 +130,19 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
   // Updated status info to only include the three allowed statuses
   const getStatusInfo = (status: string) => {
     switch (status) {
-      case 'finalized':
+      case 'Finalized':
         return {
           color: 'bg-blue-100 text-blue-800',
           tooltip: 'Applicant has passed interview and is ready to start internship',
           icon: <CheckCircle className="h-3.5 w-3.5 mr-1" />
         };
-      case 'accepted':
+      case 'Accepted':
         return {
           color: 'bg-green-100 text-green-800',
           tooltip: 'Applicant is accepted for interview',
           icon: <Clock className="h-3.5 w-3.5 mr-1" />
         };
-      case 'rejected':
+      case 'Rejected':
         return {
           color: 'bg-red-100 text-red-800',
           tooltip: 'Applicant has been rejected',
@@ -162,7 +162,7 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
     setStatusDialogOpen(true);
   };
 
-  const handleStatusChange = (status: 'accepted' | 'rejected' | 'finalized') => {
+  const handleStatusChange = (status: 'Accepted' | 'Rejected' | 'Finalized') => {
     if (currentApplicant && onStatusChange) {
       onStatusChange(currentApplicant, status);
     }
@@ -241,24 +241,24 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`border ${statusFilter === 'finalized' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
-              onClick={() => setStatusFilter('finalized')}
+              className={`border ${statusFilter === 'Finalized' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
+              onClick={() => setStatusFilter('Finalized')}
             >
               Finalized
             </Button>
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`border ${statusFilter === 'accepted' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
-              onClick={() => setStatusFilter('accepted')}
+              className={`border ${statusFilter === 'Accepted' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
+              onClick={() => setStatusFilter('Accepted')}
             >
               Accepted
             </Button>
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`border ${statusFilter === 'rejected' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
-              onClick={() => setStatusFilter('rejected')}
+              className={`border ${statusFilter === 'Rejected' ? 'bg-gray-100 text-gray-900' : 'text-gray-700 border-gray-200'}`}
+              onClick={() => setStatusFilter('Rejected')}
             >
               Rejected
             </Button>
@@ -369,7 +369,7 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
                             </div>
                             
                             <div className="flex space-x-2 mt-3 md:mt-0">
-                              {applicant.status === 'finalized' && (
+                              {applicant.status === 'Finalized' && (
                                 <Button
                                   size="sm"
                                   className="text-xs flex items-center bg-blue-600 hover:bg-blue-700 text-white"
@@ -527,7 +527,7 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
             <div className="grid grid-cols-1 gap-4">
               <Button 
                 className="bg-blue-50 hover:bg-blue-100 text-blue-800 justify-start flex items-center gap-3 p-4 h-auto border border-blue-200"
-                onClick={() => handleStatusChange('finalized')}
+                onClick={() => handleStatusChange('Finalized')}
               >
                 <div className="bg-blue-100 p-2 rounded-full">
                   <CheckCircle className="h-5 w-5" />
@@ -540,7 +540,7 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
               
               <Button 
                 className="bg-green-50 hover:bg-green-100 text-green-800 justify-start flex items-center gap-3 p-4 h-auto border border-green-200"
-                onClick={() => handleStatusChange('accepted')}
+                onClick={() => handleStatusChange('Accepted')}
               >
                 <div className="bg-green-100 p-2 rounded-full">
                   <Clock className="h-5 w-5" />
@@ -553,7 +553,7 @@ const ApplicantsTab: React.FC<ApplicantsTabProps> = ({
               
               <Button 
                 className="bg-red-50 hover:bg-red-100 text-red-800 justify-start flex items-center gap-3 p-4 h-auto border border-red-200"
-                onClick={() => handleStatusChange('rejected')}
+                onClick={() => handleStatusChange('Rejected')}
               >
                 <div className="bg-red-100 p-2 rounded-full">
                   <XCircle className="h-5 w-5" />

@@ -51,71 +51,71 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
           </div>
         </div>
         
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-2">
-          <div className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
-            <div className="p-5 bg-gradient-to-r from-scad-red to-red-600 text-white hover:shadow-lg transition-all">
-              <div className="flex items-start">
-                <div className="mr-3">
-                  <FileText className="h-6 w-6 opacity-80" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Active Job Postings</h3>
-                  <p className="text-3xl font-bold">{company.activeJobPostings}</p>
+        {/* Summary Cards - Updated with bold, dark titles */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          {/* Active Job Postings */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:bg-gray-50 hover:border-gray-300 transition-all">
+            <div className="flex items-center">
+              <div className="h-12 w-12 rounded-full bg-scad-red bg-opacity-10 flex items-center justify-center mr-4 flex-shrink-0">
+                <FileText className="h-6 w-6 text-scad-red" />
+              </div>
+              <div className="flex-grow">
+                <p className="text-base font-bold text-scad-dark">Active Postings</p>
+                <p className="text-2xl font-bold text-gray-900">{company.activeJobPostings}</p>
+                <div className="flex items-center justify-between mt-2">
+                  <p className="text-xs text-gray-500">Job opportunities</p>
+                  <button 
+                    onClick={() => onTabChange('postings')}
+                    className="text-xs text-scad-red hover:underline flex items-center"
+                  >
+                    Manage <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
+                  </button>
                 </div>
               </div>
             </div>
-            <div className="px-5 py-3 bg-white">
-            <button 
-              onClick={() => onTabChange('postings')}
-              className="text-sm text-scad-red hover:underline flex items-center justify-end"
-            >
-              Manage Postings <ChevronRight className="h-4 w-4 ml-1" />
-            </button>
+          </div>
+
+          {/* Pending Applications */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:bg-gray-50 hover:border-gray-300 transition-all">
+            <div className="flex items-center">
+              <div className="h-12 w-12 rounded-full bg-blue-500 bg-opacity-10 flex items-center justify-center mr-4 flex-shrink-0">
+                <Users className="h-6 w-6 text-blue-500" />
+              </div>
+              <div className="flex-grow">
+                <p className="text-base font-bold text-scad-dark">Pending Applications</p>
+                <p className="text-2xl font-bold text-gray-900">{company.totalApplications}</p>
+                <div className="flex items-center justify-between mt-2">
+                  <p className="text-xs text-gray-500">Awaiting review</p>
+                  <button 
+                    onClick={() => onTabChange('applicants')}
+                    className="text-xs text-scad-red hover:underline flex items-center"
+                  >
+                    Review <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           
-          <div className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
-            <div className="p-5 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white hover:shadow-lg transition-all">
-              <div className="flex items-start">
-                <div className="mr-3">
-                  <Users className="h-6 w-6 opacity-80" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Pending Applications</h3>
-                  <p className="text-3xl font-bold">{company.totalApplications}</p>
+          {/* Current Interns */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:bg-gray-50 hover:border-gray-300 transition-all">
+            <div className="flex items-center">
+              <div className="h-12 w-12 rounded-full bg-green-500 bg-opacity-10 flex items-center justify-center mr-4 flex-shrink-0">
+                <GraduationCap className="h-6 w-6 text-green-500" />
+              </div>
+              <div className="flex-grow">
+                <p className="text-base font-bold text-scad-dark">Current Interns</p>
+                <p className="text-2xl font-bold text-gray-900">{company.currentInterns}</p>
+                <div className="flex items-center justify-between mt-2">
+                  <p className="text-xs text-gray-500">Ongoing internships</p>
+                  <button 
+                    onClick={() => onTabChange('interns')}
+                    className="text-xs text-scad-red hover:underline flex items-center"
+                  >
+                    Manage <ChevronRight className="h-3.5 w-3.5 ml-0.5" />
+                  </button>
                 </div>
               </div>
-            </div>
-            <div className="px-5 py-3 bg-white">
-            <button 
-              onClick={() => onTabChange('applicants')}
-              className="text-sm text-scad-red hover:underline flex items-center justify-end"
-            >
-              Review Applications <ChevronRight className="h-4 w-4 ml-1" />
-            </button>
-            </div>
-          </div>
-          
-          <div className="bg-white rounded-md shadow-sm border border-gray-200 overflow-hidden">
-            <div className="p-5 bg-gradient-to-r from-green-500 to-green-600 text-white hover:shadow-lg transition-all">
-              <div className="flex items-start">
-                <div className="mr-3">
-                  <GraduationCap className="h-6 w-6 opacity-80" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Current Interns</h3>
-                  <p className="text-3xl font-bold">{company.currentInterns}</p>
-                </div>
-              </div>
-            </div>
-            <div className="px-5 py-3 bg-white">
-            <button 
-              onClick={() => onTabChange('interns')}
-              className="text-sm text-scad-red hover:underline flex items-center justify-end"
-            >
-              Manage Interns <ChevronRight className="h-4 w-4 ml-1" />
-            </button>
             </div>
           </div>
         </div>
@@ -144,7 +144,7 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ company, jobPostings = [], re
             </div>
             
             {/* Latest Application */}
-            <div className="p-4 bg-gray-50 rounded-md border-l-4 border-yellow-300">
+            <div className="p-4 bg-gray-50 rounded-md border-l-4 border-blue-500">
               <h3 className="text-sm font-medium text-gray-500 mb-3">Latest Application</h3>
               {recentApplications.length > 0 ? (
                 <>

@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react'; // Import eye icons
 
 interface LoginFormProps {
   redirected?: string | null;
-  
 }
 
 const LoginForm = ({ redirected }: LoginFormProps) => {
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // Add state for password visibility
   
   const navigate = useNavigate();
 
@@ -25,11 +25,11 @@ const LoginForm = ({ redirected }: LoginFormProps) => {
       setIsLoading(false);
       
       // Demo credentials for different user types
-      if ( email === 'student@example.com' && password === 'password') {
+      if (email === 'student@example.com' && password === 'password') {
         navigate('/dashboard/1');
-      } else if ( email === 'company@example.com' && password === 'password') {
+      } else if (email === 'company@example.com' && password === 'password') {
         navigate('/dashboard/2');
-      } else if ( email === 'scad@example.com' && password === 'password') {
+      } else if (email === 'scad@example.com' && password === 'password') {
         navigate('/dashboard/3');
       } else if (email === 'faculty@example.com' && password === 'password') {
         navigate('/dashboard/4');
@@ -42,6 +42,11 @@ const LoginForm = ({ redirected }: LoginFormProps) => {
         setError('Invalid credentials. Please try again.');
       }
     }, 1000);
+  };
+
+  // Function to toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -76,16 +81,30 @@ const LoginForm = ({ redirected }: LoginFormProps) => {
         </div>
 
         <div>
-          <label htmlFor="password" className="text-black block mb-1 font-medium ">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="input-field w-full bg-gray-50 text-black"
-            placeholder="••••••••"
-            required
-          />
+          <label htmlFor="password" className="text-black block mb-1 font-medium">Password</label>
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="input-field w-full bg-gray-50 text-black pr-10"
+              placeholder="••••••••"
+              required
+            />
+            <button 
+              type="button"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
+              onClick={togglePasswordVisibility}
+              tabIndex={-1}
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
         </div>
         
         <div className="flex items-center justify-between">
@@ -128,29 +147,7 @@ const LoginForm = ({ redirected }: LoginFormProps) => {
         </p>
       </div>
 
-      {/* <div className="mt-8 border-t pt-6">
-        <p className="text-sm text-gray-500 text-center mb-4">Demo Accounts:</p>
-        <div className="grid grid-cols-1 gap-3 text-xs text-gray-600">
-          <div className="p-2 bg-gray-50 rounded">
-            <p><strong>Student:</strong> student@example.com / password</p>
-          </div>
-          <div className="p-2 bg-gray-50 rounded">
-            <p><strong>Pro Student:</strong> prostudent@example.com / password</p>
-          </div>
-          <div className="p-2 bg-gray-50 rounded">
-            <p><strong>Company:</strong> company@example.com / password</p>
-          </div>
-          <div className="p-2 bg-gray-50 rounded">
-            <p><strong>Company Pending:</strong> companypending@example.com / password</p>
-          </div>
-          <div className="p-2 bg-gray-50 rounded">
-            <p><strong>SCAD Office:</strong> scad@example.com / password</p>
-          </div>
-          <div className="p-2 bg-gray-50 rounded">
-            <p><strong>Faculty:</strong> faculty@example.com / password</p>
-          </div>
-        </div>
-      </div> */}
+      {/* Demo accounts section (commented out) */}
     </div>
   );
 };
