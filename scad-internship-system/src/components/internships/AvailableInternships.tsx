@@ -27,7 +27,7 @@ interface Internship {
   endDate: string;
 }
 
-const internships: Internship[] = [
+export const internships: Internship[] = [
   { 
     id: '1', 
     company: 'TechCorp', 
@@ -153,19 +153,48 @@ const AvailableInternships: React.FC<AvailableInternshipsProps> = ({
   const [selectedInternship, setSelectedInternship] = useState<Internship | null>(null);
 
   const filteredInternships = internships.filter(internship => {
-    const matchesSearch = 
-      internship.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      internship.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      internship.description.toLowerCase().includes(searchTerm.toLowerCase());
+    // Search filter
+    const matchesSearch = internship.title.toLowerCase().includes(searchTerm.toLowerCase());
 
+    // Date filter
+    const currentDate = new Date();
+    const startDate = new Date(internship.startDate);
+    const endDate = new Date(internship.endDate);
+    
     const matchesDate = 
       dateFilter === 'all' || 
-      (dateFilter === 'current' && new Date(internship.startDate) <= new Date() && new Date(internship.endDate) >= new Date()) ||
-      (dateFilter === 'upcoming' && new Date(internship.startDate) > new Date());
+      (dateFilter === 'current' && startDate <= currentDate && endDate >= currentDate) ||
+      (dateFilter === 'upcoming' && startDate > currentDate);
 
-    const matchesIndustry = industryFilter === 'all' || internship.industry === industryFilter;
-    const matchesDuration = durationFilter === 'all' || internship.duration === durationFilter;
-    const matchesPayment = paymentFilter === 'all' || (paymentFilter === 'paid' && internship.isPaid) || (paymentFilter === 'unpaid' && !internship.isPaid);
+    // Industry filter
+    const matchesIndustry = 
+      industryFilter === 'all' || 
+      internship.industry.toLowerCase() === industryFilter.toLowerCase();
+
+    // Duration filter
+    const matchesDuration = 
+      durationFilter === 'all' || 
+      (() => {
+        // Extract the number from internship duration (e.g., "3 months" -> 3)
+        const internshipDuration = parseInt(internship.duration);
+        
+        // Handle different duration filter formats
+        if (durationFilter.includes('-')) {
+          // Handle range format (e.g., "3-6")
+          const [min, max] = durationFilter.split('-').map(num => parseInt(num.trim()));
+          return internshipDuration >= min && internshipDuration <= max;
+        } else {
+          // Handle single number format
+          const filterDuration = parseInt(durationFilter);
+          return internshipDuration === filterDuration;
+        }
+      })();
+
+    // Payment filter
+    const matchesPayment = 
+      paymentFilter === 'all' || 
+      (paymentFilter === 'paid' && internship.isPaid) || 
+      (paymentFilter === 'unpaid' && !internship.isPaid);
 
     return matchesSearch && matchesDate && matchesIndustry && matchesDuration && matchesPayment;
   });

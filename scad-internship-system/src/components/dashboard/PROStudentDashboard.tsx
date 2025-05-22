@@ -27,6 +27,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Label } from '../ui/label';
 import StudentProfilePicture from '../assets/StudentProfilePicture.jpg';
+import { internships } from '../internships/AvailableInternships';
 
 // Mock notifications data
 const mockNotifications = [
@@ -1124,6 +1125,8 @@ const PROStudentDashboard = () => {
     setNewDocument(null);
   };
 
+  const uniqueIndustries = Array.from(new Set(internships.map(i => i.industry)));
+
   return (
     <div className="p-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
@@ -1423,10 +1426,11 @@ const PROStudentDashboard = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all" className="text-gray-500">All Industries</SelectItem>
-                        <SelectItem value="technology" className="text-gray-500">Technology</SelectItem>
-                        <SelectItem value="design" className="text-gray-500">Design</SelectItem>
-                        <SelectItem value="marketing" className="text-gray-500">Marketing</SelectItem>
-                        <SelectItem value="finance" className="text-gray-500">Finance</SelectItem>
+                        {uniqueIndustries.map(industry => (
+                          <SelectItem key={industry} value={industry} className="text-gray-500">
+                            {industry}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
 

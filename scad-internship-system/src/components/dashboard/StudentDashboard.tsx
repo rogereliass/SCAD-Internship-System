@@ -17,6 +17,7 @@ import CompanyEvaluations from '../reports/CompanyEvaluations';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
 import StudentProfilePicture from '../assets/StudentProfilePicture.jpg';
+import { internships } from '../internships/AvailableInternships';
 
 interface Application {
   id: string;
@@ -273,6 +274,8 @@ const StudentDashboard = () => {
     { name: 'Pending', value: 3, color: '#eab308' },
     { name: 'Finalized', value: 1, color: '#3b82f6' },
   ];
+
+  const uniqueIndustries = Array.from(new Set(internships.map(i => i.industry)));
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
@@ -655,10 +658,11 @@ const StudentDashboard = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all" className="text-gray-500">All Industries</SelectItem>
-                        <SelectItem value="technology" className="text-gray-500">Technology</SelectItem>
-                        <SelectItem value="design" className="text-gray-500">Design</SelectItem>
-                        <SelectItem value="marketing" className="text-gray-500">Marketing</SelectItem>
-                        <SelectItem value="finance" className="text-gray-500">Finance</SelectItem>
+                        {uniqueIndustries.map(industry => (
+                          <SelectItem key={industry} value={industry} className="text-gray-500">
+                            {industry}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
 
