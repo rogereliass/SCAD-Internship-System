@@ -1,55 +1,104 @@
+# GUC SCAD Internship Management System
 
-# GUC SCAD Internship Managment System 👨‍💻
+_A professional, internal front-end prototype for the German University in Cairo’s (GUC) SCAD Office to streamline student internship workflows._
 
-A React-based front-end prototype for managing GUC student internship workflows including application submission, enrollment tracking, and report evaluation.
+---
 
-## 📌 Project Overview
+## 🎯 Purpose
+This repository contains a **React**-based front-end prototype developed as an **internal tool** for the **GUC SCAD Office**. It simulates the complete internship management process, supporting **three main user routes**:
 
-This web application was built as part of a university project to simulate an internship management system. The milestone focused solely on the **front-end**, using **React** and **JavaScript**, with no backend or database integration.
+- **Company Route**: Registration, posting internship offers, and reviewing applications.  
+- **ProStudent Route**: Students apply for positions, track enrollment, and submit reports.  
+- **SCAD Route**: Coordinators manage applications, assign evaluators, and review outcomes.  
 
-## 🎯 Objectives
+> **Note:** All data in this prototype is mocked and intended solely for demonstration within the project's environment.
 
-- Develop a functional and responsive UI using React.
-- Design user journeys for students, evaluators, coordinators and companies.
-- Ensure usability, consistency, and adherence to modern UI/UX principles.
-- Collaborate using GitHub with team-based version control.
+---
 
-## ✨ Features
+## 🔗 Simulations Videos
 
-- Internship application and enrollment flows
-- Report submission and viewing interface
-- Assessment and evaluation views
-- Dummy data used for dynamic UI simulation
-- Navigation across user roles (student, evaluator, coordinator, company)
-- Responsive and consistent design using a unified color palette
+### 🏢 SCAD Route Demo
 
-## 🛠️ Technologies Used
+[![ProStudent Simulation](https://img.youtube.com/vi/IiCnMf6hhCs/0.jpg)](https://www.youtube.com/embed/IiCnMf6hhCs)
 
-- **React**
-- **JavaScript**
-- **CSS / TailwindCSS + ShadCN UI**
-- **Git & GitHub**
+### 🎓 ProStudent Route Demo
 
-## 📌 Notes
+[![ProStudent Simulation](https://img.youtube.com/vi/w39ejf-nUus/0.jpg)](https://www.youtube.com/embed/w39ejf-nUus)
 
-- This project is a **frontend-only implementation** — no backend or database connection is included.
-- All data displayed is **mocked or hard-coded** for demonstration purposes.
-- Form submissions, navigation, and dialogs are designed to simulate real interactions using only client-side state.
-- Developed as part of a university Software Engineering course at GUC 🎓.
+### 📁 Company Route Demo
 
+[![Company Simulation](https://img.youtube.com/vi/H3d6b-X_460/0.jpg)](https://www.youtube.com/embed/H3d6b-X_460)
+
+
+
+
+---
+
+## 📝 Features
+- **Role-Based Navigation**: Switch seamlessly between Company, ProStudent (student), and SCAD Coordinator views.
+- **Internship Application Workflow**: Submit, review, and track applications using a clean, responsive UI.
+- **Report Submission & Evaluation**: Upload final internship reports and access evaluator feedback.
+- **Mock Data Simulation**: Dynamic UI updates using hard-coded datasets to emulate real interactions.
+- **Responsive Design**: Mobile-first layout with TailwindCSS and ShadCN components for consistent styling.
+
+---
+
+## 🛠️ Tech Stack
+- **Framework**: React  
+- **Language**: TypeScript 
+- **Styling**: TailwindCSS, ShadCN UI components  
+- **Version Control**: Git & GitHub  
+
+---
 
 ## 🚀 Getting Started
-
-1. Clone the repository:
+1. **Clone the repository**  
    ```bash
    git clone https://github.com/CSEN603-2025/Softies.git
    cd scad-internship-system
-
-2. Install dependencies
+   ```
+2. **Install dependencies**  
    ```bash
    npm install
-4. run
-  ```bash
-  npm run dev
-   
+   ```
+3. **Run the development server**  
+   ```bash
+   npm run dev
+   ```
+4. **Open in browser**  
+   Navigate to `http://localhost:3000` to explore all user routes.
 
+---
+
+## 📋 Project Structure
+```text
+├── public/                 # Static assets and index.html
+├── src/
+│   ├── components/         # Reusable UI components
+│   ├── pages/              # Route pages (Company, ProStudent, SCAD)
+│   ├── data/               # Mock JSON datasets
+│   ├── styles/             # Tailwind configuration and globals
+│   └── App.jsx             # Root component with router setup
+├── .gitignore
+├── package.json
+└── README.md
+```
+
+---
+
+## 📚 Further Development
+This prototype sets the foundation for full-stack integration. Future enhancements may include:
+- Real backend integration with a database (e.g., Node.js + MongoDB)
+- Authentication & authorization
+- Notification system for status updates
+- Automated report generation
+
+---
+
+## 📄 License
+This repository is for **internal academic use only** and is **not** released under a public license. All rights reserved by the Creating team.
+
+---
+
+## 📬 Contact
+For questions or feedback, please contact [roger.elias669@gmail.com](mailto:roger.elias669@gmail.com).
