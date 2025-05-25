@@ -5,11 +5,14 @@ _A professional, internal front-end prototype for the German University in Cairo
 ---
 
 ## 🎯 Purpose
-This repository contains a **React**-based front-end prototype developed as an **internal tool** for the **GUC SCAD Office**. It simulates the complete internship management process, supporting **three main user routes**:
+This repository contains a **React**-based front-end prototype developed as an **internal tool** for the **GUC SCAD Office**. It simulates the complete internship management process, supporting **five main user routes**:
 
+- **Student Route**: Students apply for positions, track enrollment, and submit reports.
+- **ProStudent Route**: Pro Students get extra features like career meetings & more.
 - **Company Route**: Registration, posting internship offers, and reviewing applications.  
-- **ProStudent Route**: Students apply for positions, track enrollment, and submit reports.  
 - **SCAD Route**: Coordinators manage applications, assign evaluators, and review outcomes.  
+- **Faculty Route**: Faculty members review reports, comment on evaluations & Accept/ Reject Internship submissions.  
+
 
 > **Note:** All data in this prototype is mocked and intended solely for demonstration within the project's environment.
 
