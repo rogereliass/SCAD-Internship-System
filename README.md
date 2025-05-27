@@ -57,7 +57,7 @@ This repository contains a **React**-based front-end prototype developed as an *
 ## 🚀 Getting Started
 1. **Clone the repository**  
    ```bash
-   git clone https://github.com/CSEN603-2025/Softies.git
+   git clone https://github.com/rogereliass/SCAD-Internship-System.git
    cd scad-internship-system
    ```
 2. **Install dependencies**  
